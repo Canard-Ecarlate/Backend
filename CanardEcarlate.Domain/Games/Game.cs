@@ -1,16 +1,10 @@
-﻿using CanardEcarlate.Domain.Cards;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CanardEcarlate.Domain.BDD
+namespace CanardEcarlate.Domain.Database
 {
     public class Game
     {
-        [Required]
         [Key]
         public int Id { get; set; }
         [Required]
