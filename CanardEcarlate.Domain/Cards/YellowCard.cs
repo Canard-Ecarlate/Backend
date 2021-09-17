@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CanardEcarlate.Domain.Cards
+﻿namespace CanardEcarlate.Domain
 {
     class YellowCard : ICard
     {
@@ -12,7 +6,7 @@ namespace CanardEcarlate.Domain.Cards
 
         public void DrawAction()
         {
-            throw new NotImplementedException();
+            // RIEN
         }
     }
 }

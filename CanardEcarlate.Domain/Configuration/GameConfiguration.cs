@@ -1,9 +1,4 @@
-﻿using CanardEcarlate.Domain.BDD;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CanardEcarlate.Domain.Database;
 
 namespace CanardEcarlate.Domain
 {
@@ -12,6 +7,7 @@ namespace CanardEcarlate.Domain
         public bool IsPrivate { get; set; }
         public string Code { get; set; }
         public CardsConfiguration CardsConfiguration { get; set; }
+        public NbPlayersConfiguration NbPlayersConfiguration { get; set; }
         public bool IsPlaying { get; set; }
     }
 }
