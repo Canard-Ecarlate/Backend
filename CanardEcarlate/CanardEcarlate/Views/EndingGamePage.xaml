@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CanardEcarlate.Views.EndingGamePage"
+             x:Name="endingGameContentPage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="{StaticResource FiligraneBlack}">
+            <Frame BackgroundColor="{StaticResource FiligraneWhite}"
+                   HorizontalOptions="CenterAndExpand"
+                   VerticalOptions="CenterAndExpand"
+                   Margin="20,50,20,0"
+                   CornerRadius="30">
+                <StackLayout>
+                    <Label
+                           x:Name="msgVictoire"
+                           FontSize="30"
+                           TextColor="{StaticResource DarkText}"
+                           Margin="10" 
+                           HorizontalTextAlignment="Center"
+                           FontAttributes="Bold"
+                           />
+                    <Image x:Name="ImgFinPartie" Margin="20"/>
+                </StackLayout>
+            </Frame>
+            <Grid VerticalOptions="End"
+                  Margin="10,0,10,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition  Width="2*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Button
+                    Text="Quitter"
+                    TextColor="White"
+                    FontSize="Title"
+                    FontAttributes="Bold"
+                    x:Name="quitButtonText"
+                    BackgroundColor="Transparent"
+                    Clicked="QuitClicked" 
+                    Grid.Row="0" 
+                    Grid.Column="0"
+                    Margin="0"
+                    HorizontalOptions="Start"/>
+                <ImageButton
+                    x:Name="quitButtonArrow"
+                    BackgroundColor="Transparent"
+                    Clicked="QuitClicked" 
+                    Grid.Row="1" 
+                    Grid.Column="0"
+                    Margin="0"
+                    HorizontalOptions="Start"/>
+                <Button 
+                    Text="Rejouer"
+                    TextColor="White"
+                    FontSize="Title"
+                    FontAttributes="Bold"
+                    x:Name="replayButtonText"
+                    BackgroundColor="Transparent"
+                    Clicked="ReplayClicked" 
+                    Grid.Row="0" 
+                    Grid.Column="1"
+                    Margin="0"
+                    HorizontalOptions="End"/>
+                <ImageButton 
+                    x:Name="replayButtonArrow"
+                    BackgroundColor="Transparent"
+                    Clicked="ReplayClicked" 
+                    Grid.Row="1" 
+                    Grid.Column="1"
+                    Margin="0"
+                    HorizontalOptions="End"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

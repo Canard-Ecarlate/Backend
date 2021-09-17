@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewsmodels="clr-namespace:CanardEcarlate.ViewsModels" x:DataType="viewsmodels:InGameViewModel"
+             x:Class="CanardEcarlate.Views.InGamePage"
+             x:Name="inGameContentPage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        <Grid RowSpacing="5"
+              ColumnSpacing="5">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            
+            <!--Player Slots-->
+            <!--TODO: Remove Text from labels used for tests-->
+            <Label x:Name="player1Name"
+                   Grid.Row="3" Grid.Column="0"
+                   HorizontalTextAlignment="Start" Margin="5,0,0,0"
+                   Text="LonglongName"
+                   Style="{StaticResource playerSlot}"/>
+            <Image x:Name="player1Cards" 
+                   Grid.Row="3" Grid.Column="0" 
+                   HorizontalOptions="Start" VerticalOptions="Start" Margin="5,25,0,0"
+                   Style="{StaticResource opponentCard}"/>
+            <Frame x:Name="player1Click" Grid.Row="3" Grid.Column="0" IsVisible="False" Style="{StaticResource transparentFrame}">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="PickOnPlayer" NumberOfTapsRequired="1"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+
+            <Label x:Name="player2Name"
+                   Grid.Row="2" Grid.Column="0"
+                   HorizontalTextAlignment="Start" Margin="5,0,0,0"
+                   Text="Test"
+                   Style="{StaticResource playerSlot}"/>
+            <Image x:Name="player2Cards"
+                   Grid.Row="2" Grid.Column="0"
+                   HorizontalOptions="Start" VerticalOptions="Start" Margin="5,25,0,0"
+                   Style="{StaticResource opponentCard}"/>
+            <Frame x:Name="player2Click" Grid.Row="2" Grid.Column="0" IsVisible="False" Style="{StaticResource transparentFrame}">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="PickOnPlayer" NumberOfTapsRequired="1"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+
+            <Label x:Name="player3Name"
+                   Grid.Row="1" Grid.Column="0"
+                   HorizontalTextAlignment="Start" Margin="5,0,0,0"
+                   Text="Testing"
+                   Style="{StaticResource playerSlot}"/>
+            <Image x:Name="player3Cards"
+                   Grid.Row="1" Grid.Column="0"
+                   HorizontalOptions="Start" VerticalOptions="Start" Margin="5,25,0,0"
+                   Style="{StaticResource opponentCard}"/>
+            <Frame x:Name="player3Click" Grid.Row="1" Grid.Column="0" IsVisible="False" Style="{StaticResource transparentFrame}">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="PickOnPlayer" NumberOfTapsRequired="1"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+
+            <Label x:Name="player4Name"
+                   Grid.Row="0" Grid.Column="1"
+                   HorizontalTextAlignment="Center" Margin="0,5,0,0"
+                   Text="ELSebamo"
+                   Style="{StaticResource playerSlot}"/>
+            <Image x:Name="player4Cards"
+                   Grid.Row="0" Grid.Column="1"
+                   HorizontalOptions="Center" VerticalOptions="Start" Margin="5,30,0,0"
+                   Style="{StaticResource opponentCard}"/>
+            <Frame x:Name="player4Click" Grid.Row="0" Grid.Column="1" IsVisible="False" Style="{StaticResource transparentFrame}">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="PickOnPlayer" NumberOfTapsRequired="1"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+
+            <Label x:Name="player5Name"
+                   Grid.Row="1" Grid.Column="2"
+                   HorizontalTextAlignment="End" Margin="0,0,5,0"
+                   Text="Pikachu"
+                   Style="{StaticResource playerSlot}"/>
+            <Image x:Name="player5Cards"
+                   Grid.Row="1" Grid.Column="2"
+                   HorizontalOptions="End" VerticalOptions="Start" Margin="0,25,5,0"
+                   Style="{StaticResource opponentCard}"/>
+            <Frame x:Name="player5Click" Grid.Row="1" Grid.Column="2" IsVisible="False" Style="{StaticResource transparentFrame}">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="PickOnPlayer" NumberOfTapsRequired="1"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+
+            <Label x:Name="player6Name"
+                   Grid.Row="2" Grid.Column="2"
+                   HorizontalTextAlignment="End" Margin="0,0,5,0"
+                   Text="Leveinard"
+                   Style="{StaticResource playerSlot}"/>
+            <Image x:Name="player6Cards"
+                   Grid.Row="2" Grid.Column="2"
+                   HorizontalOptions="End" VerticalOptions="Start" Margin="0,25,5,0"
+                   Style="{StaticResource opponentCard}"/>
+                <Frame x:Name="player6Click" Grid.Row="2" Grid.Column="2" IsVisible="False" Style="{StaticResource transparentFrame}">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="PickOnPlayer" NumberOfTapsRequired="1"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+
+            <Label x:Name="player7Name"
+                   Grid.Row="3" Grid.Column="2"
+                   HorizontalTextAlignment="End"  Margin="0,0,5,0"
+                   Text="Bob"
+                   Style="{StaticResource playerSlot}"/>
+            <Image x:Name="player7Cards"
+                   Grid.Row="3" Grid.Column="2"
+                   HorizontalOptions="End" VerticalOptions="Start" Margin="0,25,5,0"
+                   Style="{StaticResource opponentCard}"/>
+                <Frame x:Name="player7Click" Grid.Row="3" Grid.Column="2" IsVisible="False" Style="{StaticResource transparentFrame}">
+                <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="PickOnPlayer" NumberOfTapsRequired="1"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+
+
+            <!--Center Info-->
+            <Label x:Name="tourDeJeuTxt"
+                   Grid.Row="1" Grid.Column="1"
+                   HorizontalTextAlignment="Center" VerticalTextAlignment="Start"
+                   Text="{Binding game.GetNumOfTour}"
+                   Style="{StaticResource gameInfo}"/>
+
+            <Label x:Name="nbDeTirageTxt"
+                   Grid.Row="1" Grid.Column="1"
+                   HorizontalOptions="Center" VerticalOptions="Center"
+                   Text="{Binding game.GetCardsDiscovered}"
+                   Style="{StaticResource gameInfo}"/>
+
+            <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"
+                  RowSpacing="0" ColumnSpacing="5">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image x:Name="greenCardCounterImage"
+                   Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+                   HorizontalOptions="End" VerticalOptions="Center"
+                   HeightRequest="60"/>
+                <Label x:Name="greenCardCounterText"
+                   Grid.Row="1" Grid.Column="1"
+                   HorizontalOptions="Start" VerticalOptions="Start"
+                   Text="{Binding game.GetGreenCardsDiscovered}"
+                   Style="{StaticResource gameInfo}"/>
+
+            </Grid>
+
+            <Grid Grid.Row="2" Grid.Column="1"
+                  RowSpacing="0" ColumnSpacing="0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label x:Name="lastCardText"
+                       Grid.Column="0"
+                       HorizontalTextAlignment="End" VerticalTextAlignment="End"
+                       Margin="0,0,5,0"
+                       Text="{Binding game.GetLastPlayer}"
+                       Style="{StaticResource gameInfo}"
+                       />
+                <Image x:Name="lastCardImage"
+                       Grid.Column="1"
+                       HorizontalOptions="Start" VerticalOptions="End"
+                       HeightRequest="90"/>
+            </Grid>
+
+            <!--Text="C'est à Leveinard de piocher."-->
+            <Label x:Name="nextPickMsg"
+                   Grid.Row="3" Grid.Column="1"
+                   HorizontalTextAlignment="Center" VerticalOptions="Center"
+                   Text="{Binding game.GetActualPlayer}"
+                   Style="{StaticResource gameInfo}"/>
+
+
+            <!--Main Players Info-->
+            <Image x:Name="mainPlayerRole"
+                   Grid.Row="4" Grid.Column="0"
+                   HorizontalOptions="Start" VerticalOptions="End"
+                   Margin="0"/>
+            <Image x:Name="toggleVisibilityImage"
+                   Grid.Row="4" Grid.Column="2"
+                   HorizontalOptions="End" VerticalOptions="End"
+                   Margin="0,0,5,0"
+                   WidthRequest="80">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ToggleVisibility" NumberOfTapsRequired="1"/>
+                </Image.GestureRecognizers>
+            </Image>
+
+            <!--Main Player Cards-->
+            <Grid Grid.Row="4" Grid.Column="1"
+                   RowSpacing="0" ColumnSpacing="0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+
+                <Image x:Name="mainPlayerCard4"
+                       Grid.Row="0" Grid.Column="0"
+                       HorizontalOptions="End" VerticalOptions="Start"
+                       Margin="0,0,3,0"
+                       HeightRequest="90"/>
+                <Image x:Name="mainPlayerCard5"
+                       Grid.Row="0" Grid.Column="1"
+                       HorizontalOptions="Start" VerticalOptions="Start"
+                       Margin="3,0,0,0"
+                       HeightRequest="90"/>
+                <Image x:Name="mainPlayerCard1"
+                       Grid.Row="0" Grid.Column="0"
+                       HorizontalOptions="Start" VerticalOptions="End"
+                       Margin="0,0,0,5"
+                       HeightRequest="90"/>
+                <Image x:Name="mainPlayerCard2"
+                       Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                       HorizontalOptions="Center" VerticalOptions="End"
+                       Margin="0,0,0,5"
+                       HeightRequest="90"/>
+                <Image x:Name="mainPlayerCard3"
+                       Grid.Row="0" Grid.Column="1"
+                       HorizontalOptions="End" VerticalOptions="End"
+                       Margin="0,0,0,5"
+                       HeightRequest="90"/>
+            </Grid>
+                  
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
