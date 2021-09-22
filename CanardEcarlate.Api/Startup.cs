@@ -1,3 +1,5 @@
+using CanardEcarlate.Application;
+using CanardEcarlate.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
@@ -26,6 +29,12 @@ namespace CanardEcarlate.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<UserstoreDatabaseSettings>(Configuration.GetSection(nameof(UserstoreDatabaseSettings)));
+
+            services.AddSingleton<IUserstoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<UserstoreDatabaseSettings>>().Value);
+
+            services.AddSingleton<UserService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
