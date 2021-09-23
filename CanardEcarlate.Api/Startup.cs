@@ -32,12 +32,24 @@ namespace CanardEcarlate.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // MONGO
             services.Configure<UserstoreDatabaseSettings>(Configuration.GetSection(nameof(UserstoreDatabaseSettings)));
+            services.AddSingleton<IUserstoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<UserstoreDatabaseSettings>>().Value);
 
-            services.AddSingleton<IUserstoreDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<UserstoreDatabaseSettings>>().Value);
+            services.Configure<GamestoreDatabaseSettings>(Configuration.GetSection(nameof(GamestoreDatabaseSettings)));
+            services.AddSingleton<IGamestoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<GamestoreDatabaseSettings>>().Value);
+
+            services.Configure<UserStatisticsstoreDatabaseSettings>(Configuration.GetSection(nameof(UserStatisticsstoreDatabaseSettings)));
+            services.AddSingleton<IUserStatisticsstoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<UserStatisticsstoreDatabaseSettings>>().Value);
+
+            services.Configure<GlobalStatisticsstoreDatabaseSettings>(Configuration.GetSection(nameof(GlobalStatisticsstoreDatabaseSettings)));
+            services.AddSingleton<IGlobalStatisticsstoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<GlobalStatisticsstoreDatabaseSettings>>().Value);
+
+            services.Configure<CardsConfigurationUserstoreDatabaseSettings>(Configuration.GetSection(nameof(CardsConfigurationUserstoreDatabaseSettings)));
+            services.AddSingleton<ICardsConfigurationUserstoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<CardsConfigurationUserstoreDatabaseSettings>>().Value);
 
             services.AddSingleton<UserService>();
+            services.AddSingleton<GameService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
