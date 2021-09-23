@@ -1,6 +1,4 @@
-﻿using CanardEcarlate.Domain.Database;
-
-namespace CanardEcarlate.Domain
+﻿namespace CanardEcarlate.Domain
 {
     public class GameConfiguration
     {
