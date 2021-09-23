@@ -1,5 +1,4 @@
 ﻿using CanardEcarlate.Application;
-using CanardEcarlate.Domain.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
