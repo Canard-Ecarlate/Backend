@@ -1,19 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace CanardEcarlate.Domain.Database
 {
     public class GlobalStatistics
     {
-        [Key]
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string Id { get; set; }
+        [BsonElement("nballgames")]
         public int NbAllGames { get; set; }
-        [Key]
+        [BsonElement("nbreplays")]
         public int NbReplays { get; set; }
-        [Key]
+        [BsonElement("nbquimidgame")]
         public int NbQuitMidGame { get; set; }
-        [Key]
+        [BsonElement("nbwonasciatbynbplayers")]
         public Dictionary<NbPlayersConfiguration, int> NbWonAsCIATByNbPlayers { get; set; }
-        [Key]
+        [BsonElement("nbwonascebynbplayers")]
         public Dictionary<NbPlayersConfiguration, int> NbWonAsCEByNbPlayers { get; set; }
     }
 }
