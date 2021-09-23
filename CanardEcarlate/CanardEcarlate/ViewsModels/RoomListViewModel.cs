@@ -55,7 +55,6 @@ namespace CanardEcarlate.ViewsModels
 
         public void filterList()
         {
-            Console.WriteLine("coucou"+search);
             isVisibleSubmit = false;
             listRoomsFiltered = new List<Room>(listRooms.FindAll(room => room.name.Contains(search)));
             if(listRoomsFiltered.Count == 0)

@@ -90,6 +90,7 @@ namespace CanardEcarlate.Views
             Frame frame = (Frame)o;
             TapGestureRecognizer tapGesture = (TapGestureRecognizer)frame.GestureRecognizers[0];
             Label label = (Label)tapGesture.CommandParameter;
+            frame.GestureRecognizers.Remove(tapGesture);
             GlobalVariable.CurrentRoom.name = label.Text;
 
             Room result = vm.listRoomsFiltered.Find(room => room.name == GlobalVariable.CurrentRoom.name);
