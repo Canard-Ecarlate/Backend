@@ -1,6 +1,7 @@
 using CanardEcarlate.Application;
 using CanardEcarlate.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using CanardEcarlate.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -33,21 +34,22 @@ namespace CanardEcarlate.Api
             // MONGO
             services.Configure<UserstoreDatabaseSettings>(Configuration.GetSection(nameof(UserstoreDatabaseSettings)));
             services.AddSingleton<IUserstoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<UserstoreDatabaseSettings>>().Value);
-
             services.Configure<GamestoreDatabaseSettings>(Configuration.GetSection(nameof(GamestoreDatabaseSettings)));
             services.AddSingleton<IGamestoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<GamestoreDatabaseSettings>>().Value);
-
             services.Configure<UserStatisticsstoreDatabaseSettings>(Configuration.GetSection(nameof(UserStatisticsstoreDatabaseSettings)));
             services.AddSingleton<IUserStatisticsstoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<UserStatisticsstoreDatabaseSettings>>().Value);
-
             services.Configure<GlobalStatisticsstoreDatabaseSettings>(Configuration.GetSection(nameof(GlobalStatisticsstoreDatabaseSettings)));
             services.AddSingleton<IGlobalStatisticsstoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<GlobalStatisticsstoreDatabaseSettings>>().Value);
-
             services.Configure<CardsConfigurationUserstoreDatabaseSettings>(Configuration.GetSection(nameof(CardsConfigurationUserstoreDatabaseSettings)));
             services.AddSingleton<ICardsConfigurationUserstoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<CardsConfigurationUserstoreDatabaseSettings>>().Value);
 
+            // REPOSITORIES
+            services.AddSingleton<UserRepository>();
+
+            // APPLICATION
             services.AddSingleton<UserService>();
             services.AddSingleton<GameService>();
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

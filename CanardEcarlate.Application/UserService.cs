@@ -1,5 +1,6 @@
 ﻿using CanardEcarlate.Domain;
 using CanardEcarlate.Infrastructure;
+using CanardEcarlate.Infrastructure.Repositories;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -8,20 +9,18 @@ namespace CanardEcarlate.Application
 {
     public class UserService
     {
-        private readonly IMongoCollection<User> _users;
+        private readonly UserRepository _userRepository;
 
-        public UserService(IUserstoreDatabaseSettings settings)
+        public UserService(UserRepository userRepository)
         {
-            var client = new MongoClient(settings.ConnectionString);
-            var database = client.GetDatabase(settings.DatabaseName);
-            _users = database.GetCollection<User>(settings.UsersCollectionName);
+            _userRepository = userRepository;
         }
 
         public List<User> Get() =>
-            _users.Find(user => true).ToList();
+            _userRepository.Get();
 
         public User Get(string id) =>
-            _users.Find<User>(user => user.Id == id).FirstOrDefault();
+            _userRepository.Get(id);
 
         public User Create(User user)
         {
@@ -40,10 +39,10 @@ namespace CanardEcarlate.Application
         }
 
         public void Update(string id, User userIn) =>
-            _users.ReplaceOne(user => user.Id == id, userIn);
+            _userRepository.Update(id, userIn);
 
-        public void Remove(User userIn) =>
-            _users.DeleteOne(user => user.Id == userIn.Id);
+        public void Remove(User user) =>
+            _userRepository.Remove(user);
 
         public void Remove(string id) =>
             _users.DeleteOne(user => user.Id == id);
