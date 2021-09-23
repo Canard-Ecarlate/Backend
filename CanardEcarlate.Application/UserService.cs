@@ -1,7 +1,6 @@
-﻿using CanardEcarlate.Domain.Database;
+﻿using CanardEcarlate.Domain;
 using CanardEcarlate.Infrastructure;
 using MongoDB.Driver;
-using System;
 using System.Collections.Generic;
 
 namespace CanardEcarlate.Application
