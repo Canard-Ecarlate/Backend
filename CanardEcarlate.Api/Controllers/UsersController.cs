@@ -1,4 +1,5 @@
 ﻿using CanardEcarlate.Application;
+using CanardEcarlate.Domain;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
