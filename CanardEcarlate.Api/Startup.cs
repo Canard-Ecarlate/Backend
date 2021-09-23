@@ -1,5 +1,6 @@
 using CanardEcarlate.Application;
 using CanardEcarlate.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,11 +9,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CanardEcarlate.Api
@@ -40,6 +43,45 @@ namespace CanardEcarlate.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CanardEcarlate.Api", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter JWT with Bearer into field",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                { new OpenApiSecurityScheme
+                        {
+                         Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer"}
+                        },
+                    new string[] {}
+                }
+                });
+            });
+
+            var TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidIssuer = "https://canardecarlate.fr",
+                ValidAudience = "https://canardecarlate.fr",
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ")),
+                ClockSkew = TimeSpan.Zero // remove delay of token when expire
+            };
+
+            services
+            .AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(cfg =>
+            {
+                cfg.TokenValidationParameters = TokenValidationParameters;
+            });
+
+            services.AddAuthorization(cfg =>
+            {
+                cfg.AddPolicy("Joueur", policy => policy.RequireClaim("type", "Joueur"));
+                cfg.AddPolicy("ClearanceLevel1", policy => policy.RequireClaim("ClearanceLevel", "1"));
             });
         }
 
@@ -57,7 +99,10 @@ namespace CanardEcarlate.Api
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
