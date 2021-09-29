@@ -42,7 +42,6 @@ namespace CanardEcarlate.Api
             services.AddSingleton<UserService>();
             services.AddSingleton<GameService>();
 
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
