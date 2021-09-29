@@ -22,6 +22,9 @@ namespace CanardEcarlate.Infrastructure.Repositories
         public User Get(string id) =>
             _users.Find<User>(user => user.Id == id).FirstOrDefault();
 
+        public User GetByName(string name) =>
+            _users.Find<User>(user => user.Name == name).FirstOrDefault();
+
         public User Create(User user)
         {
             _users.InsertOne(user);
