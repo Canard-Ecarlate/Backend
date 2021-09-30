@@ -39,5 +39,11 @@ namespace CanardEcarlate.Infrastructure.Repositories
 
         public void Remove(string id) =>
             _users.DeleteOne(user => user.Id == id);
+
+        public long CountUserByName(string name) =>
+            _users.Find<User>(user => user.Name == name).CountDocuments();
+
+        public long CountUserByMail(string mail) =>
+            _users.Find<User>(user => user.Email == mail).CountDocuments();
     }
 }

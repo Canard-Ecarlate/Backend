@@ -9,6 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using CanardEcarlate.Domain.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -77,18 +78,20 @@ namespace CanardEcarlate.Api.Controllers
                 return NotFound();
             }
 
-            _userService.Remove(user.Id);
+            _userService.Remove(_userService.Get(id));
 
             return NoContent();
         }
 
+
         [HttpPost]
         [Route("[action]")]
-        public ActionResult<String> Login([FromBody] User User)
+        public ActionResult<UserWithToken> Login([FromBody] User User)
         {
+            User userAuthentifiate = null;
             try
             {
-                User user = _userService.Login(User.Name, User.Password);
+                userAuthentifiate = _userService.Login(User.Name, User.Password);
             }
             catch (UnauthorizedAccessException e) {
                 return Unauthorized();
@@ -108,8 +111,21 @@ namespace CanardEcarlate.Api.Controllers
                 expires: DateTime.Now.AddDays(30.0),
                 signingCredentials: new SigningCredentials(Key, SecurityAlgorithms.HmacSha256)
             );
+            UserWithToken userToken = new UserWithToken { token = new JwtSecurityTokenHandler().WriteToken(Token), user = userAuthentifiate };
+            return new OkObjectResult(userToken);
+        }
 
-            return new OkObjectResult(new JwtSecurityTokenHandler().WriteToken(Token));
+        [HttpPost]
+        [Route("[action]")]
+        public ActionResult<User> SignUp(String name,String mail, String password, String passwordConfirmation) {
+            try {
+                User user = _userService.SignUp(name, mail, password, passwordConfirmation);
+                return CreatedAtRoute("GetUser", new { id = user.Id.ToString() }, user);
+            }
+            catch (Exception e) {
+                Console.Write(e.Message);
+                throw;
+            }
         }
     }
 }

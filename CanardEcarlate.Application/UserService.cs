@@ -2,6 +2,7 @@
 using CanardEcarlate.Infrastructure;
 using CanardEcarlate.Infrastructure.Repositories;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
@@ -24,17 +25,9 @@ namespace CanardEcarlate.Application
 
         public User Create(User user)
         {
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
 
-            var pbkdf2 = new Rfc2898DeriveBytes(user.Password, salt, 100000);
-            byte[] hash = pbkdf2.GetBytes(20);
-            byte[] hashBytes = new byte[36];
-            Array.Copy(salt, 0, hashBytes, 0, 16);
-            Array.Copy(hash, 0, hashBytes, 16, 20);
-            string savedPasswordHash = Convert.ToBase64String(hashBytes);
-            user.Password = savedPasswordHash;
-            _users.InsertOne(user);
+            user.Password = hashPassword(user.Password);
+            _userRepository.Create(user);
             return user;
         }
 
@@ -44,14 +37,11 @@ namespace CanardEcarlate.Application
         public void Remove(User user) =>
             _userRepository.Remove(user);
 
-        public void Remove(string id) =>
-            _users.DeleteOne(user => user.Id == id);
-
         public User Login(String name, String password){
-            long nbPseudo = _users.Find(user => user.Name == name).CountDocuments();
+            long nbPseudo = _userRepository.CountUserByName(name);
             if (nbPseudo == 1)
             {
-                User usertemp = _users.Find(user => user.Name == name).First();
+                User usertemp = _userRepository.GetByName(name);
                 /* Extract the bytes */
                 byte[] hashBytes = Convert.FromBase64String(usertemp.Password);
                 /* Get the salt */
@@ -70,6 +60,49 @@ namespace CanardEcarlate.Application
             else {
                 throw new UnauthorizedAccessException();
             }
+        }
+
+        public String hashPassword(String password) {
+            byte[] salt;
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000);
+            byte[] hash = pbkdf2.GetBytes(20);
+            byte[] hashBytes = new byte[36];
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 20);
+            string savedPasswordHash = Convert.ToBase64String(hashBytes);
+            return savedPasswordHash;
+        }
+
+        public User SignUp(String name, String mail, String password, String passwordConfirmation) {
+            User user = null;
+            if (_userRepository.CountUserByName(name) == 0)
+            {
+                if (_userRepository.CountUserByMail(mail) == 0)
+                {
+                    if (password == passwordConfirmation) 
+                    {
+                        String passwordChiffre = hashPassword(password);
+                        user = new User { Name = name, Email = mail, Password = passwordChiffre };
+                        _userRepository.Create(user);
+                    }
+                    else
+                    {
+                        throw new Exception("les mots de passes ne sont pas identiques");
+                    }
+                }
+                else {
+                    throw new Exception("L'adresse mail : "+mail+" est déjà prise");
+                }
+
+            }
+            else {
+                throw new Exception("Le nom d'utilisateur "+name+" est déjà pris.");
+            }
+
+
+            return user;
         }
     }
 }
