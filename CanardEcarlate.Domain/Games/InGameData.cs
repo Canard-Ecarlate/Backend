@@ -1,4 +1,7 @@
-﻿namespace CanardEcarlate.Domain
+﻿using CanardEcarlate.Domain.Cards;
+using CanardEcarlate.Domain.Roles;
+
+namespace CanardEcarlate.Domain.Games
 {
     public class InGameData
     {

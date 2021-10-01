@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using CanardEcarlate.Domain.Configuration;
 
-namespace CanardEcarlate.Domain
+namespace CanardEcarlate.Domain.Statistics
 {
     public class CardsConfigurationStatistics
     {

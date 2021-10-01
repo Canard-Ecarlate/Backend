@@ -17,35 +17,16 @@ namespace CanardEcarlate.Application
         {
             _userRepository = userRepository;
         }
-
-        public List<User> Get() =>
-            _userRepository.Get();
-
-        public User Get(string id) =>
-            _userRepository.Get(id);
-
-        public User Create(User user)
-        {
-            user.Password = HashPassword(user.Password);
-            _userRepository.Create(user);
-            return user;
-        }
-
-        public void Update(string id, User userIn) =>
-            _userRepository.Update(id, userIn);
-
-        public void Remove(User user) =>
-            _userRepository.Remove(user);
-
+        
         public User Login(string name, string password)
         {
-            long nbPseudo = _userRepository.CountUserByName(name);
+            List<User> users = _userRepository.GetByName(name);
             
-            if (nbPseudo != 1) throw new UnauthorizedAccessException();
+            if (users.Count != 1) throw new UnauthorizedAccessException();
             
-            User usertemp = _userRepository.GetByName(name);
+            User user = users[0];
             /* Extract the bytes */
-            byte[] hashBytes = Convert.FromBase64String(usertemp.Password);
+            byte[] hashBytes = Convert.FromBase64String(user.Password);
             /* Get the salt */
             byte[] salt = new byte[HASH_SIZE];
             Array.Copy(hashBytes, 0, salt, 0, HASH_SIZE);
@@ -60,28 +41,14 @@ namespace CanardEcarlate.Application
                     throw new UnauthorizedAccessException();
                 }
             }
-            return usertemp;
-        }
-
-        private string HashPassword(string password)
-        {
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[HASH_SIZE]);
-
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, ITERATIONS);
-            byte[] hash = pbkdf2.GetBytes(BYTE_SIZE);
-            byte[] hashBytes = new byte[36];
-            Array.Copy(salt, 0, hashBytes, 0, HASH_SIZE);
-            Array.Copy(hash, 0, hashBytes, HASH_SIZE, BYTE_SIZE);
-            string savedPasswordHash = Convert.ToBase64String(hashBytes);
-            return savedPasswordHash;
+            return user;
         }
 
         public void SignUp(string name, string email, string password, string passwordConfirmation)
         {
             if (_userRepository.CountUserByName(name) == 0)
             {
-                if (_userRepository.CountUserByMail(email) == 0)
+                if (_userRepository.CountUserByEmail(email) == 0)
                 {
                     if (password == passwordConfirmation)
                     {
@@ -103,6 +70,20 @@ namespace CanardEcarlate.Application
             {
                 throw new Exception("User name " + name + " is still used");
             }
+        }
+        
+        private static string HashPassword(string password)
+        {
+            byte[] salt = new byte[HASH_SIZE];
+            new RNGCryptoServiceProvider().GetBytes(salt);
+
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, ITERATIONS);
+            byte[] hash = pbkdf2.GetBytes(BYTE_SIZE);
+            byte[] hashBytes = new byte[36];
+            Array.Copy(salt, 0, hashBytes, 0, HASH_SIZE);
+            Array.Copy(hash, 0, hashBytes, HASH_SIZE, BYTE_SIZE);
+            string savedPasswordHash = Convert.ToBase64String(hashBytes);
+            return savedPasswordHash;
         }
     }
 }

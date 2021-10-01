@@ -1,13 +1,13 @@
 ﻿namespace CanardEcarlate.Infrastructure
 {
-    public class GlobalStatisticsstoreDatabaseSettings : IGlobalStatisticsstoreDatabaseSettings
+    public class GlobalStatisticsStoreDatabaseSettings : IGlobalStatisticsStoreDatabaseSettings
     {
         public string GlobalStatisticsCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
     }
 
-    public interface IGlobalStatisticsstoreDatabaseSettings
+    public interface IGlobalStatisticsStoreDatabaseSettings
     {
         string GlobalStatisticsCollectionName { get; set; }
         string ConnectionString { get; set; }

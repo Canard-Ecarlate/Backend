@@ -1,13 +1,13 @@
 ﻿namespace CanardEcarlate.Infrastructure
 {
-    public class UserstoreDatabaseSettings : IUserstoreDatabaseSettings
+    public class UserStoreDatabaseSettings : IUserStoreDatabaseSettings
     {
         public string UsersCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
     }
 
-    public interface IUserstoreDatabaseSettings
+    public interface IUserStoreDatabaseSettings
     {
         string UsersCollectionName { get; set; }
         string ConnectionString { get; set; }

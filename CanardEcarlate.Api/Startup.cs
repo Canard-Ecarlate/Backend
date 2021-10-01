@@ -7,18 +7,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using CanardEcarlate.Api.Models;
-using CanardEcarlate.Domain;
 using AutoMapper;
+using CanardEcarlate.Api.Mappings;
 
 namespace CanardEcarlate.Api
 {
@@ -35,31 +30,30 @@ namespace CanardEcarlate.Api
         public void ConfigureServices(IServiceCollection services)
         {
             // MONGO
-            services.Configure<UserstoreDatabaseSettings>(Configuration.GetSection(nameof(UserstoreDatabaseSettings)));
-            services.AddSingleton<IUserstoreDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<UserstoreDatabaseSettings>>().Value);
-            services.Configure<GamestoreDatabaseSettings>(Configuration.GetSection(nameof(GamestoreDatabaseSettings)));
-            services.AddSingleton<IGamestoreDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<GamestoreDatabaseSettings>>().Value);
-            services.Configure<UserStatisticsstoreDatabaseSettings>(
-                Configuration.GetSection(nameof(UserStatisticsstoreDatabaseSettings)));
-            services.AddSingleton<IUserStatisticsstoreDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<UserStatisticsstoreDatabaseSettings>>().Value);
-            services.Configure<GlobalStatisticsstoreDatabaseSettings>(
-                Configuration.GetSection(nameof(GlobalStatisticsstoreDatabaseSettings)));
-            services.AddSingleton<IGlobalStatisticsstoreDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<GlobalStatisticsstoreDatabaseSettings>>().Value);
-            services.Configure<CardsConfigurationUserstoreDatabaseSettings>(
-                Configuration.GetSection(nameof(CardsConfigurationUserstoreDatabaseSettings)));
-            services.AddSingleton<ICardsConfigurationUserstoreDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<CardsConfigurationUserstoreDatabaseSettings>>().Value);
+            services.Configure<UserStoreDatabaseSettings>(Configuration.GetSection(nameof(UserStoreDatabaseSettings)));
+            services.AddSingleton<IUserStoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<UserStoreDatabaseSettings>>().Value);
+            services.Configure<GameStoreDatabaseSettings>(Configuration.GetSection(nameof(GameStoreDatabaseSettings)));
+            services.AddSingleton<IGameStoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<GameStoreDatabaseSettings>>().Value);
+            services.Configure<UserStatisticsStoreDatabaseSettings>(
+                Configuration.GetSection(nameof(UserStatisticsStoreDatabaseSettings)));
+            services.AddSingleton<IUserStatisticsStoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<UserStatisticsStoreDatabaseSettings>>().Value);
+            services.Configure<GlobalStatisticsStoreDatabaseSettings>(
+                Configuration.GetSection(nameof(GlobalStatisticsStoreDatabaseSettings)));
+            services.AddSingleton<IGlobalStatisticsStoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<GlobalStatisticsStoreDatabaseSettings>>().Value);
+            services.Configure<CardsConfigurationUserStoreDatabaseSettings>(
+                Configuration.GetSection(nameof(CardsConfigurationUserStoreDatabaseSettings)));
+            services.AddSingleton<ICardsConfigurationUserStoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<CardsConfigurationUserStoreDatabaseSettings>>().Value);
 
             // REPOSITORIES
             services.AddSingleton<UserRepository>();
 
             // APPLICATION
             services.AddSingleton<AuthenticationService>();
-            //services.AddSingleton<GameService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -105,7 +99,7 @@ namespace CanardEcarlate.Api
 
             services.AddAuthorization(cfg =>
             {
-                cfg.AddPolicy("Joueur", policy => policy.RequireClaim("type", "Joueur"));
+                cfg.AddPolicy("player", policy => policy.RequireClaim("type", "player"));
                 cfg.AddPolicy("ClearanceLevel1", policy => policy.RequireClaim("ClearanceLevel", "1"));
             });
         }

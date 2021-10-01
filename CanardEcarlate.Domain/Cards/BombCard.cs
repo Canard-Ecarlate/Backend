@@ -1,4 +1,4 @@
-﻿namespace CanardEcarlate.Domain
+﻿namespace CanardEcarlate.Domain.Cards
 {
     public class BombCard : ICard
     {

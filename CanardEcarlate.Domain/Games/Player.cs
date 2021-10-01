@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using CanardEcarlate.Domain.Cards;
+using CanardEcarlate.Domain.Roles;
 
-namespace CanardEcarlate.Domain
+namespace CanardEcarlate.Domain.Games
 {
     public class Player
     {
