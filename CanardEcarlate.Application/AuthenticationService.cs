@@ -1,17 +1,16 @@
-﻿using CanardEcarlate.Domain;
-using CanardEcarlate.Infrastructure;
+﻿using System;
+using CanardEcarlate.Domain;
 using CanardEcarlate.Infrastructure.Repositories;
-using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
 namespace CanardEcarlate.Application
 {
-    public class UserService
+    public class AuthenticationService
     {
         private readonly UserRepository _userRepository;
 
-        public UserService(UserRepository userRepository)
+        public AuthenticationService(UserRepository userRepository)
         {
             _userRepository = userRepository;
         }
@@ -24,8 +23,7 @@ namespace CanardEcarlate.Application
 
         public User Create(User user)
         {
-
-            user.Password = hashPassword(user.Password);
+            user.Password = HashPassword(user.Password);
             _userRepository.Create(user);
             return user;
         }
@@ -36,7 +34,8 @@ namespace CanardEcarlate.Application
         public void Remove(User user) =>
             _userRepository.Remove(user);
 
-        public User Login(String name, String password){
+        public User Login(string name, string password)
+        {
             long nbPseudo = _userRepository.CountUserByName(name);
             if (nbPseudo == 1)
             {
@@ -56,12 +55,14 @@ namespace CanardEcarlate.Application
 
                 return usertemp;
             }
-            else {
+            else
+            {
                 throw new UnauthorizedAccessException();
             }
         }
 
-        public String hashPassword(String password) {
+        private string HashPassword(string password)
+        {
             byte[] salt;
             new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
 
@@ -74,34 +75,32 @@ namespace CanardEcarlate.Application
             return savedPasswordHash;
         }
 
-        public User SignUp(String name, String mail, String password, String passwordConfirmation) {
-            User user = null;
+        public void SignUp(string name, string email, string password, string passwordConfirmation)
+        {
             if (_userRepository.CountUserByName(name) == 0)
             {
-                if (_userRepository.CountUserByMail(mail) == 0)
+                if (_userRepository.CountUserByMail(email) == 0)
                 {
-                    if (password == passwordConfirmation) 
+                    if (password == passwordConfirmation)
                     {
-                        String passwordChiffre = hashPassword(password);
-                        user = new User { Name = name, Email = mail, Password = passwordChiffre };
+                        string encryptedPassword = HashPassword(password);
+                        User user = new User {Name = name, Email = email, Password = encryptedPassword};
                         _userRepository.Create(user);
                     }
                     else
                     {
-                        throw new Exception("les mots de passes ne sont pas identiques");
+                        throw new Exception("Passwords are not equals");
                     }
                 }
-                else {
-                    throw new Exception("L'adresse mail : "+mail+" est déjà prise");
+                else
+                {
+                    throw new Exception("Email " + email + " is still used");
                 }
-
             }
-            else {
-                throw new Exception("Le nom d'utilisateur "+name+" est déjà pris.");
+            else
+            {
+                throw new Exception("User name " + name + " is still used");
             }
-
-
-            return user;
         }
     }
 }

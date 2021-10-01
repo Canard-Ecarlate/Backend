@@ -58,7 +58,7 @@ namespace CanardEcarlate.Api
             services.AddSingleton<UserRepository>();
 
             // APPLICATION
-            services.AddSingleton<UserService>();
+            services.AddSingleton<AuthenticationService>();
             //services.AddSingleton<GameService>();
 
             services.AddControllers();

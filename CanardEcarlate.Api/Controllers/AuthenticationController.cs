@@ -14,14 +14,14 @@ namespace CanardEcarlate.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly AuthenticationService _authenticationService;
         private readonly IMapper _mapper;
 
-        public UsersController(UserService userService, IMapper mapper)
+        public AuthenticationController(AuthenticationService authenticationService, IMapper mapper)
         {
-            _userService = userService;
+            _authenticationService = authenticationService;
             _mapper = mapper;
         }
 
@@ -32,7 +32,7 @@ namespace CanardEcarlate.Api.Controllers
             User user;
             try
             {
-                user = _userService.Login(identifier.Name, identifier.Password);
+                user = _authenticationService.Login(identifier.Name, identifier.Password);
             }
             catch (UnauthorizedAccessException e) {
                 return Unauthorized(e);
@@ -63,7 +63,7 @@ namespace CanardEcarlate.Api.Controllers
         [Route("[action]")]
         public ActionResult SignUp(Register register) {
             try {
-                _userService.SignUp(register.Name, register.Email, register.Password, register.PasswordConfirmation);
+                _authenticationService.SignUp(register.Name, register.Email, register.Password, register.PasswordConfirmation);
                 return new OkResult();
             }
             catch (Exception e) {
