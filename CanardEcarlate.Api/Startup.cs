@@ -16,6 +16,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CanardEcarlate.Api.Models;
+using CanardEcarlate.Domain;
+using AutoMapper;
 
 namespace CanardEcarlate.Api
 {
@@ -33,15 +36,23 @@ namespace CanardEcarlate.Api
         {
             // MONGO
             services.Configure<UserstoreDatabaseSettings>(Configuration.GetSection(nameof(UserstoreDatabaseSettings)));
-            services.AddSingleton<IUserstoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<UserstoreDatabaseSettings>>().Value);
+            services.AddSingleton<IUserstoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<UserstoreDatabaseSettings>>().Value);
             services.Configure<GamestoreDatabaseSettings>(Configuration.GetSection(nameof(GamestoreDatabaseSettings)));
-            services.AddSingleton<IGamestoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<GamestoreDatabaseSettings>>().Value);
-            services.Configure<UserStatisticsstoreDatabaseSettings>(Configuration.GetSection(nameof(UserStatisticsstoreDatabaseSettings)));
-            services.AddSingleton<IUserStatisticsstoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<UserStatisticsstoreDatabaseSettings>>().Value);
-            services.Configure<GlobalStatisticsstoreDatabaseSettings>(Configuration.GetSection(nameof(GlobalStatisticsstoreDatabaseSettings)));
-            services.AddSingleton<IGlobalStatisticsstoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<GlobalStatisticsstoreDatabaseSettings>>().Value);
-            services.Configure<CardsConfigurationUserstoreDatabaseSettings>(Configuration.GetSection(nameof(CardsConfigurationUserstoreDatabaseSettings)));
-            services.AddSingleton<ICardsConfigurationUserstoreDatabaseSettings>(sp => sp.GetRequiredService<IOptions<CardsConfigurationUserstoreDatabaseSettings>>().Value);
+            services.AddSingleton<IGamestoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<GamestoreDatabaseSettings>>().Value);
+            services.Configure<UserStatisticsstoreDatabaseSettings>(
+                Configuration.GetSection(nameof(UserStatisticsstoreDatabaseSettings)));
+            services.AddSingleton<IUserStatisticsstoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<UserStatisticsstoreDatabaseSettings>>().Value);
+            services.Configure<GlobalStatisticsstoreDatabaseSettings>(
+                Configuration.GetSection(nameof(GlobalStatisticsstoreDatabaseSettings)));
+            services.AddSingleton<IGlobalStatisticsstoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<GlobalStatisticsstoreDatabaseSettings>>().Value);
+            services.Configure<CardsConfigurationUserstoreDatabaseSettings>(
+                Configuration.GetSection(nameof(CardsConfigurationUserstoreDatabaseSettings)));
+            services.AddSingleton<ICardsConfigurationUserstoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<CardsConfigurationUserstoreDatabaseSettings>>().Value);
 
             // REPOSITORIES
             services.AddSingleton<UserRepository>();
@@ -53,7 +64,7 @@ namespace CanardEcarlate.Api
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CanardEcarlate.Api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "CanardEcarlate.Api", Version = "v1"});
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
@@ -61,33 +72,36 @@ namespace CanardEcarlate.Api
                     Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey
                 });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-                { new OpenApiSecurityScheme
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
                         {
-                         Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer"}
+                            Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id = "Bearer"}
                         },
-                    new string[] {}
-                }
+                        new string[] { }
+                    }
                 });
             });
+            
+            // Auto Mapper Configurations
+            var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
 
-            var TokenValidationParameters = new TokenValidationParameters
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+            
+            var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidIssuer = "https://canardecarlate.fr",
                 ValidAudience = "https://canardecarlate.fr",
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ")),
+                IssuerSigningKey =
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ")),
                 ClockSkew = TimeSpan.Zero // remove delay of token when expire
             };
 
             services
-            .AddAuthentication(options =>
-            {
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(cfg =>
-            {
-                cfg.TokenValidationParameters = TokenValidationParameters;
-            });
+                .AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
+                .AddJwtBearer(cfg => { cfg.TokenValidationParameters = tokenValidationParameters; });
 
             services.AddAuthorization(cfg =>
             {
@@ -114,10 +128,7 @@ namespace CanardEcarlate.Api
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

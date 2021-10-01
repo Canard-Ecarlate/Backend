@@ -5,13 +5,10 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using CanardEcarlate.Domain.Models;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using CanardEcarlate.Api.Models;
+using AutoMapper;
 
 namespace CanardEcarlate.Api.Controllers
 {
@@ -20,107 +17,54 @@ namespace CanardEcarlate.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserService _userService;
- 
-        public UsersController(UserService userService)
+        private readonly IMapper _mapper;
+
+        public UsersController(UserService userService, IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
-
-
-        [HttpGet]
-        public ActionResult<List<User>> Get() =>
-            _userService.Get();
-
-        [HttpGet("{id:length(24)}", Name = "GetUser")]
-        public ActionResult<User> Get(string id)
-        {
-            var user = _userService.Get(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
-        }
-
-        [HttpPost]
-        public ActionResult<User> Create(User user)
-        {
-            _userService.Create(user);
-
-            return CreatedAtRoute("GetUser", new { id = user.Id.ToString() }, user);
-        }
-
-        [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, User userIn)
-        {
-            userIn.Id = id;
-            var user = _userService.Get(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _userService.Update(id, userIn);
-
-            return NoContent();
-        }
-
-        [HttpDelete("{id:length(24)}")]
-        public IActionResult Delete(string id)
-        {
-            var user = _userService.Get(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _userService.Remove(_userService.Get(id));
-
-            return NoContent();
-        }
-
 
         [HttpPost]
         [Route("[action]")]
-        public ActionResult<UserWithToken> Login([FromBody] User User)
+        public ActionResult<UserWithToken> Login(Identifier identifier)
         {
-            User userAuthentifiate = null;
+            User user;
             try
             {
-                userAuthentifiate = _userService.Login(User.Name, User.Password);
+                user = _userService.Login(identifier.Name, identifier.Password);
             }
             catch (UnauthorizedAccessException e) {
-                return Unauthorized();
+                return Unauthorized(e);
             }
 
-            var Claims = new List<Claim>
+            List<Claim> claims = new List<Claim>
             {
-                new Claim("type", "Joueur"),
+                new Claim("type", "player")
             };
 
-            var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ"));
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ"));
 
-            var Token = new JwtSecurityToken(
+            JwtSecurityToken token = new JwtSecurityToken(
                 "https://canardecarlate.fr",
                 "https://canardecarlate.fr",
-                Claims,
+                claims,
                 expires: DateTime.Now.AddDays(30.0),
-                signingCredentials: new SigningCredentials(Key, SecurityAlgorithms.HmacSha256)
+                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );
-            UserWithToken userToken = new UserWithToken { token = new JwtSecurityTokenHandler().WriteToken(Token), user = userAuthentifiate };
-            return new OkObjectResult(userToken);
+            
+            UserWithToken userWithToken = _mapper.Map<UserWithToken>(user);
+            userWithToken.Token = new JwtSecurityTokenHandler().WriteToken(token);
+            
+            return new OkObjectResult(userWithToken);
         }
 
         [HttpPost]
         [Route("[action]")]
-        public ActionResult<User> SignUp(String name,String mail, String password, String passwordConfirmation) {
+        public ActionResult SignUp(Register register) {
             try {
-                User user = _userService.SignUp(name, mail, password, passwordConfirmation);
-                return CreatedAtRoute("GetUser", new { id = user.Id.ToString() }, user);
+                _userService.SignUp(register.Name, register.Email, register.Password, register.PasswordConfirmation);
+                return new OkResult();
             }
             catch (Exception e) {
                 Console.Write(e.Message);
