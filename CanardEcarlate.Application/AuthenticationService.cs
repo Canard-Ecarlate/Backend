@@ -9,6 +9,9 @@ namespace CanardEcarlate.Application
     public class AuthenticationService
     {
         private readonly UserRepository _userRepository;
+        private const int HASH_SIZE = 16;
+        private const int ITERATIONS = 100000;
+        private const int BYTE_SIZE = 20;
 
         public AuthenticationService(UserRepository userRepository)
         {
@@ -37,40 +40,39 @@ namespace CanardEcarlate.Application
         public User Login(string name, string password)
         {
             long nbPseudo = _userRepository.CountUserByName(name);
-            if (nbPseudo == 1)
+            
+            if (nbPseudo != 1) throw new UnauthorizedAccessException();
+            
+            User usertemp = _userRepository.GetByName(name);
+            /* Extract the bytes */
+            byte[] hashBytes = Convert.FromBase64String(usertemp.Password);
+            /* Get the salt */
+            byte[] salt = new byte[HASH_SIZE];
+            Array.Copy(hashBytes, 0, salt, 0, HASH_SIZE);
+            /* Compute the hash on the password the user entered */
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, ITERATIONS);
+            byte[] hash = pbkdf2.GetBytes(BYTE_SIZE);
+            /* Compare the results */
+            for (int i = 0; i < BYTE_SIZE; i++)
             {
-                User usertemp = _userRepository.GetByName(name);
-                /* Extract the bytes */
-                byte[] hashBytes = Convert.FromBase64String(usertemp.Password);
-                /* Get the salt */
-                byte[] salt = new byte[16];
-                Array.Copy(hashBytes, 0, salt, 0, 16);
-                /* Compute the hash on the password the user entered */
-                var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000);
-                byte[] hash = pbkdf2.GetBytes(20);
-                /* Compare the results */
-                for (int i = 0; i < 20; i++)
-                    if (hashBytes[i + 16] != hash[i])
-                        throw new UnauthorizedAccessException();
-
-                return usertemp;
+                if (hashBytes[i + HASH_SIZE] != hash[i])
+                {
+                    throw new UnauthorizedAccessException();
+                }
             }
-            else
-            {
-                throw new UnauthorizedAccessException();
-            }
+            return usertemp;
         }
 
         private string HashPassword(string password)
         {
             byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[HASH_SIZE]);
 
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000);
-            byte[] hash = pbkdf2.GetBytes(20);
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, ITERATIONS);
+            byte[] hash = pbkdf2.GetBytes(BYTE_SIZE);
             byte[] hashBytes = new byte[36];
-            Array.Copy(salt, 0, hashBytes, 0, 16);
-            Array.Copy(hash, 0, hashBytes, 16, 20);
+            Array.Copy(salt, 0, hashBytes, 0, HASH_SIZE);
+            Array.Copy(hash, 0, hashBytes, HASH_SIZE, BYTE_SIZE);
             string savedPasswordHash = Convert.ToBase64String(hashBytes);
             return savedPasswordHash;
         }
