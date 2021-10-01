@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CanardEcarlate.Domain;
+using Microsoft.VisualBasic;
 using MongoDB.Driver;
 
 namespace CanardEcarlate.Infrastructure.Repositories
@@ -15,7 +16,7 @@ namespace CanardEcarlate.Infrastructure.Repositories
             _users = database.GetCollection<User>(settings.UsersCollectionName);
         }
 
-        public List<User> GetByName(string name) =>
+        public IList<User> GetByName(string name) =>
             _users.Find(user => user.Name == name).ToList();
         
         public void Create(User user)

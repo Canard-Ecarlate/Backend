@@ -20,9 +20,12 @@ namespace CanardEcarlate.Application
         
         public User Login(string name, string password)
         {
-            List<User> users = _userRepository.GetByName(name);
-            
-            if (users.Count != 1) throw new UnauthorizedAccessException();
+            IList<User> users = _userRepository.GetByName(name);
+
+            if (users.Count != 1)
+            {
+                throw new UnauthorizedAccessException();
+            }
             
             User user = users[0];
             /* Extract the bytes */
