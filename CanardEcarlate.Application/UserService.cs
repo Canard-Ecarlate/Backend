@@ -2,7 +2,6 @@
 using CanardEcarlate.Infrastructure;
 using CanardEcarlate.Infrastructure.Repositories;
 using MongoDB.Driver;
-using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
