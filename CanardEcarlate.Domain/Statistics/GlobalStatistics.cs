@@ -19,8 +19,8 @@ namespace CanardEcarlate.Domain.Statistics
         [BsonElement("nbquimidgame")]
         public int NbQuitMidGame { get; set; }
         [BsonElement("nbwonasciatbynbplayers")]
-        public Dictionary<NbPlayersConfiguration, int> NbWonAsCIATByNbPlayers { get; set; }
+        public Dictionary<NbPlayersConfiguration, int> NbWonAsCiatByNbPlayers { get; set; }
         [BsonElement("nbwonascebynbplayers")]
-        public Dictionary<NbPlayersConfiguration, int> NbWonAsCEByNbPlayers { get; set; }
+        public Dictionary<NbPlayersConfiguration, int> NbWonAsCeByNbPlayers { get; set; }
     }
 }

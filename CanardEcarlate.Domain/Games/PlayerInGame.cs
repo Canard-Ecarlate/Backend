@@ -4,10 +4,10 @@ using CanardEcarlate.Domain.Roles;
 
 namespace CanardEcarlate.Domain.Games
 {
-    public class Player
+    public class PlayerInGame
     {
         public string Name { get; set; }
         public IRole Role { get; set; }
-        public List<ICard> Cards { get; set; }
+        public List<ICard> CardsInHand { get; set; }
     }
 }

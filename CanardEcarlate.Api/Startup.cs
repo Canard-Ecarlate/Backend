@@ -33,19 +33,16 @@ namespace CanardEcarlate.Api
             services.Configure<UserStoreDatabaseSettings>(Configuration.GetSection(nameof(UserStoreDatabaseSettings)));
             services.AddSingleton<IUserStoreDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<UserStoreDatabaseSettings>>().Value);
-            services.Configure<GameStoreDatabaseSettings>(Configuration.GetSection(nameof(GameStoreDatabaseSettings)));
-            services.AddSingleton<IGameStoreDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<GameStoreDatabaseSettings>>().Value);
-            services.Configure<UserStatisticsStoreDatabaseSettings>(
-                Configuration.GetSection(nameof(UserStatisticsStoreDatabaseSettings)));
+            
+            services.Configure<UserStatisticsStoreDatabaseSettings>(Configuration.GetSection(nameof(UserStatisticsStoreDatabaseSettings)));
             services.AddSingleton<IUserStatisticsStoreDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<UserStatisticsStoreDatabaseSettings>>().Value);
-            services.Configure<GlobalStatisticsStoreDatabaseSettings>(
-                Configuration.GetSection(nameof(GlobalStatisticsStoreDatabaseSettings)));
+            
+            services.Configure<GlobalStatisticsStoreDatabaseSettings>(Configuration.GetSection(nameof(GlobalStatisticsStoreDatabaseSettings)));
             services.AddSingleton<IGlobalStatisticsStoreDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<GlobalStatisticsStoreDatabaseSettings>>().Value);
-            services.Configure<CardsConfigurationUserStoreDatabaseSettings>(
-                Configuration.GetSection(nameof(CardsConfigurationUserStoreDatabaseSettings)));
+            
+            services.Configure<CardsConfigurationUserStoreDatabaseSettings>(Configuration.GetSection(nameof(CardsConfigurationUserStoreDatabaseSettings)));
             services.AddSingleton<ICardsConfigurationUserStoreDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<CardsConfigurationUserStoreDatabaseSettings>>().Value);
 

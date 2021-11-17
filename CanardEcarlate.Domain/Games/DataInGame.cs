@@ -3,10 +3,10 @@ using CanardEcarlate.Domain.Roles;
 
 namespace CanardEcarlate.Domain.Games
 {
-    public class InGameData
+    public class DataInGame
     {
-        public Player CurrentPlayer { get; set; }
-        public Player PreviousPlayer { get; set; }
+        public PlayerInGame CurrentPlayerInGame { get; set; }
+        public PlayerInGame PreviousPlayerInGame { get; set; }
         public ICard DrawnCard { get; set; }
         public int NbRound { get; set; }
         public int NbGreenDrawn { get; set; }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using CanardEcarlate.Domain;
-using Microsoft.VisualBasic;
 using MongoDB.Driver;
 
 namespace CanardEcarlate.Infrastructure.Repositories

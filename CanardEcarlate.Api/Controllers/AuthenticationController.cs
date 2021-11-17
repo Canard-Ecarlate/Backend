@@ -12,7 +12,7 @@ using AutoMapper;
 
 namespace CanardEcarlate.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace CanardEcarlate.Api.Controllers
         }
 
         [HttpPost]
-        [Route("[action]")]
+        [Route("")]
         public ActionResult<UserWithToken> Login(Identifier identifier)
         {
             User user;
@@ -60,7 +60,7 @@ namespace CanardEcarlate.Api.Controllers
         }
 
         [HttpPost]
-        [Route("[action]")]
+        [Route("")]
         public ActionResult SignUp(Register register) {
             try {
                 _authenticationService.SignUp(register.Name, register.Email, register.Password, register.PasswordConfirmation);
