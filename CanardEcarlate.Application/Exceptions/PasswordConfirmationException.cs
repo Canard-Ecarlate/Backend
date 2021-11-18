@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CanardEcarlate.Application.Exceptions
 {
-    class PasswordConfirmationException : Exception
+    public class PasswordConfirmationException : Exception
     {
         public PasswordConfirmationException() : 
             base("Password and password confirmation are not equals.")            

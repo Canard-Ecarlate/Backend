@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CanardEcarlate.Application.Exceptions
 {
-    class UsernameAlreadyExistException : Exception
+    public class UsernameAlreadyExistException : Exception
     {
         private String userName { get; set; }
 
