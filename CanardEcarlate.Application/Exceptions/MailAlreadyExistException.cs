@@ -1,15 +1,32 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace CanardEcarlate.Application.Exceptions
 {
+    [Serializable]
     public class MailAlreadyExistException : Exception
     {
-        private String mail { get; set; }
+        private string Mail { get; set; }
 
-        public MailAlreadyExistException(String mail)
-         : base(String.Format("mail {0} already exist in our database.",mail))
+        public MailAlreadyExistException() : 
+            base("mail already exists")            
         {
-            this.mail = mail;
+        }
+
+        public MailAlreadyExistException(string mail) 
+            : base($"mail {mail} already exists in our database.")
+        {
+            Mail = mail;
+        }
+
+        public MailAlreadyExistException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
+        protected MailAlreadyExistException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
         }
     }
 }

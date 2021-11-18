@@ -1,19 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace CanardEcarlate.Application.Exceptions
 {
+    [Serializable]
     public class UsernameAlreadyExistException : Exception
     {
-        private String userName { get; set; }
-
-        public UsernameAlreadyExistException(String userName)
-         : base(String.Format("Username {0} already exist in our database.", userName))
+        private string UserName { get; set; }
+        
+        public UsernameAlreadyExistException() : 
+            base("Password and password confirmation are not equals.")            
         {
-            this.userName = userName;
+        }
+        
+        public UsernameAlreadyExistException(string userName)
+            : base($"Username {userName} already exist in our database.")
+        {
+            UserName = userName;
+        }
+        
+        public UsernameAlreadyExistException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
+        protected UsernameAlreadyExistException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
         }
     }
 }

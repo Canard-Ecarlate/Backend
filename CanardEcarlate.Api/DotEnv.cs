@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CanardEcarlate.Api
+﻿namespace CanardEcarlate.Api
 {
     using System;
     using System.IO;
