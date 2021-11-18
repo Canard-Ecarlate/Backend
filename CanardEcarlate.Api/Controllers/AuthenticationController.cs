@@ -67,6 +67,7 @@ namespace CanardEcarlate.Api.Controllers
                 return new OkResult();
             }
             catch (Exception e) {
+                Console.Write(e.Message);
                 throw;
             }
         }
