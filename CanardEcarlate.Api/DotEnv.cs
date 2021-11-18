@@ -5,6 +5,8 @@
 
     public static class DotEnv
     {
+        private const int MAX_ELEMENTS_IN_A_ROW = 2;
+
         public static void Load(string filePath)
         {
             if (!File.Exists(filePath))
@@ -16,7 +18,7 @@
             {
                 var parts = line.Split('=', StringSplitOptions.RemoveEmptyEntries);
 
-                if (parts.Length != 2)
+                if (parts.Length != MAX_ELEMENTS_IN_A_ROW)
                 {
                     continue;
                 }
