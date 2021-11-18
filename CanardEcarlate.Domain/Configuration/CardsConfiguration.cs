@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using CanardEcarlate.Domain.Cards;
 
-namespace CanardEcarlate.Domain
+namespace CanardEcarlate.Domain.Configuration
 {
     public class CardsConfiguration
     {

@@ -1,4 +1,4 @@
-﻿namespace CanardEcarlate.Domain
+﻿namespace CanardEcarlate.Domain.Configuration
 {
     public class GameConfiguration
     {

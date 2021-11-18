@@ -1,9 +1,10 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using CanardEcarlate.Domain.Configuration;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-namespace CanardEcarlate.Domain
+namespace CanardEcarlate.Domain.Statistics
 {
     public class GlobalStatistics
     {
@@ -18,8 +19,8 @@ namespace CanardEcarlate.Domain
         [BsonElement("nbquimidgame")]
         public int NbQuitMidGame { get; set; }
         [BsonElement("nbwonasciatbynbplayers")]
-        public Dictionary<NbPlayersConfiguration, int> NbWonAsCIATByNbPlayers { get; set; }
+        public Dictionary<NbPlayersConfiguration, int> NbWonAsCiatByNbPlayers { get; set; }
         [BsonElement("nbwonascebynbplayers")]
-        public Dictionary<NbPlayersConfiguration, int> NbWonAsCEByNbPlayers { get; set; }
+        public Dictionary<NbPlayersConfiguration, int> NbWonAsCeByNbPlayers { get; set; }
     }
 }
