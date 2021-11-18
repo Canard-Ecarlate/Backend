@@ -40,7 +40,7 @@ namespace CanardEcarlate.Api.Controllers
 
             List<Claim> claims = new List<Claim>
             {
-                new Claim("type", "player")
+                new("type", "player")
             };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ"));
@@ -61,15 +61,10 @@ namespace CanardEcarlate.Api.Controllers
 
         [HttpPost]
         [Route("")]
-        public ActionResult SignUp(Register register) {
-            try {
-                _authenticationService.SignUp(register.Name, register.Email, register.Password, register.PasswordConfirmation);
-                return new OkResult();
-            }
-            catch (Exception e) {
-                Console.Write(e.Message);
-                throw;
-            }
+        public ActionResult SignUp(Register register)
+        {
+            _authenticationService.SignUp(register.Name, register.Email, register.Password, register.PasswordConfirmation);
+            return new OkResult();
         }
     }
 }

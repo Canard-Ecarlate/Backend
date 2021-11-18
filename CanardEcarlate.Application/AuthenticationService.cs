@@ -3,6 +3,7 @@ using CanardEcarlate.Domain;
 using CanardEcarlate.Infrastructure.Repositories;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using CanardEcarlate.Application.Exceptions;
 
 namespace CanardEcarlate.Application
 {
@@ -61,17 +62,17 @@ namespace CanardEcarlate.Application
                     }
                     else
                     {
-                        throw new Exception("Passwords are not equals");
+                        throw new PasswordConfirmationException();
                     }
                 }
                 else
                 {
-                    throw new Exception("Email " + email + " is still used");
+                    throw new MailAlreadyExistException(email);
                 }
             }
             else
             {
-                throw new Exception("User name " + name + " is still used");
+                throw new UsernameAlreadyExistException(name);
             }
         }
         

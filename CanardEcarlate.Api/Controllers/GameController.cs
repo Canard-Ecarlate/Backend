@@ -12,6 +12,5 @@ namespace CanardEcarlate.Api.Controllers
             // If win => global stat nbWonAs....ByNbPlayers +1
             return new OkObjectResult("draw card in " + userName + " 's hand");
         }
-        
     }
 }

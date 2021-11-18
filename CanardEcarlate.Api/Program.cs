@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace CanardEcarlate.Api
 {
@@ -7,6 +8,9 @@ namespace CanardEcarlate.Api
     {
         public static void Main(string[] args)
         {
+            var root = Directory.GetCurrentDirectory();
+            var dotenv = Path.Combine(root, ".env");
+            DotEnv.Load(dotenv);
             CreateHostBuilder(args).Build().Run();
         }
 

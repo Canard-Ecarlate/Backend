@@ -52,6 +52,5 @@ namespace CanardEcarlate.Api.Controllers
             // nb uit mid game +1
             return new OkObjectResult("stop game");
         }
-        
     }
 }
