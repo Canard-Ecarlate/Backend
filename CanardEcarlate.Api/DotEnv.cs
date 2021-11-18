@@ -12,7 +12,6 @@ namespace CanardEcarlate.Api
     {
         public static void Load(string filePath)
         {
-
             if (!File.Exists(filePath))
             {
                 return;
@@ -26,8 +25,6 @@ namespace CanardEcarlate.Api
                 {
                     continue;
                 }
-
-
                 Environment.SetEnvironmentVariable(parts[0], parts[1]);
             }
         }
