@@ -1,4 +1,6 @@
+using CanardEcarlate.Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CanardEcarlate.Api.Controllers
 {
@@ -6,9 +8,18 @@ namespace CanardEcarlate.Api.Controllers
     [ApiController]
     public class RoomController : ControllerBase
     {
+        private readonly IHubContext<CanardEcarlateHub> _ceHub;
+
+        public RoomController(IHubContext<CanardEcarlateHub> ceHub)
+        {
+            _ceHub = ceHub;
+        }
+
         [HttpPost]
         public ActionResult<string> CreateRoom()
         {
+            // Exemple d'utilisation de signalR
+            _ceHub.Clients.All.SendAsync("AfterCreateRoom", "Room created");
             return new OkObjectResult("create room");
         }
         
