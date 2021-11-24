@@ -26,7 +26,6 @@ namespace CanardEcarlate.Api.Controllers
         [HttpPost]
         public ActionResult<string> JoinRoom()
         {
-            
             return new OkObjectResult("join room");
         }
         

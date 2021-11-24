@@ -8,14 +8,12 @@ namespace CanardEcarlate.Api.Controllers
     [ApiController]
     public class GameController : ControllerBase
     {
-        
         private readonly IHubContext<CanardEcarlateHub> _ceHub;
 
         public GameController(IHubContext<CanardEcarlateHub> ceHub)
         {
             _ceHub = ceHub;
         }
-
         
         [HttpPost]
         public ActionResult<string> DrawCard(string userName)

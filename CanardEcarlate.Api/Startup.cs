@@ -52,7 +52,6 @@ namespace CanardEcarlate.Api
             AutoMapperService(services);
 
             AuthenticationAuthorisationService(services);
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,7 +79,6 @@ namespace CanardEcarlate.Api
                 endpoints.MapControllers(); 
                 endpoints.MapHub<CanardEcarlateHub> ("/canardecarlatehub");
             });
-            
         }
 
         private void MongoServices(IServiceCollection services)
@@ -101,7 +99,6 @@ namespace CanardEcarlate.Api
             services.AddSingleton<ICardsConfigurationUserStoreDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<CardsConfigurationUserStoreDatabaseSettings>>().Value);
         }
-        
         
         private static void SwaggerService(IServiceCollection services)
         {
@@ -133,7 +130,6 @@ namespace CanardEcarlate.Api
             var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
-
         }
 
         private static void AuthenticationAuthorisationService(IServiceCollection services)
@@ -156,7 +152,6 @@ namespace CanardEcarlate.Api
                 cfg.AddPolicy("player", policy => policy.RequireClaim("type", "player"));
                 cfg.AddPolicy("ClearanceLevel1", policy => policy.RequireClaim("ClearanceLevel", "1"));
             });
-
         }
     }
 }
