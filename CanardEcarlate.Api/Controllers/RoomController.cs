@@ -16,10 +16,10 @@ namespace CanardEcarlate.Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> CreateRoom(string roomName)
+        public ActionResult<string> CreateRoom()
         {
             // Exemple d'utilisation de signalR
-            _ceHub.Clients.All.SendAsync("AfterCreateRoom", $"Room {roomName} created");
+            _ceHub.Clients.All.SendAsync("AfterCreateRoom", "Room created");
             return new OkObjectResult("create room");
         }
         

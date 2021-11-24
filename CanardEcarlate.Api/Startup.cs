@@ -38,15 +38,15 @@ namespace CanardEcarlate.Api
                         .AllowCredentials()));
 
             services.AddSignalR();
-
-            MongoServices(services);
             
             services.AddSingleton<UserRepository>();
 
             services.AddSingleton<AuthenticationService>();
             
             services.AddControllers();
-            
+                        
+            MongoService(services);
+
             SwaggerService(services);
 
             AutoMapperService(services);
@@ -81,7 +81,7 @@ namespace CanardEcarlate.Api
             });
         }
 
-        private void MongoServices(IServiceCollection services)
+        private void MongoService(IServiceCollection services)
         {
             services.Configure<UserStoreDatabaseSettings>(Configuration.GetSection(nameof(UserStoreDatabaseSettings)));
             services.AddSingleton<IUserStoreDatabaseSettings>(sp =>
