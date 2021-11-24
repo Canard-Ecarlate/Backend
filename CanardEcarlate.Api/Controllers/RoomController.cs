@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using CanardEcarlate.Application;
+using CanardEcarlate.Api.Models;
 
 namespace CanardEcarlate.Api.Controllers
 {
@@ -6,14 +8,22 @@ namespace CanardEcarlate.Api.Controllers
     [ApiController]
     public class RoomController : ControllerBase
     {
+        private readonly RoomService _roomService;
+
+        public RoomController(RoomService roomService) {
+            _roomService = roomService;
+        }
+
         [HttpPost]
-        public ActionResult<string> CreateRoom()
+        public ActionResult<string> CreateRoom(RoomCreation room)
         {
-            return new OkObjectResult("create room");
+            _roomService.addRooms(room.RoomName, room.HostName, room.gameConfiguration, room.IsPrivate);
+            JoinRoom(new UserJoinRoom { RoomName = room.RoomName,UserName = room.RoomName});
+            return new OkObjectResult("Room created");
         }
         
         [HttpPost]
-        public ActionResult<string> JoinRoom()
+        public ActionResult<string> JoinRoom(UserJoinRoom user)
         {
             return new OkObjectResult("join room");
         }

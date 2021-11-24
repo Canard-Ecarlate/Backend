@@ -4,7 +4,7 @@ using CanardEcarlate.Domain.Roles;
 
 namespace CanardEcarlate.Domain.Games
 {
-    public class PlayerInGame
+    public class PlayerInRoom
     {
         public string Name { get; set; }
         public IRole Role { get; set; }

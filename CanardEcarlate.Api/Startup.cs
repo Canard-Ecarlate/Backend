@@ -51,6 +51,7 @@ namespace CanardEcarlate.Api
 
             // APPLICATION
             services.AddSingleton<AuthenticationService>();
+            services.AddSingleton<RoomService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
