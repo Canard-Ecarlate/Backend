@@ -1,6 +1,8 @@
+using CanardEcarlate.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using CanardEcarlate.Application;
 using CanardEcarlate.Api.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CanardEcarlate.Api.Controllers
 {
@@ -8,9 +10,12 @@ namespace CanardEcarlate.Api.Controllers
     [ApiController]
     public class RoomController : ControllerBase
     {
+        private readonly IHubContext<CanardEcarlateHub> _ceHub;
         private readonly RoomService _roomService;
 
-        public RoomController(RoomService roomService) {
+        public RoomController(IHubContext<CanardEcarlateHub> ceHub, RoomService roomService)
+        {
+            _ceHub = ceHub;
             _roomService = roomService;
         }
 
@@ -20,6 +25,9 @@ namespace CanardEcarlate.Api.Controllers
             _roomService.AddPublicRooms(room.RoomName, room.HostName, room.gameConfiguration);
             JoinRoom(new UserJoinRoom { RoomName = room.RoomName,UserName = room.RoomName});
             return new OkObjectResult("Room created");
+            // Exemple d'utilisation de signalR
+            _ceHub.Clients.All.SendAsync("AfterCreateRoom", "Room created");
+            return new OkObjectResult("create room");
         }
 
         [HttpPost]

@@ -14,6 +14,7 @@ using System;
 using System.Text;
 using AutoMapper;
 using CanardEcarlate.Api.Mappings;
+using CanardEcarlate.Api.Models;
 
 namespace CanardEcarlate.Api
 {
@@ -29,7 +30,61 @@ namespace CanardEcarlate.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // MONGO
+            services.AddCors(options => options
+                .AddPolicy("CorsPolicy", builder => 
+                    builder.WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()));
+
+            services.AddSignalR();
+            
+            services.AddSingleton<UserRepository>();
+
+            services.AddSingleton<AuthenticationService>();
+
+            services.AddSingleton<RoomService>();
+            
+            services.AddControllers();
+                        
+            MongoService(services);
+
+            SwaggerService(services);
+
+            AutoMapperService(services);
+
+            AuthenticationAuthorisationService(services);
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CanardEcarlate.Api v1"));
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+            
+            app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers(); 
+                endpoints.MapHub<CanardEcarlateHub> ("/canardecarlatehub");
+            });
+        }
+
+        private void MongoService(IServiceCollection services)
+        {
             services.Configure<UserStoreDatabaseSettings>(Configuration.GetSection(nameof(UserStoreDatabaseSettings)));
             services.AddSingleton<IUserStoreDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<UserStoreDatabaseSettings>>().Value);
@@ -45,15 +100,11 @@ namespace CanardEcarlate.Api
             services.Configure<CardsConfigurationUserStoreDatabaseSettings>(Configuration.GetSection(nameof(CardsConfigurationUserStoreDatabaseSettings)));
             services.AddSingleton<ICardsConfigurationUserStoreDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<CardsConfigurationUserStoreDatabaseSettings>>().Value);
+        }
+        
+        private static void SwaggerService(IServiceCollection services)
+        {
 
-            // REPOSITORIES
-            services.AddSingleton<UserRepository>();
-
-            // APPLICATION
-            services.AddSingleton<AuthenticationService>();
-            services.AddSingleton<RoomService>();
-
-            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "CanardEcarlate.Api", Version = "v1"});
@@ -71,17 +122,21 @@ namespace CanardEcarlate.Api
                         {
                             Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id = "Bearer"}
                         },
-                        new string[] { }
+                        Array.Empty<string>()
                     }
                 });
             });
-            
-            // Auto Mapper Configurations
-            var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
+        }
 
+        private static void AutoMapperService(IServiceCollection services)
+        {
+            var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
-            
+        }
+
+        private static void AuthenticationAuthorisationService(IServiceCollection services)
+        {
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidIssuer = "https://canardecarlate.fr",
@@ -100,27 +155,6 @@ namespace CanardEcarlate.Api
                 cfg.AddPolicy("player", policy => policy.RequireClaim("type", "player"));
                 cfg.AddPolicy("ClearanceLevel1", policy => policy.RequireClaim("ClearanceLevel", "1"));
             });
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CanardEcarlate.Api v1"));
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
