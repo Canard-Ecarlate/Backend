@@ -15,27 +15,6 @@ namespace CanardEcarlate.Domain.Games
         public List<PlayerInRoom> Players { get; set; }
         public DataInGame DataInGame { get; set; }
         public bool IsPrivate { get; set; }
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-            Room objAsRoom = obj as Room;
-            if (objAsRoom == null)
-            {
-                return false;
-            }
-            else {
-                if (objAsRoom.Name == this.Name)
-                {
-                    return true;
-                }
-                else 
-                {
-                    return false;
-                }
-            }
-        }
+
     }
 }

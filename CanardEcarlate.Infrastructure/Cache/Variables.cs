@@ -5,6 +5,7 @@ namespace CanardEcarlate.Infrastructure.Cache
 {
     public static class Variables
     {
-        public static List<Room> Rooms { get; set; } = new List<Room>();
+        public static List<Room> PublicRooms { get; set; } = new List<Room>();
+        public static List<Room> PrivateRooms { get; set; } = new List<Room>();
     }
 }

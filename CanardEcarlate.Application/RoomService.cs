@@ -4,6 +4,8 @@ using CanardEcarlate.Domain.Configuration;
 using CanardEcarlate.Infrastructure.Repositories;
 using CanardEcarlate.Application.Exceptions;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 
 namespace CanardEcarlate.Application
 {
@@ -13,22 +15,43 @@ namespace CanardEcarlate.Application
         public RoomService(UserRepository userRepository) {
             _userRepository = userRepository;
         }
-        public void addRooms(string roomName, string hostName, GameConfiguration gameConfiguration, bool isPrivate) {
-            if (!Variables.Rooms.Contains(new Room { Name = roomName }))
+        public void AddPublicRooms(string roomName, string hostName, GameConfiguration gameConfiguration) {
+            CheckValidRoom(roomName,hostName,gameConfiguration,false);
+            Room room = new Room
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = roomName,
+                HostName = hostName,
+                GameConfiguration = gameConfiguration,
+                Players = new List<PlayerInRoom>(),
+                IsPrivate = false
+            };
+            Variables.PublicRooms.Add(room);
+        }
+
+        public void AddPrivateRooms(string roomName, string hostName, GameConfiguration gameConfiguration)
+        {
+            CheckValidRoom(roomName, hostName, gameConfiguration,true);
+            Room room = new Room
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = roomName,
+                HostName = hostName,
+                GameConfiguration = gameConfiguration,
+                Players = new List<PlayerInRoom>(),
+                IsPrivate = true
+            };
+            Variables.PrivateRooms.Add(room);
+        }
+
+        public bool CheckValidRoom(string roomName, string hostName, GameConfiguration gameConfiguration,bool privateRoom) {
+            if (!Variables.PublicRooms.Any(room => room.Name == roomName) || privateRoom)
             {
                 if ((roomName != "") && (roomName != null))
                 {
                     if (_userRepository.CountUserByName(hostName) != 0)
                     {
-                        Room room = new Room
-                        {
-                            Name = roomName,
-                            HostName = hostName,
-                            GameConfiguration = gameConfiguration,
-                            Players = new List<PlayerInRoom>(),
-                            IsPrivate = isPrivate
-                        };
-                        Variables.Rooms.Add(room);
+                        return true;
                     }
                     else
                     {
@@ -40,7 +63,8 @@ namespace CanardEcarlate.Application
                     throw new RoomNameNullException();
                 }
             }
-            else {
+            else
+            {
                 throw new RoomNameAlreadyExistException();
             }
         }
