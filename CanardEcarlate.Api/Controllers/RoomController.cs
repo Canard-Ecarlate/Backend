@@ -25,9 +25,6 @@ namespace CanardEcarlate.Api.Controllers
             _roomService.AddPublicRooms(room.RoomName, room.HostName, room.gameConfiguration);
             JoinRoom(new UserJoinRoom { RoomName = room.RoomName,UserName = room.RoomName});
             return new OkObjectResult("Room created");
-            // Exemple d'utilisation de signalR
-            _ceHub.Clients.All.SendAsync("AfterCreateRoom", "Room created");
-            return new OkObjectResult("create room");
         }
 
         [HttpPost]
