@@ -104,7 +104,6 @@ namespace CanardEcarlate.Api
         
         private static void SwaggerService(IServiceCollection services)
         {
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "CanardEcarlate.Api", Version = "v1"});

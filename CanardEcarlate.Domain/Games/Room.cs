@@ -15,6 +15,5 @@ namespace CanardEcarlate.Domain.Games
         public List<PlayerInRoom> Players { get; set; }
         public DataInGame DataInGame { get; set; }
         public bool IsPrivate { get; set; }
-
     }
 }

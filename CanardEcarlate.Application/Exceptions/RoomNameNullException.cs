@@ -6,8 +6,6 @@ namespace CanardEcarlate.Application.Exceptions
     [Serializable]
     public class RoomNameNullException : Exception
     {
-
-
         public RoomNameNullException() : 
             base("RoomName cannot be null.")            
         {
