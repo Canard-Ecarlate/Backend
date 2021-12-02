@@ -11,6 +11,11 @@ namespace CanardEcarlate.Application.Exceptions
         {
         }
 
+        public RoomNameNullException(string message) :
+            base(message)
+        {
+        }
+
         public RoomNameNullException(string message, Exception innerException)
             : base(message, innerException)
         {

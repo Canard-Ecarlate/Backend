@@ -20,17 +20,17 @@ namespace CanardEcarlate.Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> CreatePublicRoom(PublicRoomCreation room)
+        public ActionResult<string> CreatePublicRoom(RoomCreation room)
         {
-            _roomService.AddPublicRooms(room.RoomName, room.HostName, room.gameConfiguration);
+            _roomService.AddPublicRooms(room.RoomName, room.HostName, room.GameConfiguration);
             JoinRoom(new UserJoinRoom { RoomName = room.RoomName,UserName = room.RoomName});
             return new OkObjectResult("Room created");
         }
 
         [HttpPost]
-        public ActionResult<string> CreatePrivateRoom(PublicRoomCreation room)
+        public ActionResult<string> CreatePrivateRoom(RoomCreation room)
         {
-            _roomService.AddPrivateRooms(room.RoomName, room.HostName, room.gameConfiguration);
+            _roomService.AddPrivateRooms(room.RoomName, room.HostName, room.GameConfiguration);
             JoinRoom(new UserJoinRoom { RoomName = room.RoomName, UserName = room.RoomName });
             return new OkObjectResult("Room created");
         }
