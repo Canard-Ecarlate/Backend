@@ -1,5 +1,7 @@
 using CanardEcarlate.Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using CanardEcarlate.Application;
+using CanardEcarlate.Api.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace CanardEcarlate.Api.Controllers
@@ -9,22 +11,32 @@ namespace CanardEcarlate.Api.Controllers
     public class RoomController : ControllerBase
     {
         private readonly IHubContext<CanardEcarlateHub> _ceHub;
+        private readonly RoomService _roomService;
 
-        public RoomController(IHubContext<CanardEcarlateHub> ceHub)
+        public RoomController(IHubContext<CanardEcarlateHub> ceHub, RoomService roomService)
         {
             _ceHub = ceHub;
+            _roomService = roomService;
         }
 
         [HttpPost]
-        public ActionResult<string> CreateRoom()
+        public ActionResult<string> CreatePublicRoom(RoomCreation room)
         {
-            // Exemple d'utilisation de signalR
-            _ceHub.Clients.All.SendAsync("AfterCreateRoom", "Room created");
-            return new OkObjectResult("create room");
+            _roomService.AddPublicRooms(room.RoomName, room.HostName, room.GameConfiguration);
+            JoinRoom(new UserJoinRoom { RoomName = room.RoomName,UserName = room.RoomName});
+            return new OkObjectResult("Room created");
         }
-        
+
         [HttpPost]
-        public ActionResult<string> JoinRoom()
+        public ActionResult<string> CreatePrivateRoom(RoomCreation room)
+        {
+            _roomService.AddPrivateRooms(room.RoomName, room.HostName, room.GameConfiguration);
+            JoinRoom(new UserJoinRoom { RoomName = room.RoomName, UserName = room.RoomName });
+            return new OkObjectResult("Room created");
+        }
+
+        [HttpPost]
+        public ActionResult<string> JoinRoom(UserJoinRoom user)
         {
             return new OkObjectResult("join room");
         }

@@ -42,6 +42,8 @@ namespace CanardEcarlate.Api
             services.AddSingleton<UserRepository>();
 
             services.AddSingleton<AuthenticationService>();
+
+            services.AddSingleton<RoomService>();
             
             services.AddControllers();
                         
