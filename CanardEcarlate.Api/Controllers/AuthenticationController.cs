@@ -25,6 +25,14 @@ namespace CanardEcarlate.Api.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        [Route("")]
+        public ActionResult<UserWithToken> Bonjour()
+        {
+            return new OkObjectResult("Bonjour");
+        }
+
+
         [HttpPost]
         [Route("")]
         public ActionResult<UserWithToken> Login(Identifier identifier)
