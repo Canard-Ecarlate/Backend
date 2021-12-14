@@ -15,58 +15,39 @@ namespace CanardEcarlate.Application
         public RoomService(UserRepository userRepository) {
             _userRepository = userRepository;
         }
-        public void AddPublicRooms(string roomName, string hostName, GameConfiguration gameConfiguration) {
-            CheckValidRoom(roomName,hostName,gameConfiguration,false);
+        public Room AddRooms(string roomName, string hostId, GameConfiguration gameConfiguration,bool isPrivate) {
+            CheckValidRoom(roomName, hostId, gameConfiguration,false);
+            string HostName = _userRepository.GetById(hostId)[0].Id;
             Room room = new Room
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = roomName,
-                HostName = hostName,
+                HostId = hostId,
+                HostName = HostName,
                 GameConfiguration = gameConfiguration,
                 Players = new List<PlayerInRoom>(),
-                IsPrivate = false
+                IsPrivate = isPrivate
             };
-            Variables.PublicRooms.Add(room);
+            Variables.Rooms.Add(room);
+            return room;
         }
 
-        public void AddPrivateRooms(string roomName, string hostName, GameConfiguration gameConfiguration)
-        {
-            CheckValidRoom(roomName, hostName, gameConfiguration,true);
-            Room room = new Room
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = roomName,
-                HostName = hostName,
-                GameConfiguration = gameConfiguration,
-                Players = new List<PlayerInRoom>(),
-                IsPrivate = true
-            };
-            Variables.PrivateRooms.Add(room);
-        }
-
-        public bool CheckValidRoom(string roomName, string hostName, GameConfiguration gameConfiguration,bool privateRoom) {
-            if (!Variables.PublicRooms.Any(room => room.Name == roomName) || privateRoom)
-            {
+        public bool CheckValidRoom(string roomName, string hostId, GameConfiguration gameConfiguration,bool privateRoom) {
                 if ((roomName != "") && (roomName != null))
                 {
-                    if (_userRepository.CountUserByName(hostName) != 0)
+                    if (_userRepository.CountUserById(hostId) != 0)
                     {
                         return true;
                     }
                     else
                     {
-                        throw new HostNameNoExistException(hostName);
+                        throw new HostNameNoExistException(hostId);
                     }
                 }
                 else
                 {
                     throw new RoomNameNullException();
                 }
-            }
-            else
-            {
-                throw new RoomNameAlreadyExistException();
-            }
-        }
+            }        
     }
 }

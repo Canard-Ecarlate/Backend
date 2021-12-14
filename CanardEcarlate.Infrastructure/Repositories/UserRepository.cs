@@ -17,7 +17,10 @@ namespace CanardEcarlate.Infrastructure.Repositories
 
         public IList<User> GetByName(string name) =>
             _users.Find(user => user.Name == name).ToList();
-        
+
+        public IList<User> GetById(string id) =>
+            _users.Find(user => user.Id == id).ToList();
+
         public void Create(User user)
         {
             _users.InsertOne(user);
@@ -25,6 +28,8 @@ namespace CanardEcarlate.Infrastructure.Repositories
 
         public long CountUserByName(string name) =>
             _users.Find(user => user.Name == name).CountDocuments();
+        public long CountUserById(string id) =>
+            _users.Find(user => user.Id == id).CountDocuments();
 
         public long CountUserByEmail(string email) =>
             _users.Find(user => user.Email == email).CountDocuments();

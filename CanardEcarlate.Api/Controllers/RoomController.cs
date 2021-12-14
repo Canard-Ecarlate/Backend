@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using CanardEcarlate.Application;
 using CanardEcarlate.Api.Models;
 using Microsoft.AspNetCore.SignalR;
+using CanardEcarlate.Domain.Games;
 
 namespace CanardEcarlate.Api.Controllers
 {
@@ -20,20 +21,13 @@ namespace CanardEcarlate.Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> CreatePublicRoom(RoomCreation room)
+        public ActionResult<string> CreateRoom(RoomCreation room)
         {
-            _roomService.AddPublicRooms(room.RoomName, room.HostName, room.GameConfiguration);
-            JoinRoom(new UserJoinRoom { RoomName = room.RoomName,UserName = room.RoomName});
+            Room roomCreated = _roomService.AddRooms(room.RoomName, room.HostId, room.GameConfiguration, room.IsPrivate);
+            JoinRoom(new UserJoinRoom { RoomId = roomCreated.Id,UserName = room.RoomName});
             return new OkObjectResult("Room created");
         }
 
-        [HttpPost]
-        public ActionResult<string> CreatePrivateRoom(RoomCreation room)
-        {
-            _roomService.AddPrivateRooms(room.RoomName, room.HostName, room.GameConfiguration);
-            JoinRoom(new UserJoinRoom { RoomName = room.RoomName, UserName = room.RoomName });
-            return new OkObjectResult("Room created");
-        }
 
         [HttpPost]
         public ActionResult<string> JoinRoom(UserJoinRoom user)
