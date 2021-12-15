@@ -7,7 +7,6 @@ namespace CanardEcarlate.Api.Controllers
     [ApiController]
     public class GameController : ControllerBase
     {
-
         public GameController(IConfiguration configuration)
         {
             Configuration = configuration;
