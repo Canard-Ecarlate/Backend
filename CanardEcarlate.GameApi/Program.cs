@@ -4,7 +4,7 @@ using System.IO;
 
 namespace CanardEcarlate.GameApi
 {
-    public static class Program
+    internal static class Program
     {
         public static void Main(string[] args)
         {
