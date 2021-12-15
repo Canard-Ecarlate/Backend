@@ -9,12 +9,9 @@ namespace CanardEcarlate.GameApi
     public class CanardEcarlateHub : Hub
     {
         private static readonly Dictionary<string, HashSet<string>> MyGroups = new();
-        private const string AFTER_SEND_MESSAGE_ASYNC = "AfterSendMessageAsync";
-
-        public async Task SendMessageAsync (string user) {
-            await Clients.All.SendAsync (AFTER_SEND_MESSAGE_ASYNC, $"Good Morning in GameApi {user}");
-        }
+        private const string PUSH_MESSAGE_ASYNC = "PushMessageAsync";
         
+        // Life cycle of signalR's users
         public override async Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();
@@ -28,8 +25,13 @@ namespace CanardEcarlate.GameApi
                 roomName = group.Key;
             }
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
-            await Clients.Group(roomName).SendAsync (AFTER_SEND_MESSAGE_ASYNC, $"Good Bye {Context.ConnectionId}");
+            await Clients.Group(roomName).SendAsync (PUSH_MESSAGE_ASYNC, $"Good Bye {Context.ConnectionId}");
             await base.OnDisconnectedAsync(exception);
+        }
+
+        // Methods
+        public async Task SendMessageAsync (string user) {
+            await Clients.All.SendAsync (PUSH_MESSAGE_ASYNC, $"Good Morning in GameApi {user}");
         }
 
         public async Task JoinRoomAsync(string roomName)
@@ -47,7 +49,7 @@ namespace CanardEcarlate.GameApi
             }
             
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
-            await Clients.Group(roomName).SendAsync (AFTER_SEND_MESSAGE_ASYNC, $"Good Morning {Context.ConnectionId} in {roomName}");
+            await Clients.Group(roomName).SendAsync (PUSH_MESSAGE_ASYNC, $"Good Morning {Context.ConnectionId} in {roomName}");
         }
 
         public async Task LeaveRoomAsync(string roomName)
@@ -58,7 +60,7 @@ namespace CanardEcarlate.GameApi
                 value.Remove(Context.ConnectionId);
             }
 
-            await Clients.Group(roomName).SendAsync (AFTER_SEND_MESSAGE_ASYNC, $"Good Bye {Context.ConnectionId} in {roomName}");
+            await Clients.Group(roomName).SendAsync (PUSH_MESSAGE_ASYNC, $"Good Bye {Context.ConnectionId} in {roomName}");
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
         }
     }
