@@ -4,9 +4,9 @@ using System.IO;
 
 namespace CanardEcarlate.GameApi
 {
-    internal static class Program
+    public static class Program
     {
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var root = Directory.GetCurrentDirectory();
             var dotenv = Path.Combine(root, ".env");
