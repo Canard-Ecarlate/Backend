@@ -6,7 +6,7 @@ namespace CanardEcarlate.GameApi
 {
     internal static class Program
     {
-        public static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var root = Directory.GetCurrentDirectory();
             var dotenv = Path.Combine(root, ".env");
