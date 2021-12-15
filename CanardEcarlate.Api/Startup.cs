@@ -35,7 +35,6 @@ namespace CanardEcarlate.Api
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()));
-            services.AddSignalR();
             services.AddSingleton<UserRepository>();
             services.AddSingleton<AuthenticationService>();
             services.AddSingleton<RoomService>();
