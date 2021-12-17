@@ -23,10 +23,10 @@ namespace CanardEcarlate.Infrastructure.Repositories
         public long CountRoomById(string id) =>
             _rooms.Find(room => room.Id == id).CountDocuments();
 
-        public IList<Room> GetById(string id) =>
+        public IList<Room> FindById(string id) =>
             _rooms.Find(room => room.Id == id).ToList();
 
-        public IEnumerable<Room> GetAllRooms() =>
-                _rooms.Find(_ => true).ToList();
+        public IEnumerable<Room> FindAllRooms() => 
+            _rooms.Find(_ => true).ToList();
     }
 }

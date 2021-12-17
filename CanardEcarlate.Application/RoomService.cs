@@ -41,7 +41,7 @@ namespace CanardEcarlate.Application
         {
             CheckValid.JoinRoom(_roomRepository, _userRepository, userId, roomId);
             
-            Room room = _roomRepository.GetById(roomId)[0];
+            Room room = _roomRepository.FindById(roomId)[0];
             User user = _userRepository.GetById(userId)[0];
             PlayerInRoom player = new PlayerInRoom {Id = userId, Name = user.Name};
             room.Players.Add(player);

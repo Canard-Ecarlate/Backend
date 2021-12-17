@@ -45,7 +45,7 @@ namespace CanardEcarlate.Application
                 throw new UserIdNoExistException();
             }
 
-            if (roomRepository.GetAllRooms().Any(r => r.Players.Contains(new PlayerInRoom {Id = userId})))
+            if (roomRepository.FindAllRooms().Any(r => r.Players.Contains(new PlayerInRoom {Id = userId})))
             { 
                 throw new UserAlreadyInRoomException();
             }
