@@ -10,12 +10,10 @@ namespace CanardEcarlate.Api.Controllers
     [ApiController]
     public class RoomController : ControllerBase
     {
-        private readonly IHubContext<CanardEcarlateHub> _ceHub;
         private readonly RoomService _roomService;
 
-        public RoomController(IHubContext<CanardEcarlateHub> ceHub, RoomService roomService)
+        public RoomController(RoomService roomService)
         {
-            _ceHub = ceHub;
             _roomService = roomService;
         }
 
