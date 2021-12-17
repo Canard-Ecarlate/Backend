@@ -1,11 +1,6 @@
-﻿using CanardEcarlate.Domain;
-using CanardEcarlate.Domain.Games;
+﻿using CanardEcarlate.Domain.Games;
 using MongoDB.Driver;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CanardEcarlate.Infrastructure.Repositories
 {
@@ -33,6 +28,5 @@ namespace CanardEcarlate.Infrastructure.Repositories
 
         public IList<Room> GetAllRooms() =>
                 _rooms.Find(_ => true).ToList();
-
     }
 }

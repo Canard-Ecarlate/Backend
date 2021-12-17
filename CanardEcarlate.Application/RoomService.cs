@@ -47,6 +47,5 @@ namespace CanardEcarlate.Application
             room.Players.Add(player);
             return room;
         }
-
     }
 }
