@@ -1,6 +1,7 @@
-using CanardEcarlate.Api.Models;
+using CanardEcarlate.Api.Models.Room;
 using Microsoft.AspNetCore.Mvc;
 using CanardEcarlate.Application;
+using CanardEcarlate.Domain.Games;
 
 namespace CanardEcarlate.Api.Controllers
 {
@@ -16,25 +17,17 @@ namespace CanardEcarlate.Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> CreatePublicRoom(RoomCreation room)
+        public ActionResult<Room> CreateRoom(RoomCreation room)
         {
-            _roomService.AddPublicRooms(room.RoomName, room.HostName, room.GameConfiguration);
-            JoinRoom(new UserJoinRoom { RoomName = room.RoomName,UserName = room.RoomName});
-            return new OkObjectResult("Room created");
+            Room roomCreated = _roomService.AddRooms(room.RoomName, room.HostId, room.GameConfiguration, room.IsPrivate);
+            return JoinRoom(new UserJoinRoom { RoomId = roomCreated.Id, UserId = room.HostId });
         }
-
+        
         [HttpPost]
-        public ActionResult<string> CreatePrivateRoom(RoomCreation room)
+        public ActionResult<Room> JoinRoom(UserJoinRoom userJoinRoom)
         {
-            _roomService.AddPrivateRooms(room.RoomName, room.HostName, room.GameConfiguration);
-            JoinRoom(new UserJoinRoom { RoomName = room.RoomName, UserName = room.RoomName });
-            return new OkObjectResult("Room created");
-        }
-
-        [HttpPost]
-        public ActionResult<string> JoinRoom(UserJoinRoom user)
-        {
-            return new OkObjectResult("join room");
+            Room roomJoined = _roomService.JoinRooms(userJoinRoom.RoomId, userJoinRoom.UserId);
+            return new OkObjectResult(roomJoined);
         }
         
         [HttpPost]
