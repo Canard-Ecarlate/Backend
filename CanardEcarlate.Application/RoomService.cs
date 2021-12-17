@@ -42,7 +42,7 @@ namespace CanardEcarlate.Application
         {
             CheckValidJoinRoom(userId, roomId);
             Room room = _roomRepository.GetById(roomId)[0];
-            User user = _userRepository.GetById(roomId)[0];
+            User user = _userRepository.GetById(userId)[0];
             PlayerInRoom player = new PlayerInRoom { Id = userId, Name = user.Name };
             room.Players.Add(player);
             return room;
