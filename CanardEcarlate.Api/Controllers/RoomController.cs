@@ -1,7 +1,6 @@
 using CanardEcarlate.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using CanardEcarlate.Application;
-using CanardEcarlate.Api.Models;
 using Microsoft.AspNetCore.SignalR;
 using CanardEcarlate.Domain.Games;
 
@@ -27,8 +26,7 @@ namespace CanardEcarlate.Api.Controllers
             JoinRoom(new UserJoinRoom { RoomId = roomCreated.Id,UserName = room.RoomName});
             return new OkObjectResult("Room created");
         }
-
-
+        
         [HttpPost]
         public ActionResult<string> JoinRoom(UserJoinRoom user)
         {
