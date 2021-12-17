@@ -1,4 +1,4 @@
-using CanardEcarlate.Api.Models;
+using CanardEcarlate.Api.Models.Room;
 using Microsoft.AspNetCore.Mvc;
 using CanardEcarlate.Application;
 using CanardEcarlate.Domain.Games;

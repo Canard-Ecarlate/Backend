@@ -1,4 +1,4 @@
-﻿namespace CanardEcarlate.Api.Models
+﻿namespace CanardEcarlate.Api.Models.Authentication
 {
     public class UserWithToken
     {

@@ -1,6 +1,6 @@
 ﻿using CanardEcarlate.Domain.Configuration;
 
-namespace CanardEcarlate.Api.Models
+namespace CanardEcarlate.Api.Models.Room
 {
     public class RoomCreation
     {

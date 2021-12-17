@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using CanardEcarlate.Api.Models;
 using AutoMapper;
+using CanardEcarlate.Api.Models.Authentication;
 
 namespace CanardEcarlate.Api.Controllers
 {
