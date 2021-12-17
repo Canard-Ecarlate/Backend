@@ -41,6 +41,8 @@ namespace CanardEcarlate.Api
             
             services.AddSingleton<UserRepository>();
 
+            services.AddSingleton<RoomRepository>();
+
             services.AddSingleton<AuthenticationService>();
 
             services.AddSingleton<RoomService>();
@@ -88,7 +90,11 @@ namespace CanardEcarlate.Api
             services.Configure<UserStoreDatabaseSettings>(Configuration.GetSection(nameof(UserStoreDatabaseSettings)));
             services.AddSingleton<IUserStoreDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<UserStoreDatabaseSettings>>().Value);
-            
+
+            services.Configure<RoomStoreDatabaseSettings>(Configuration.GetSection(nameof(RoomStoreDatabaseSettings)));
+            services.AddSingleton<IRoomStoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<RoomStoreDatabaseSettings>>().Value);
+
             services.Configure<UserStatisticsStoreDatabaseSettings>(Configuration.GetSection(nameof(UserStatisticsStoreDatabaseSettings)));
             services.AddSingleton<IUserStatisticsStoreDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<UserStatisticsStoreDatabaseSettings>>().Value);

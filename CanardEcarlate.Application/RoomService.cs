@@ -6,18 +6,24 @@ using CanardEcarlate.Application.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using MongoDB.Bson;
+using CanardEcarlate.Domain;
 
 namespace CanardEcarlate.Application
 {
     public class RoomService
     {
         private readonly UserRepository _userRepository;
-        public RoomService(UserRepository userRepository) {
+        private readonly RoomRepository _roomRepository;
+        public RoomService(UserRepository userRepository, RoomRepository roomRepository)
+        {
             _userRepository = userRepository;
+            _roomRepository = roomRepository;
         }
-        public Room AddRooms(string roomName, string hostId, GameConfiguration gameConfiguration,bool isPrivate) {
-            CheckValidRoom(roomName, hostId, gameConfiguration,false);
-            string HostName = _userRepository.GetById(hostId)[0].Id;
+        public Room AddRooms(string roomName, string hostId, GameConfiguration gameConfiguration, bool isPrivate)
+        {
+            CheckValidCreateRoom(roomName, hostId, gameConfiguration, false);
+            string HostName = _userRepository.GetById(hostId)[0].Name;
             Room room = new Room
             {
                 Id = Guid.NewGuid().ToString(),
@@ -25,15 +31,28 @@ namespace CanardEcarlate.Application
                 HostId = hostId,
                 HostName = HostName,
                 GameConfiguration = gameConfiguration,
-                Players = new List<PlayerInRoom>(),
+                Players = new HashSet<PlayerInRoom>(),
                 IsPrivate = isPrivate
             };
-            Variables.Rooms.Add(room);
+            _roomRepository.Create(room);
             return room;
         }
 
-        public bool CheckValidRoom(string roomName, string hostId, GameConfiguration gameConfiguration,bool privateRoom) {
-                if ((roomName != "") && (roomName != null))
+        public Room JoinRooms(string roomId, string userId)
+        {
+            CheckValidJoinRoom(userId, roomId);
+            Room room = _roomRepository.GetById(roomId)[0];
+            User user = _userRepository.GetById(roomId)[0];
+            PlayerInRoom player = new PlayerInRoom { Id = userId, Name = user.Name };
+            room.Players.Add(player);
+            return room;
+        }
+
+        public bool CheckValidCreateRoom(string roomName, string hostId, GameConfiguration gameConfiguration, bool privateRoom)
+        {
+            if ((roomName != "") && (roomName != null))
+            {
+                if (ObjectId.TryParse(hostId, out _))
                 {
                     if (_userRepository.CountUserById(hostId) != 0)
                     {
@@ -41,13 +60,51 @@ namespace CanardEcarlate.Application
                     }
                     else
                     {
-                        throw new HostNameNoExistException(hostId);
+                        throw new HostIdNoExistException(hostId);
                     }
                 }
                 else
                 {
-                    throw new RoomNameNullException();
+                    throw new IdNotValidException(hostId);
                 }
-            }        
+            }
+            else
+            {
+                throw new RoomNameNullException();
+            }
+        }
+
+        public bool CheckValidJoinRoom(string userId, string roomId)
+        {
+            if (ObjectId.TryParse(userId, out _))
+            {
+                if (_userRepository.CountUserById(userId) != 0)
+                {
+                    if (_roomRepository.CountRoomById(roomId) != 0)
+                    {
+                        if (!_roomRepository.GetAllRooms().Any(r => r.Players.Contains(new PlayerInRoom { Id = userId })))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            throw new UserAlreadyInRoomException();
+                        }
+                    }
+                    else
+                    {
+                        throw new UserIdNoExistException();
+                    }
+                }
+                else
+                {
+                    throw new RoomIdNoExistException();
+                }
+            }
+            else
+            {
+                throw new IdNotValidException(userId);
+            }
+        }
     }
 }

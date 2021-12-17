@@ -13,8 +13,9 @@ namespace CanardEcarlate.Domain.Games
         public string HostId { get; set; }
         public string HostName { get; set; }
         public GameConfiguration GameConfiguration { get; set; }
-        public List<PlayerInRoom> Players { get; set; }
+        public HashSet<PlayerInRoom> Players { get; set; }
         public DataInGame DataInGame { get; set; }
         public bool IsPrivate { get; set; }
+        public string ConteneurId { get; set; }
     }
 }

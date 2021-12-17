@@ -61,10 +61,10 @@ namespace CanardEcarlate.Api.Controllers
 
         [HttpPost]
         [Route("")]
-        public ActionResult SignUp(Register register)
+        public ActionResult<UserWithToken> SignUp(Register register)
         {
             _authenticationService.SignUp(register.Name, register.Email, register.Password, register.PasswordConfirmation);
-            return new OkResult();
+            return Login(new Identifier { Name = register.Name, Password = register.Password });
         }
     }
 }
