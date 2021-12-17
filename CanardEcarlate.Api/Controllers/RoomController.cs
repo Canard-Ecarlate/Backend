@@ -1,7 +1,6 @@
 using CanardEcarlate.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using CanardEcarlate.Application;
-using Microsoft.AspNetCore.SignalR;
 using CanardEcarlate.Domain.Games;
 
 namespace CanardEcarlate.Api.Controllers
