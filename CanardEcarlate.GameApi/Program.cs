@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 
-namespace CanardEcarlate.Api
+namespace CanardEcarlate.GameApi
 {
-    public  static class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {

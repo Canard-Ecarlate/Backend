@@ -1,8 +1,6 @@
 using CanardEcarlate.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using CanardEcarlate.Application;
-using CanardEcarlate.Api.Models;
-using Microsoft.AspNetCore.SignalR;
 using CanardEcarlate.Domain.Games;
 
 namespace CanardEcarlate.Api.Controllers
@@ -11,12 +9,10 @@ namespace CanardEcarlate.Api.Controllers
     [ApiController]
     public class RoomController : ControllerBase
     {
-        private readonly IHubContext<CanardEcarlateHub> _ceHub;
         private readonly RoomService _roomService;
 
-        public RoomController(IHubContext<CanardEcarlateHub> ceHub, RoomService roomService)
+        public RoomController(RoomService roomService)
         {
-            _ceHub = ceHub;
             _roomService = roomService;
         }
 
@@ -26,8 +22,7 @@ namespace CanardEcarlate.Api.Controllers
             Room roomCreated = _roomService.AddRooms(room.RoomName, room.HostId, room.GameConfiguration, room.IsPrivate);
             return JoinRoom(new UserJoinRoom { RoomId = roomCreated.Id, UserId = room.HostId });
         }
-
-
+        
         [HttpPost]
         public ActionResult<Room> JoinRoom(UserJoinRoom userJoinRoom)
         {

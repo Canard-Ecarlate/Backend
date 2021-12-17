@@ -14,7 +14,6 @@ using System;
 using System.Text;
 using AutoMapper;
 using CanardEcarlate.Api.Mappings;
-using CanardEcarlate.Api.Models;
 
 namespace CanardEcarlate.Api
 {
@@ -36,25 +35,16 @@ namespace CanardEcarlate.Api
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()));
-
-            services.AddSignalR();
-            
             services.AddSingleton<UserRepository>();
 
             services.AddSingleton<RoomRepository>();
 
             services.AddSingleton<AuthenticationService>();
-
             services.AddSingleton<RoomService>();
-            
             services.AddControllers();
-                        
             MongoService(services);
-
             SwaggerService(services);
-
             AutoMapperService(services);
-
             AuthenticationAuthorisationService(services);
         }
 
@@ -67,21 +57,14 @@ namespace CanardEcarlate.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CanardEcarlate.Api v1"));
             }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-            
             app.UseCors("CorsPolicy");
-
             app.UseAuthentication();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers(); 
-                endpoints.MapHub<CanardEcarlateHub> ("/canardecarlatehub");
             });
         }
 
