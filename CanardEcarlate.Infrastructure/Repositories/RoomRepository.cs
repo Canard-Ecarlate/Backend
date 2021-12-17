@@ -26,7 +26,7 @@ namespace CanardEcarlate.Infrastructure.Repositories
         public IList<Room> GetById(string id) =>
             _rooms.Find(room => room.Id == id).ToList();
 
-        public IList<Room> GetAllRooms() =>
+        public IEnumerable<Room> GetAllRooms() =>
                 _rooms.Find(_ => true).ToList();
     }
 }
