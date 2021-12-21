@@ -1,0 +1,43 @@
+using System.Diagnostics;
+using DuckCity.Api.Models.Authentication;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DuckCity.Api.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    [ApiController]
+    public class SshController : ControllerBase
+    {
+
+        [HttpGet]
+        public ActionResult<string> TestSsh()
+        {
+            const string strCmdText = "-c \"sshpass -p Iamroot!01 ssh localadm@54.36.80.250 ls\"";
+
+            // Process.Start("/bin/bash",strCmdText);
+
+            ProcessStartInfo procStartInfo = new("/bin/bash", strCmdText)
+            {
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            Process proc = new();
+            proc.StartInfo = procStartInfo;
+            proc.Start();
+
+            string result = proc.StandardOutput.ReadToEnd();
+
+            return new OkObjectResult("ok" + result);
+        }
+        
+                
+        [HttpGet]
+        [Route("")]
+        public ActionResult<UserWithToken> Bonjour()
+        {
+            return new OkObjectResult("Bonjour");
+        }
+    }
+}
