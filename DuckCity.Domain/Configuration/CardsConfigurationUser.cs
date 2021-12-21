@@ -12,9 +12,9 @@ namespace DuckCity.Domain.Configuration
         public string? Id { get; set; }
         [BsonElement("name")]
         public string? Name { get; set; }
-        [BsonElement("userid")]
+        [BsonElement("user_id")]
         public int UserId { get; set; }
-        [BsonElement("cardsconfiguration")]
+        [BsonElement("cards_configuration")]
         public CardsConfiguration? CardsConfiguration { get; set; }
     }
 }
