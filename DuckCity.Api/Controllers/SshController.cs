@@ -12,7 +12,7 @@ namespace DuckCity.Api.Controllers
         [HttpGet]
         public ActionResult<string> TestSsh()
         {
-            const string strCmdText = "-c \"sshpass -p Iamroot!01 ssh localadm@54.36.80.250 ls\"";
+            const string strCmdText = "-c \"sshpass -p Iamroot!01 ssh localadm@54.36.80.250 -o StrictHostKeyChecking=no ls\"";
 
             // Process.Start("/bin/bash",strCmdText);
 
@@ -29,7 +29,7 @@ namespace DuckCity.Api.Controllers
 
             string result = proc.StandardOutput.ReadToEnd();
 
-            return new OkObjectResult("ok" + result);
+            return new OkObjectResult("ok\n" + result);
         }
         
                 
