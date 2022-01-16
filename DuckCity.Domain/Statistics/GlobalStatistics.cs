@@ -11,15 +11,15 @@ namespace DuckCity.Domain.Statistics
         [BsonRepresentation(BsonType.ObjectId)]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string? Id { get; set; }
-        [BsonElement("nballgames")]
+        [BsonElement("nb_all_games")]
         public int NbAllGames { get; set; }
-        [BsonElement("nbreplays")]
+        [BsonElement("nb_replays")]
         public int NbReplays { get; set; }
-        [BsonElement("nbquimidgame")]
+        [BsonElement("nb_quit_mid_game")]
         public int NbQuitMidGame { get; set; }
-        [BsonElement("nbwonasciatbynbplayers")]
+        [BsonElement("nb_won_as_blue_by_nb_players")]
         public Dictionary<NbPlayersConfiguration, int>? NbWonAsBlueByNbPlayers { get; set; }
-        [BsonElement("nbwonascebynbplayers")]
+        [BsonElement("nb_won_as_red_by_nb_players")]
         public Dictionary<NbPlayersConfiguration, int>? NbWonAsRedByNbPlayers { get; set; }
     }
 }

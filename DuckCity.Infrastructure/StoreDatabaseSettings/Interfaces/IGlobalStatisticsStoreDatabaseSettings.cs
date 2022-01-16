@@ -1,8 +1,9 @@
-﻿namespace DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces;
-
-public interface IGlobalStatisticsStoreDatabaseSettings
+﻿namespace DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces
 {
-    string? GlobalStatisticsCollectionName { get; set; }
-    string? ConnectionString { get; set; }
-    string? DatabaseName { get; set; }
+    public interface IGlobalStatisticsStoreDatabaseSettings
+    {
+        string? GlobalStatisticsCollectionName { get; set; }
+        string? ConnectionString { get; set; }
+        string? DatabaseName { get; set; }
+    }
 }

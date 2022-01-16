@@ -1,6 +1,6 @@
 ﻿namespace DuckCity.Domain.Cards
 {
-    class YellowCard : ICard
+    public class YellowCard : ICard
     {
         public string Name => "Yellow";
 

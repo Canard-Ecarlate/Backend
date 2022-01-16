@@ -12,23 +12,23 @@ namespace DuckCity.Domain.Statistics
         public string? Id { get; set; }
         [BsonElement("username")]
         public int UserName { get; set; }
-        [BsonElement("nbplayedgame")]
+        [BsonElement("nb_played_game")]
         public int NbGamesPlayed { get; set; }
-        [BsonElement("nbwonasciat")]
-        public int NbWonAsCIAT { get; set; }
-        [BsonElement("nblostasciat")]
-        public int NbLostAsCIAT { get; set; }
-        [BsonElement("nbwonasce")]
-        public int NbWonAsCE { get; set; }
-        [BsonElement("nblostasce")]
-        public int NbLostAsCe { get; set; }
+        [BsonElement("nb_won_as_blue")]
+        public int NbWonAsBlue { get; set; }
+        [BsonElement("nb_lost_as_blue")]
+        public int NbLostAsBlue { get; set; }
+        [BsonElement("nb_won_as_red")]
+        public int NbWonAsRed { get; set; }
+        [BsonElement("nb_lost_as_red")]
+        public int NbLostAsRed { get; set; }
         [BsonElement("streak")]
         public int Streak { get; set; }
-        [BsonElement("maxwinstreak")]
+        [BsonElement("max_win_streak")]
         public int MaxWinStreak { get; set; }
-        [BsonElement("maxlossstreak")]
+        [BsonElement("max_loss_streak")]
         public int MaxLossStreak { get; set; }
-        [BsonElement("cardsconfigurationstatistics")]
+        [BsonElement("cards_configuration_statistics")]
         public List<CardsConfigurationStatistics>? CardsConfigurationStatistics { get; set; }
     }
 }

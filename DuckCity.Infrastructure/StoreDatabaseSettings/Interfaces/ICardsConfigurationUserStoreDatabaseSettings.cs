@@ -1,8 +1,9 @@
-﻿namespace DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces;
-
-public interface ICardsConfigurationUserStoreDatabaseSettings
+﻿namespace DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces
 {
-    string? CardsConfigurationUsersCollectionName { get; set; }
-    string? ConnectionString { get; set; }
-    string? DatabaseName { get; set; }
+    public interface ICardsConfigurationUserStoreDatabaseSettings
+    {
+        string? CardsConfigurationUsersCollectionName { get; set; }
+        string? ConnectionString { get; set; }
+        string? DatabaseName { get; set; }
+    }
 }
