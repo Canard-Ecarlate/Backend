@@ -1,9 +1,8 @@
-﻿namespace DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces
+﻿namespace DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces;
+
+public interface IUserStoreDatabaseSettings
 {
-    public interface IUserStoreDatabaseSettings
-    {
-        string? UsersCollectionName { get; set; }
-        string? ConnectionString { get; set; }
-        string? DatabaseName { get; set; }
-    }
+    string? UsersCollectionName { get; set; }
+    string? ConnectionString { get; set; }
+    string? DatabaseName { get; set; }
 }

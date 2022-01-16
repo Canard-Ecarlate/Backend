@@ -1,9 +1,8 @@
-﻿namespace DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces
+﻿namespace DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces;
+
+public interface IRoomStoreDatabaseSettings
 {
-    public interface IRoomStoreDatabaseSettings
-    {
-        string? RoomsCollectionName { get; set; }
-        string? ConnectionString { get; set; }
-        string? DatabaseName { get; set; }
-    }
+    string? RoomsCollectionName { get; set; }
+    string? ConnectionString { get; set; }
+    string? DatabaseName { get; set; }
 }
