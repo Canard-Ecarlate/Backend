@@ -13,13 +13,13 @@ COPY . .
 WORKDIR "/src/DuckCity.Api"
 RUN dotnet build "DuckCity.Api.csproj" -c Release -o /app/build
 
-FROM build AS publish
+FROM build AS publishone
 RUN apt-get update && apt-get install -y --no-install-recommends openssh-server && apt-get install -y --no-install-recommends sshpass && apt-get clean \ && rm -rf /var/lib/apt/lists/* && dotnet publish "DuckCity.Api.csproj" -c Release -o /app/publish
 
-FROM base AS final
+FROM base AS finalone
 WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends openssh-server && apt-get install -y --no-install-recommends sshpass && apt-get clean \ && rm -rf /var/lib/apt/lists/*
-COPY --from=publish /app/publish .
+COPY --from=publishone /app/publish .
 ENTRYPOINT ["dotnet", "DuckCity.Api.dll"]
 COPY ["DuckCity.Domain/DuckCity.Domain.csproj", "DuckCity.Domain/"]
 COPY ["DuckCity.Application/DuckCity.Application.csproj", "DuckCity.Application/"]
