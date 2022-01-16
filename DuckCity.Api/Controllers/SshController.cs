@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using DuckCity.Api.Models.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,13 +7,10 @@ namespace DuckCity.Api.Controllers
     [ApiController]
     public class SshController : ControllerBase
     {
-
         [HttpGet]
         public ActionResult<string> TestSsh()
         {
             const string strCmdText = "-c \"sshpass -p Iamroot!01 ssh localadm@54.36.80.250 -o StrictHostKeyChecking=no ls\"";
-
-            // Process.Start("/bin/bash",strCmdText);
 
             ProcessStartInfo procStartInfo = new("/bin/bash", strCmdText)
             {
