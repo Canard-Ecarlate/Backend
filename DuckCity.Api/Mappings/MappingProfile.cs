@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DuckCity.Api.Models.Authentication;
 using DuckCity.Domain;
+using DuckCity.Domain.Users;
 
 namespace DuckCity.Api.Mappings
 {

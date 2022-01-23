@@ -1,4 +1,5 @@
 ﻿using DuckCity.Domain;
+using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.StoreDatabaseSettings;
 using DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces;
 using MongoDB.Driver;

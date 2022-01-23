@@ -3,6 +3,7 @@ using AutoMapper;
 using DuckCity.Api;
 using DuckCity.Api.Mappings;
 using DuckCity.Application;
+using DuckCity.Application.Services;
 using DuckCity.Infrastructure;
 using DuckCity.Infrastructure.Repositories;
 using DuckCity.Infrastructure.StoreDatabaseSettings;

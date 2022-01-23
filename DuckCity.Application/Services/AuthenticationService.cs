@@ -1,9 +1,10 @@
 ﻿using System.Security.Cryptography;
 using DuckCity.Application.Exceptions;
 using DuckCity.Domain;
+using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.Repositories;
 
-namespace DuckCity.Application
+namespace DuckCity.Application.Services
 {
     public class AuthenticationService
     {

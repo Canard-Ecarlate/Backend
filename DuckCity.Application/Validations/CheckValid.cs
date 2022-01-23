@@ -1,16 +1,13 @@
 using DuckCity.Application.Exceptions;
-using DuckCity.Domain.Configuration;
-using DuckCity.Domain.Games;
+using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.Repositories;
 using MongoDB.Bson;
 
-namespace DuckCity.Application
+namespace DuckCity.Application.Validations
 {
     public static class CheckValid
     {
-        public static void CreateRoom(UserRepository userRepository, string? roomName, string? hostId,
-            GameConfiguration? gameConfiguration,
-            bool privateRoom)
+        public static void CreateRoom(UserRepository userRepository, string? roomName, string? hostId)
         {
             if (string.IsNullOrEmpty(roomName))
             {
