@@ -28,7 +28,7 @@ namespace DuckCity.Domain.Rooms
                 new()
                 {
                     CardName = "Yellow",
-                    Number = NbPlayers * NumberOfCardsFirstRound - NbPlayers + 1
+                    Number = (NbPlayers * NumberOfCardsFirstRound) - NbPlayers + 1
                 }
             };
         }

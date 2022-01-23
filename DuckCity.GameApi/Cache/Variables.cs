@@ -8,5 +8,3 @@ namespace DuckCity.GameApi.Cache
         public static Collection<Game> Games { get; } = new();
     }
 }
-
-
