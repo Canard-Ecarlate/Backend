@@ -1,11 +1,18 @@
-﻿namespace DuckCity.Api.Models.Room
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DuckCity.Api.Models.Room
 {
     public class RoomCreation
     {
-        public string? Name { get; set; }
-        public string? HostId { get; set; }
-        public string? HostName { get; set; }
-        public bool IsPrivate { get; set; }
-        public int NbPlayers { get; set; }
+        [Required]
+        public string Name { get; init; } = "";
+        [Required]
+        public string HostId { get; init; } = "";
+        [Required]
+        public string HostName { get; init; } = "";
+        [Required]
+        public bool IsPrivate { get; init; }
+        [Required]
+        public int NbPlayers { get; init; }
     }
 }

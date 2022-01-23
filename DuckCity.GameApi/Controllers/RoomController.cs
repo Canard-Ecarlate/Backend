@@ -1,5 +1,4 @@
 ﻿using DuckCity.Application.Services;
-using DuckCity.Domain.Rooms;
 using DuckCity.GameApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,13 +13,6 @@ public class RoomController
     public RoomController(RoomService roomService)
     {
         _roomService = roomService;
-    }
-
-    [HttpPost]
-    public ActionResult<Room> JoinRoom(UserAndRoom userAndRoom)
-    {
-        Room roomJoined = _roomService.JoinRoom(userAndRoom.RoomId, userAndRoom.UserId, userAndRoom.UserName);
-        return new OkObjectResult(roomJoined);
     }
 
     [HttpPost]

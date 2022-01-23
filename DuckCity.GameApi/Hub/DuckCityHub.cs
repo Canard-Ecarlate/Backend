@@ -2,6 +2,7 @@ using DuckCity.Application.Services;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
 using DuckCity.GameApi.Models;
+using MongoDB.Driver;
 
 namespace DuckCity.GameApi.Hub;
 
@@ -42,23 +43,29 @@ public class DuckCityHub : Microsoft.AspNetCore.SignalR.Hub
     public async Task JoinSignalRGroupHubAsync(string roomId)
     {
         await HubGroupManagement.AddUser(Context, Groups, roomId);
-        Room room = _roomService.FindRoom(roomId);
-        if (room.Players == null)
+        Room? room = _roomService.FindRoom(roomId);
+        if (room != null)
         {
-            throw new PlayerNotFoundException();
+            if (room.Players == null)
+            {
+                throw new PlayerNotFoundException();
+            }
+            await HubMessageSender.AlertGroupOfPlayersUpToDate(Context, Clients, roomId, room.Players);
         }
-        await HubMessageSender.AlertGroupOfPlayersUpToDate(Context, Clients, roomId, room.Players);
     }
 
     public async Task LeaveSignalRGroupHubAsync(string roomId)
     {
         await HubGroupManagement.RemoveUser(Context, Groups, roomId);
-        Room room = _roomService.FindRoom(roomId);
-        if (room.Players == null)
+        Room? room = _roomService.FindRoom(roomId);
+        if (room != null)
         {
-            throw new PlayerNotFoundException();
+            if (room.Players == null)
+            {
+                throw new PlayerNotFoundException();
+            }
+            await HubMessageSender.AlertGroupOfPlayersUpToDate(Context, Clients, roomId, room.Players);
         }
-        await HubMessageSender.AlertGroupOfPlayersUpToDate(Context, Clients, roomId, room.Players);
     }
 
     public async Task PlayerReadyHubAsync(UserAndRoom userAndRoom)
