@@ -1,14 +1,10 @@
-﻿using DuckCity.Domain.Cards;
-using DuckCity.Domain.Roles;
-
-namespace DuckCity.Domain.Games
+﻿namespace DuckCity.Domain.Rooms
 {
     public class PlayerInRoom
     {
         public string? Id { get; init; }
-        public string? Name { get; set; }
-        public IRole? Role { get; set; }
-        public List<ICard>? CardsInHand { get; set; }
+        public string? Name { get; init; }
+        public bool Ready { get; set; } = false;
 
         public override bool Equals(object? obj)
         {

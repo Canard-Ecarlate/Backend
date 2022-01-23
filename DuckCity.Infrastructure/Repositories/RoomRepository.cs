@@ -1,5 +1,4 @@
-﻿using DuckCity.Domain.Games;
-using DuckCity.Infrastructure.StoreDatabaseSettings;
+﻿using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces;
 using MongoDB.Driver;
 
@@ -11,14 +10,20 @@ namespace DuckCity.Infrastructure.Repositories
 
         public RoomRepository(IRoomStoreDatabaseSettings settings)
         {
-            var client = new MongoClient(settings.ConnectionString);
-            var database = client.GetDatabase(settings.DatabaseName);
+            MongoClient client = new(settings.ConnectionString);
+            IMongoDatabase database = client.GetDatabase(settings.DatabaseName);
             _rooms = database.GetCollection<Room>(settings.RoomsCollectionName);
         }
 
         public void Create(Room room)
         {
             _rooms.InsertOne(room);
+        }
+        
+        public void Replace(Room room)
+        {
+            FilterDefinition<Room>? filter = Builders<Room>.Filter.Eq(r => r.Id, room.Id);
+            _rooms.ReplaceOne(filter, room);
         }
 
         public long CountRoomById(string? id) =>

@@ -1,12 +1,11 @@
-﻿using DuckCity.Domain.Configuration;
-
-namespace DuckCity.Api.Models.Room
+﻿namespace DuckCity.Api.Models.Room
 {
     public class RoomCreation
     {
+        public string? Name { get; set; }
         public string? HostId { get; set; }
-        public string? RoomName { get; set; }
-        public GameConfiguration? GameConfiguration { get; set; }
+        public string? HostName { get; set; }
         public bool IsPrivate { get; set; }
+        public int NbPlayers { get; set; }
     }
 }

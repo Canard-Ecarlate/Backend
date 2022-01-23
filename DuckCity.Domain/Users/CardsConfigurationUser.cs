@@ -1,20 +1,18 @@
 ﻿using System.Text.Json.Serialization;
+using DuckCity.Domain.Cards;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace DuckCity.Domain
+namespace DuckCity.Domain.Users
 {
-    public class User
+    public class CardsConfigurationUser
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string? Id { get; set; }
-        [BsonElement("name")]
         public string? Name { get; set; }
-        [BsonElement("email")]
-        public string? Email { get; set; }
-        [BsonElement("password")]
-        public string? Password { get; set; }
+        public int UserId { get; set; }
+        public List<NbEachCard> Cards { get; set; } = new();
     }
 }

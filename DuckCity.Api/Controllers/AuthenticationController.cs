@@ -4,7 +4,9 @@ using System.Text;
 using AutoMapper;
 using DuckCity.Api.Models.Authentication;
 using DuckCity.Application;
+using DuckCity.Application.Services;
 using DuckCity.Domain;
+using DuckCity.Domain.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 

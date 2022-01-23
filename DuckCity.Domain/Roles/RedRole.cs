@@ -1,6 +1,6 @@
 ﻿namespace DuckCity.Domain.Roles
 {
-    public class RedRole : IRole
+    class RedRole : IRole
     {
         public string Name => "Red";
     }
