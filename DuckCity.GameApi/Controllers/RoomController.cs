@@ -12,12 +12,10 @@ namespace DuckCity.GameApi.Controllers;
 public class RoomController
 {
     private readonly RoomService _roomService;
-    private readonly IHubContext<DuckCityHub> _duckCityHub;
 
-    public RoomController(RoomService roomService, IHubContext<DuckCityHub> duckCityHub)
+    public RoomController(RoomService roomService)
     {
         _roomService = roomService;
-        _duckCityHub = duckCityHub;
     }
 
     [HttpPost]
@@ -33,5 +31,4 @@ public class RoomController
         // Si 0 joueurs, destroy
         return new OkObjectResult("destroy room");
     }
-
 }

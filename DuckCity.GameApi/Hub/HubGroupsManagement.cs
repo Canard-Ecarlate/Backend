@@ -4,11 +4,7 @@ namespace DuckCity.GameApi.Hub
 {
     public static class HubGroupManagement
     {
-        // SignalRGroups =
-        // {
-        //    string roomId,
-        //    HashSet<string> connectionsIds
-        // }
+        // SignalRGroups = { string roomId, HashSet<string> connectionsIds }
         private static readonly Dictionary<string, HashSet<string>?> SignalRGroups = new();
 
         public static async Task AddUser(HubCallerContext context, IGroupManager groups, string roomId)

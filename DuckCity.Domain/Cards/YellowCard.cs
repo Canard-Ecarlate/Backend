@@ -1,12 +1,11 @@
-﻿namespace DuckCity.Domain.Cards
-{
-    public class YellowCard : ICard
-    {
-        public string Name => "Yellow";
+﻿namespace DuckCity.Domain.Cards;
 
-        public void DrawAction()
-        {
-            // RIEN
-        }
+public class YellowCard : ICard
+{
+    public string Name => "Yellow";
+
+    public void DrawAction()
+    {
+        // RIEN
     }
 }

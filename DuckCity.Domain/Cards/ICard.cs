@@ -1,9 +1,8 @@
-﻿namespace DuckCity.Domain.Cards
-{
-    public interface ICard
-    {
-        string Name { get; }
+﻿namespace DuckCity.Domain.Cards;
 
-        void DrawAction();
-    }
+public interface ICard
+{
+    string Name { get; }
+
+    void DrawAction();
 }
