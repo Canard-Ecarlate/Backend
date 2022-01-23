@@ -30,8 +30,7 @@ namespace DuckCity.Api.Controllers
         }
             
         [HttpGet]
-        [Route("")]
-        public ActionResult<UserWithToken> Bonjour()
+        public ActionResult<string> Bonjour()
         {
             return new OkObjectResult("Bonjour");
         }

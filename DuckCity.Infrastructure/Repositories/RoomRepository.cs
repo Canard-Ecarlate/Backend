@@ -1,4 +1,5 @@
-﻿using DuckCity.Domain.Rooms;
+﻿using DuckCity.Domain.Exceptions;
+using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces;
 using MongoDB.Driver;
 
@@ -29,8 +30,15 @@ namespace DuckCity.Infrastructure.Repositories
         public long CountRoomById(string? id) =>
             _rooms.Find(room => room.Id == id).CountDocuments();
 
-        public IList<Room> FindById(string? id) =>
-            _rooms.Find(room => room.Id == id).ToList();
+        public Room FindById(string? id)
+        {
+            Room room = _rooms.Find(room => room.Id == id).ToList().First();
+            if (room == null)
+            {
+                throw new RoomNotFoundException();
+            }
+            return room;
+        }
 
         public IEnumerable<Room> FindAllRooms() => 
             _rooms.Find(_ => true).ToList();

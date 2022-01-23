@@ -1,4 +1,4 @@
-using DuckCity.Application.Exceptions;
+using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.Repositories;
 using MongoDB.Bson;
