@@ -1,35 +1,36 @@
 ﻿using DuckCity.Domain.Cards;
 
-namespace DuckCity.Domain.Rooms;
-
-public class RoomConfiguration
+namespace DuckCity.Domain.Rooms
 {
-    public bool IsPrivate { get; set; }
-    public  int NbPlayers { get; set; }
-    public  List<NbEachCard> Cards { get; set; }
-    private const int NumberOfCardsFirstRound = 5;
-
-    public RoomConfiguration(bool isPrivate, int nbPlayers)
+    public class RoomConfiguration
     {
-        IsPrivate = isPrivate;
-        NbPlayers = nbPlayers;
-        Cards = new List<NbEachCard>
+        public bool IsPrivate { get; set; }
+        public int NbPlayers { get; set; }
+        public List<NbEachCard> Cards { get; set; }
+        private const int NumberOfCardsFirstRound = 5;
+
+        public RoomConfiguration(bool isPrivate, int nbPlayers)
         {
-            new()
+            IsPrivate = isPrivate;
+            NbPlayers = nbPlayers;
+            Cards = new List<NbEachCard>
             {
-                CardName = "Bomb",
-                Number = 1
-            },
-            new()
-            {
-                CardName = "Green",
-                Number = NbPlayers
-            },
-            new()
-            {
-                CardName = "Yellow",
-                Number = NbPlayers * NumberOfCardsFirstRound - NbPlayers + 1
-            }
-        };
+                new()
+                {
+                    CardName = "Bomb",
+                    Number = 1
+                },
+                new()
+                {
+                    CardName = "Green",
+                    Number = NbPlayers
+                },
+                new()
+                {
+                    CardName = "Yellow",
+                    Number = NbPlayers * NumberOfCardsFirstRound - NbPlayers + 1
+                }
+            };
+        }
     }
 }

@@ -1,7 +1,8 @@
-﻿namespace DuckCity.Domain.Cards;
-
-public class NbEachCard
+﻿namespace DuckCity.Domain.Cards
 {
-    public string? CardName { get; set; }
-    public int Number { get; set; }
+    public class NbEachCard
+    {
+        public string? CardName { get; set; }
+        public int Number { get; set; }
+    }
 }

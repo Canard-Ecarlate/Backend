@@ -3,50 +3,51 @@ using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.Repositories;
 using MongoDB.Bson;
 
-namespace DuckCity.Application.Validations;
-
-public static class CheckValid
+namespace DuckCity.Application.Validations
 {
-    public static void CreateRoom(UserRepository userRepository, string? roomName, string? hostId)
+    public static class CheckValid
     {
-        if (string.IsNullOrEmpty(roomName))
+        public static void CreateRoom(UserRepository userRepository, string? roomName, string? hostId)
         {
-            throw new RoomNameNullException();
+            if (string.IsNullOrEmpty(roomName))
+            {
+                throw new RoomNameNullException();
+            }
+
+            if (!ObjectId.TryParse(hostId, out _))
+            {
+                throw new IdNotValidException(hostId);
+            }
+
+            if (userRepository.CountUserById(hostId) == 0)
+            {
+                throw new HostIdNoExistException(hostId);
+            }
         }
 
-        if (!ObjectId.TryParse(hostId, out _))
+        public static void JoinRoom(RoomRepository roomRepository, UserRepository userRepository, string? userId,
+            string? roomId)
         {
-            throw new IdNotValidException(hostId);
-        }
+            if (!ObjectId.TryParse(userId, out _))
+            {
+                throw new IdNotValidException(userId);
+            }
 
-        if (userRepository.CountUserById(hostId) == 0)
-        {
-            throw new HostIdNoExistException(hostId);
-        }
-    }
+            if (userRepository.CountUserById(userId) == 0)
+            {
+                throw new RoomIdNoExistException();
+            }
 
-    public static void JoinRoom(RoomRepository roomRepository, UserRepository userRepository, string? userId,
-        string? roomId)
-    {
-        if (!ObjectId.TryParse(userId, out _))
-        {
-            throw new IdNotValidException(userId);
-        }
+            if (roomRepository.CountRoomById(roomId) == 0)
+            {
+                throw new UserIdNoExistException();
+            }
 
-        if (userRepository.CountUserById(userId) == 0)
-        {
-            throw new RoomIdNoExistException();
-        }
-
-        if (roomRepository.CountRoomById(roomId) == 0)
-        {
-            throw new UserIdNoExistException();
-        }
-
-        if (roomRepository.FindAllRooms()
-            .Any(r => r.Players != null && r.Players.Contains(new PlayerInRoom {Id = userId})))
-        {
-            throw new UserAlreadyInRoomException();
+            if (roomRepository.FindAllRooms()
+                .Any(r => r.Players != null && r.Players.Contains(new PlayerInRoom {Id = userId})))
+            {
+                throw new UserAlreadyInRoomException();
+            }
         }
     }
 }
