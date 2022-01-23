@@ -7,7 +7,6 @@ namespace DuckCity.GameApi.Hub;
 
 public class DuckCityHub : Microsoft.AspNetCore.SignalR.Hub
 {
-   
     private readonly RoomService _roomService;
 
     public DuckCityHub(RoomService roomService)
@@ -15,9 +14,11 @@ public class DuckCityHub : Microsoft.AspNetCore.SignalR.Hub
         _roomService = roomService;
     }
 
-     
-    // Life cycle of signalR's users
-   public override async Task OnConnectedAsync()
+
+    /**
+     * Life cycle of signalR's users
+     */
+    public override async Task OnConnectedAsync()
     {
         await base.OnConnectedAsync();
     }
@@ -30,8 +31,10 @@ public class DuckCityHub : Microsoft.AspNetCore.SignalR.Hub
         await base.OnDisconnectedAsync(exception);
     }
 
-    // Methods
-    public async Task SendMessageHubAsync (string user)
+    /**
+     * Methods
+     */
+    public async Task SendMessageHubAsync(string user)
     {
         await HubMessageSender.HelloWorldToAll(Clients, user);
     }
@@ -45,12 +48,17 @@ public class DuckCityHub : Microsoft.AspNetCore.SignalR.Hub
             throw new PlayerNotFoundException();
         }
         await HubMessageSender.AlertGroupOfPlayersUpToDate(Context, Clients, roomId, room.Players);
- }
+    }
 
     public async Task LeaveSignalRGroupHubAsync(string roomId)
     {
         await HubGroupManagement.RemoveUser(Context, Groups, roomId);
-        await HubMessageSender.AlertGroupOfUserLeft(Context, Clients, roomId);
+        Room room = _roomService.FindRoom(roomId);
+        if (room.Players == null)
+        {
+            throw new PlayerNotFoundException();
+        }
+        await HubMessageSender.AlertGroupOfPlayersUpToDate(Context, Clients, roomId, room.Players);
     }
 
     public async Task PlayerReadyHubAsync(UserAndRoom userAndRoom)
@@ -61,9 +69,10 @@ public class DuckCityHub : Microsoft.AspNetCore.SignalR.Hub
         {
             throw new RoomIdNoExistException();
         }
+
         // update list of players and send it
         IEnumerable<PlayerInRoom> playersUpToDate =
             _roomService.UpdatePlayerReadyInRoom(userAndRoom.UserId, userAndRoom.RoomId);
         await HubMessageSender.AlertGroupOfPlayersUpToDate(Context, Clients, userAndRoom.RoomId, playersUpToDate);
-  }
+    }
 }

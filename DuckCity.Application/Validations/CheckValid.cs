@@ -35,19 +35,48 @@ namespace DuckCity.Application.Validations
 
             if (userRepository.CountUserById(userId) == 0)
             {
-                throw new RoomIdNoExistException();
+                throw new UserIdNoExistException();
             }
 
             if (roomRepository.CountRoomById(roomId) == 0)
             {
-                throw new UserIdNoExistException();
+                throw new RoomIdNoExistException();
             }
 
             if (roomRepository.FindAllRooms()
                 .Any(r => r.Players != null && r.Players.Contains(new PlayerInRoom {Id = userId})))
             {
-                throw new UserAlreadyInRoomException();
+                throw new UserAlreadyInRoomException(userId);
             }
+        }
+
+        public static Room LeaveRoom(RoomRepository roomRepository, UserRepository userRepository, string userId, string roomId)
+        {
+            if (!ObjectId.TryParse(userId, out _))
+            {
+                throw new IdNotValidException(userId);
+            }
+            
+            if (userRepository.CountUserById(userId) == 0)
+            {
+                throw new UserIdNoExistException();
+            }
+
+            if (roomRepository.CountRoomById(roomId) == 0)
+            {
+                throw new RoomIdNoExistException();
+            }
+
+            Room room = roomRepository.FindById(roomId);
+            if (room.Players == null)
+            {
+                throw new PlayersNotFoundException();
+            }
+            if (!room.Players.Contains(new PlayerInRoom {Id = userId}))
+            {
+                throw new UserNotInRoomException(userId);
+            }
+            return room;
         }
     }
 }

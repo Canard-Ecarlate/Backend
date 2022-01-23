@@ -1,5 +1,4 @@
-﻿using System.Security.Authentication;
-using DuckCity.Application.Validations;
+﻿using DuckCity.Application.Validations;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.Repositories;
@@ -38,13 +37,17 @@ public class RoomService
         return room;
     }
 
-    public Room JoinRooms(string roomId, string userId, string userName)
+    public Room JoinRoom(string roomId, string userId, string userName)
     {
         CheckValid.JoinRoom(_roomRepository, _userRepository, userId, roomId);
             
         Room room = _roomRepository.FindById(roomId);
-        PlayerInRoom playerInRoom = new() {Id = userId, Name = userName};
-        room.Players?.Add(playerInRoom);
+        if (room.Players == null)
+        {
+            throw new PlayersNotFoundException();
+        }
+        PlayerInRoom playerInRoom = new() {Id = userId, Name = userName}; 
+        room.Players.Add(playerInRoom);
         _roomRepository.Replace(room);
         return room;
     }
@@ -65,5 +68,20 @@ public class RoomService
         playerInRoom.Ready = !playerInRoom.Ready;
         _roomRepository.Replace(room);
         return playerInRooms;
+    }
+
+    public bool LeaveRoom(string roomId, string userId)
+    {
+        Room room = CheckValid.LeaveRoom(_roomRepository, _userRepository, userId, roomId);
+        room.Players?.RemoveWhere(p => p.Id == userId);
+        if (room.Players is {Count: 0})
+        {
+            _roomRepository.Delete(room);
+        }
+        else
+        {
+            _roomRepository.Replace(room);
+        }
+        return true;
     }
 }
