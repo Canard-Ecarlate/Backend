@@ -1,5 +1,6 @@
 using DuckCity.Api.Models.Room;
 using DuckCity.Application.Services;
+using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,25 +21,22 @@ namespace DuckCity.Api.Controllers
         public ActionResult<IEnumerable<Room>> FindAllRooms() => new OkObjectResult(_roomService.FindAllRooms());
 
         [HttpPost]
-        public async Task<ActionResult<string>> CreateRoom(RoomCreation room)
+        public ActionResult<Room> CreateRoom(RoomCreation room)
         {
             Room roomCreated = _roomService.AddRooms(room.Name, room.HostId, room.HostName, room.IsPrivate, room.NbPlayers);
-            await JoinRoom(new UserAndRoom {UserId = room.HostId, UserName = room.HostName, RoomId = roomCreated.Id});
-            return new OkObjectResult("ok");
+            if (roomCreated.Id == null)
+            {
+                throw new RoomIdNoExistException();
+            }
+            ActionResult<Room> newRoom = JoinRoom(new UserAndRoom {UserId = room.HostId, UserName = room.HostName, RoomId = roomCreated.Id});
+            return newRoom;
         }
         
         [HttpPost]
-        public async Task<ActionResult<string>> JoinRoom(UserAndRoom userAndRoom)
+        public ActionResult<Room> JoinRoom(UserAndRoom userAndRoom)
         {
-            HttpClient client = new();
-            client.DefaultRequestHeaders.Accept.Clear();
-            
-            JsonContent json = JsonContent.Create(userAndRoom);
-            Task<HttpResponseMessage> stringTask = client.PostAsync("https://localhost:7143/api/Room/JoinRoom", json);
-            HttpResponseMessage msg = await stringTask;
-            Console.Write(msg.Content);
-            
-            return new OkObjectResult("ok");
+            Room roomJoined = _roomService.JoinRoom(userAndRoom.RoomId, userAndRoom.UserId, userAndRoom.UserName);
+            return new OkObjectResult(roomJoined);
         }
     }
 }

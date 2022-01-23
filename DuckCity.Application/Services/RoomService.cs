@@ -2,6 +2,7 @@
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.Repositories;
+using MongoDB.Driver;
 
 namespace DuckCity.Application.Services;
 
@@ -18,7 +19,7 @@ public class RoomService
 
     public IEnumerable<Room> FindAllRooms() => _roomRepository.FindAllRooms();
 
-    public Room FindRoom(string roomId) => _roomRepository.FindById(roomId);
+    public Room? FindRoom(string roomId) => _roomRepository.FindById(roomId);
 
     public Room AddRooms(string? roomName, string? hostId, string? hostName, bool isPrivate, int nbPlayers)
     {
@@ -41,7 +42,11 @@ public class RoomService
     {
         CheckValid.JoinRoom(_roomRepository, _userRepository, userId, roomId);
             
-        Room room = _roomRepository.FindById(roomId);
+        Room? room = _roomRepository.FindById(roomId);
+        if (room == null)
+        {
+            throw new RoomNotFoundException();
+        }
         if (room.Players == null)
         {
             throw new PlayersNotFoundException();
@@ -54,7 +59,11 @@ public class RoomService
 
     public IEnumerable<PlayerInRoom> UpdatePlayerReadyInRoom(string userId, string roomId)
     {
-        Room room = FindRoom(roomId);
+        Room? room = _roomRepository.FindById(roomId);
+        if (room == null)
+        {
+            throw new RoomNotFoundException();
+        }
         if (room.Players == null)
         {
             throw new PlayersNotFoundException();
