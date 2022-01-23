@@ -17,9 +17,9 @@ public class RoomService
         _roomRepository = roomRepository;
     }
 
-    public IEnumerable<Room> GetAllRooms() => _roomRepository.FindAllRooms();
+    public IEnumerable<Room> FindAllRooms() => _roomRepository.FindAllRooms();
 
-    public Room GetRoom(string roomId) => _roomRepository.FindById(roomId);
+    public Room FindRoom(string roomId) => _roomRepository.FindById(roomId);
 
     public Room AddRooms(string? roomName, string? hostId, string? hostName, bool isPrivate, int nbPlayers)
     {
@@ -51,7 +51,7 @@ public class RoomService
 
     public IEnumerable<PlayerInRoom> UpdatePlayerReadyInRoom(string userId, string roomId)
     {
-        Room room = GetRoom(roomId);
+        Room room = FindRoom(roomId);
         if (room.Players == null)
         {
             throw new PlayersNotFoundException();

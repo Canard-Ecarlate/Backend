@@ -39,7 +39,7 @@ public class DuckCityHub : Microsoft.AspNetCore.SignalR.Hub
     public async Task JoinSignalRGroupHubAsync(string roomId)
     {
         await HubGroupManagement.AddUser(Context, Groups, roomId);
-        Room room = _roomService.GetRoom(roomId);
+        Room room = _roomService.FindRoom(roomId);
         if (room.Players == null)
         {
             throw new PlayerNotFoundException();
