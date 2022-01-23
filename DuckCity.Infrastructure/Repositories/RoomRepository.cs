@@ -30,7 +30,6 @@ namespace DuckCity.Infrastructure.Repositories
                 Console.WriteLine(e);
                 return null;
             }
-            
         }
 
         public IEnumerable<Room> FindAllRooms() => _rooms.Find(_ => true).ToList();
