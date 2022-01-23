@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
-using DuckCity.Application.Exceptions;
 using DuckCity.Domain;
+using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.Repositories;
 

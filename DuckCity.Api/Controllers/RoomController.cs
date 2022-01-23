@@ -16,6 +16,14 @@ namespace DuckCity.Api.Controllers
             _roomService = roomService;
         }
 
+        [HttpGet]
+        public ActionResult<IEnumerable<Room>> GetAllRooms()
+        {
+            IEnumerable<Room> rooms = _roomService.GetAllRooms();
+            return new OkObjectResult(rooms);
+        }
+
+
         [HttpPost]
         public Task<ActionResult<string>> CreateRoom(RoomCreation room)
         {

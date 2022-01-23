@@ -22,4 +22,8 @@
       <ProjectReference Include="..\DuckCity.Domain\DuckCity.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="..\.dockerignore" />
+    </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace DuckCity.Application.Exceptions
+namespace DuckCity.Domain.Exceptions
 {
     [Serializable]
     public class UsernameAlreadyExistException : Exception
