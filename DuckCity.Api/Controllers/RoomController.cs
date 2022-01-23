@@ -20,10 +20,11 @@ namespace DuckCity.Api.Controllers
         public ActionResult<IEnumerable<Room>> FindAllRooms() => new OkObjectResult(_roomService.FindAllRooms());
 
         [HttpPost]
-        public Task<ActionResult<string>> CreateRoom(RoomCreation room)
+        public async Task<ActionResult<string>> CreateRoom(RoomCreation room)
         {
             Room roomCreated = _roomService.AddRooms(room.Name, room.HostId, room.HostName, room.IsPrivate, room.NbPlayers);
-            return JoinRoom(new UserAndRoom {UserId = room.HostId, UserName = room.HostName, RoomId = roomCreated.Id});
+            await JoinRoom(new UserAndRoom {UserId = room.HostId, UserName = room.HostName, RoomId = roomCreated.Id});
+            return new OkObjectResult("ok");
         }
         
         [HttpPost]

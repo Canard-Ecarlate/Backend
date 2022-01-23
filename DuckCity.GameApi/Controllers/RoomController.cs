@@ -1,9 +1,7 @@
 ﻿using DuckCity.Application.Services;
 using DuckCity.Domain.Rooms;
-using DuckCity.GameApi.Hub;
 using DuckCity.GameApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
 namespace DuckCity.GameApi.Controllers;
 
@@ -21,14 +19,14 @@ public class RoomController
     [HttpPost]
     public ActionResult<Room> JoinRoom(UserAndRoom userAndRoom)
     {
-        Room roomJoined = _roomService.JoinRooms(userAndRoom.RoomId, userAndRoom.UserId, userAndRoom.UserName);
+        Room roomJoined = _roomService.JoinRoom(userAndRoom.RoomId, userAndRoom.UserId, userAndRoom.UserName);
         return new OkObjectResult(roomJoined);
     }
 
     [HttpPost]
-    public ActionResult<string> LeaveRoom()
+    public ActionResult<bool> LeaveRoom(UserAndRoom userAndRoom)
     {
-        // Si 0 joueurs, destroy
-        return new OkObjectResult("destroy room");
+        bool left = _roomService.LeaveRoom(userAndRoom.RoomId, userAndRoom.UserId);
+        return new OkObjectResult(left);
     }
 }

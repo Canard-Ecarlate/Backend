@@ -42,5 +42,11 @@ namespace DuckCity.Infrastructure.Repositories
 
         public IEnumerable<Room> FindAllRooms() => 
             _rooms.Find(_ => true).ToList();
+
+        public void Delete(Room room)
+        {
+            FilterDefinition<Room>? filter = Builders<Room>.Filter.Eq(r => r.Id, room.Id);
+            _rooms.DeleteOne(filter);
+        }
     }
 }
