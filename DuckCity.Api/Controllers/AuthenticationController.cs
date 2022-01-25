@@ -5,6 +5,7 @@ using AutoMapper;
 using DuckCity.Api.DTO.Authentication;
 using DuckCity.Application;
 using DuckCity.Application.Services;
+using DuckCity.Application.Services.Interfaces;
 using DuckCity.Domain;
 using DuckCity.Domain.Users;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +17,10 @@ namespace DuckCity.Api.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly AuthenticationService _authenticationService;
+        private readonly IAuthenticationService _authenticationService;
         private readonly IMapper _mapper;
 
-        public AuthenticationController(AuthenticationService authenticationService, IMapper mapper)
+        public AuthenticationController(IAuthenticationService authenticationService, IMapper mapper)
         {
             _authenticationService = authenticationService;
             _mapper = mapper;
