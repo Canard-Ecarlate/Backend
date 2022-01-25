@@ -7,18 +7,23 @@ namespace DuckCity.Application.Validations
 {
     public static class CheckValid
     {
-        public static void CreateRoom(IRoomRepository roomRepository, IUserRepository userRepository, string? roomName, string? hostId)
+        public static void IsObjectId(string id)
         {
+            if (!ObjectId.TryParse(id, out _))
+            {
+                throw new IdNotValidException(id);
+            }
+        }
+        
+        public static void CreateRoom(IUserRepository userRepository, string roomName, string hostId)
+        {
+            IsObjectId(hostId);
+
             if (string.IsNullOrEmpty(roomName))
             {
                 throw new RoomNameNullException();
             }
-
-            if (!ObjectId.TryParse(hostId, out _))
-            {
-                throw new IdNotValidException(hostId);
-            }
-
+            
             if (userRepository.CountUserById(hostId) == 0)
             {
                 throw new HostIdNoExistException(hostId);
@@ -31,14 +36,11 @@ namespace DuckCity.Application.Validations
             }
         }
 
-        public static void JoinRoom(IRoomRepository roomRepository, IUserRepository userRepository, string? userId,
-            string? roomId)
+        public static void JoinRoom(IRoomRepository roomRepository, IUserRepository userRepository, string userId,
+            string roomId)
         {
-            if (!ObjectId.TryParse(userId, out _))
-            {
-                throw new IdNotValidException(userId);
-            }
-
+            IsObjectId(userId);
+            
             if (userRepository.CountUserById(userId) == 0)
             {
                 throw new UserIdNoExistException();
@@ -59,10 +61,8 @@ namespace DuckCity.Application.Validations
         public static Room LeaveRoom(IRoomRepository roomRepository, IUserRepository userRepository, string userId,
             string roomId)
         {
-            if (!ObjectId.TryParse(userId, out _))
-            {
-                throw new IdNotValidException(userId);
-            }
+            IsObjectId(userId);
+            IsObjectId(roomId);
 
             if (userRepository.CountUserById(userId) == 0)
             {
