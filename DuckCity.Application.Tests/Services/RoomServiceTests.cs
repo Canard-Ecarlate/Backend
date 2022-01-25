@@ -7,105 +7,113 @@ using MongoDB.Bson;
 using Moq;
 using Xunit;
 
-namespace DuckCity.Application.Tests.Services;
-
-public class RoomServiceTests
+namespace DuckCity.Application.Tests.Services
 {
-    private readonly RoomService _roomService;
-    private readonly Mock<IUserRepository> _mockUserRep = new();
-    private readonly Mock<IRoomRepository> _mockRoomRep = new();
-
-    public RoomServiceTests()
+    public class RoomServiceTests
     {
-        _roomService = new RoomService(_mockUserRep.Object, _mockRoomRep.Object);
-    }
+        private readonly RoomService _roomService;
+        private readonly Mock<IUserRepository> _mockUserRep = new();
+        private readonly Mock<IRoomRepository> _mockRoomRep = new();
 
-    [Fact]
-    public void FindAllRoomsTest()
-    {
-        _mockRoomRep.Setup(mock => mock.FindAllRooms()).Returns(new List<Room>());
-
-        IEnumerable<Room> result = _roomService.FindAllRooms();
-        Assert.Empty(result);
-        _mockRoomRep.Verify(mock => mock.FindAllRooms(), Times.Once);
-    }
-
-    [Theory]
-    [InlineData("something not ObjectId")]
-    [InlineData(Examples.ObjectId)]
-    public void FindRoomTest(string roomId)
-    {
-        _mockRoomRep.Setup(mock => mock.FindById(roomId)).Returns(new Room());
-
-        try
+        public RoomServiceTests()
         {
-            Room? result = _roomService.FindRoom(roomId);
-            Assert.NotNull(result);
-            _mockRoomRep.Verify(mock => mock.FindById(roomId), Times.Once);
+            _roomService = new RoomService(_mockUserRep.Object, _mockRoomRep.Object);
         }
-        catch (IdNotValidException e)
-        {
-            if (!ObjectId.TryParse(roomId, out _))
-            {
-                // error because an id is not valid => OK
-            }
-            else
-            {
-                throw;
-            }
-        }
-    }
 
-    [Theory]
-    [InlineData(Examples.String, Examples.ObjectId, Examples.String, Examples.True, Examples.Five, 1)]
-    [InlineData(Examples.String, Examples.String, Examples.String, Examples.True, Examples.Five, 1)]
-    [InlineData(Examples.String, Examples.ObjectId, Examples.String, Examples.True, Examples.Five, 0)]
-    [InlineData("", Examples.ObjectId, Examples.String, Examples.True, Examples.Five, 1)]
-    public void AddRoomsTest(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers, int countUser)
-    {
-        _mockUserRep.Setup(mock => mock.CountUserById(hostId)).Returns(countUser);
-        
-        try
+        [Fact]
+        public void FindAllRoomsTest()
         {
-            Room roomResult = _roomService.AddRooms(roomName, hostId, hostName, isPrivate, nbPlayers);
-            Assert.NotNull(roomResult);
-            Assert.NotNull(roomResult.RoomConfiguration);
-            Assert.Equal(roomName, roomResult.Name);
-            Assert.Equal(hostId, roomResult.HostId);
-            Assert.Equal(hostName, roomResult.HostName);
-            Assert.Equal(isPrivate, roomResult.RoomConfiguration?.IsPrivate);
-            Assert.Equal(nbPlayers, roomResult.RoomConfiguration?.NbPlayers);
-            _mockRoomRep.Verify(mock => mock.Create(It.IsAny<Room>()), Times.Once);
+            _mockRoomRep.Setup(mock => mock.FindAllRooms()).Returns(new List<Room>());
+
+            IEnumerable<Room> result = _roomService.FindAllRooms();
+            Assert.Empty(result);
+            _mockRoomRep.Verify(mock => mock.FindAllRooms(), Times.Once);
         }
-        catch (IdNotValidException e)
+
+        [Theory]
+        [InlineData("something not ObjectId")]
+        [InlineData(ConstantTest.ObjectId)]
+        public void FindRoomTest(string roomId)
         {
-            if (!ObjectId.TryParse(hostId, out _))
+            _mockRoomRep.Setup(mock => mock.FindById(roomId)).Returns(new Room());
+
+            try
             {
-                // error because an id is not valid => OK
+                Room? result = _roomService.FindRoom(roomId);
+                Assert.NotNull(result);
+                _mockRoomRep.Verify(mock => mock.FindById(roomId), Times.Once);
             }
-            else
+            catch (IdNotValidException e)
             {
-                throw;
-            }        }
-        catch (RoomNameNullException e)
+                if (!ObjectId.TryParse(roomId, out _))
+                {
+                    // error because an id is not valid => OK
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        [Theory]
+        [InlineData(ConstantTest.String, ConstantTest.ObjectId, ConstantTest.String, ConstantTest.True,
+            ConstantTest.Five, 1)]
+        [InlineData(ConstantTest.String, ConstantTest.String, ConstantTest.String, ConstantTest.True, ConstantTest.Five,
+            1)]
+        [InlineData(ConstantTest.String, ConstantTest.ObjectId, ConstantTest.String, ConstantTest.True,
+            ConstantTest.Five, 0)]
+        [InlineData("", ConstantTest.ObjectId, ConstantTest.String, ConstantTest.True, ConstantTest.Five, 1)]
+        public void AddRoomsTest(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers,
+            int countUser)
         {
-            if (string.IsNullOrEmpty(roomName))
+            _mockUserRep.Setup(mock => mock.CountUserById(hostId)).Returns(countUser);
+
+            try
             {
-                // error because an id is not valid => OK
+                Room roomResult = _roomService.AddRooms(roomName, hostId, hostName, isPrivate, nbPlayers);
+                Assert.NotNull(roomResult);
+                Assert.NotNull(roomResult.RoomConfiguration);
+                Assert.Equal(roomName, roomResult.Name);
+                Assert.Equal(hostId, roomResult.HostId);
+                Assert.Equal(hostName, roomResult.HostName);
+                Assert.Equal(isPrivate, roomResult.RoomConfiguration?.IsPrivate);
+                Assert.Equal(nbPlayers, roomResult.RoomConfiguration?.NbPlayers);
+                _mockRoomRep.Verify(mock => mock.Create(It.IsAny<Room>()), Times.Once);
             }
-            else
+            catch (IdNotValidException e)
             {
-                throw;
-            }        }
-        catch (HostIdNoExistException e)
-        {
-            if (_mockUserRep.Object.CountUserById(hostId) == 0)
-            {
-                // error because an id is not valid => OK
+                if (!ObjectId.TryParse(hostId, out _))
+                {
+                    // error because an id is not valid => OK
+                }
+                else
+                {
+                    throw;
+                }
             }
-            else
+            catch (RoomNameNullException e)
             {
-                throw;
-            }        }
+                if (string.IsNullOrEmpty(roomName))
+                {
+                    // error because an id is not valid => OK
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            catch (HostIdNoExistException e)
+            {
+                if (_mockUserRep.Object.CountUserById(hostId) == 0)
+                {
+                    // error because an id is not valid => OK
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
     }
 }
