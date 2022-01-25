@@ -8,12 +8,12 @@ namespace DuckCity.Domain.Exceptions
         private string? Id { get; set; }
 
         public IdNotValidException() : 
-            base("ID is not valid")            
+            base("ID is not an ObjectId")            
         {
         }
 
         public IdNotValidException(string? id) 
-            : base($"ID : {id} is not valid")
+            : base($"ID : {id} is not an ObjectId")
         {
             Id = id;
         }

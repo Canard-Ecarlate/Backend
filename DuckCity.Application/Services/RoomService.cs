@@ -19,9 +19,13 @@ public class RoomService : IRoomService
 
     public IEnumerable<Room> FindAllRooms() => _roomRepository.FindAllRooms();
 
-    public Room? FindRoom(string roomId) => _roomRepository.FindById(roomId);
+    public Room? FindRoom(string roomId)
+    {
+        CheckValid.IsObjectId(roomId);
+        return _roomRepository.FindById(roomId);
+    } 
 
-    public Room AddRooms(string? roomName, string? hostId, string? hostName, bool isPrivate, int nbPlayers)
+    public Room AddRooms(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers)
     {
         CheckValid.CreateRoom(_roomRepository, _userRepository, roomName, hostId);
         Room room = new()
