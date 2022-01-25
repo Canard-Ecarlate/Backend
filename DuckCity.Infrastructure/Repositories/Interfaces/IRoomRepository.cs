@@ -1,17 +1,18 @@
 ﻿using DuckCity.Domain.Rooms;
 
-namespace DuckCity.Infrastructure.Repositories.Interfaces;
-
-public interface IRoomRepository
+namespace DuckCity.Infrastructure.Repositories.Interfaces
 {
-    void Create(Room room);
+    public interface IRoomRepository
+    {
+        void Create(Room room);
 
-    void Replace(Room room);
+        void Replace(Room room);
 
-    Room? FindById(string? id);
+        Room? FindById(string? id);
 
-    IEnumerable<Room> FindAllRooms();
+        IEnumerable<Room> FindAllRooms();
 
-    void Delete(Room room);
+        void Delete(Room room);
 
+    }
 }
