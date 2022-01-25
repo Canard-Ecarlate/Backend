@@ -14,6 +14,5 @@ namespace DuckCity.Infrastructure.Repositories.Interfaces
         public long CountUserById(string? id);
 
         public long CountUserByEmail(string? email);
-
     }
 }
