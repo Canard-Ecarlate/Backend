@@ -1,5 +1,5 @@
 ﻿using DuckCity.Application.Services;
-using DuckCity.GameApi.Models;
+using DuckCity.GameApi.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DuckCity.GameApi.Controllers;
@@ -16,9 +16,9 @@ public class RoomController
     }
 
     [HttpPost]
-    public ActionResult<bool> LeaveRoom(UserAndRoom userAndRoom)
+    public ActionResult<bool> LeaveRoom(UserAndRoomDto userAndRoomDto)
     {
-        bool left = _roomService.LeaveRoom(userAndRoom.RoomId, userAndRoom.UserId);
+        bool left = _roomService.LeaveRoom(userAndRoomDto.RoomId, userAndRoomDto.UserId);
         return new OkObjectResult(left);
     }
 }

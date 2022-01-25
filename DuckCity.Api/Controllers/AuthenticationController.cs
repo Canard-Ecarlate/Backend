@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
-using DuckCity.Api.Models.Authentication;
+using DuckCity.Api.DTO.Authentication;
 using DuckCity.Application;
 using DuckCity.Application.Services;
 using DuckCity.Domain;
@@ -27,12 +27,12 @@ namespace DuckCity.Api.Controllers
 
         [HttpPost]
         [Route("")]
-        public ActionResult<UserWithToken> Login(Identifier identifier)
+        public ActionResult<UserWithTokenDto> Login(IdentifierDto identifierDto)
         {
             User user;
             try
             {
-                user = _authenticationService.Login(identifier.Name, identifier.Password);
+                user = _authenticationService.Login(identifierDto.Name, identifierDto.Password);
             }
             catch (UnauthorizedAccessException e) {
                 return Unauthorized(e);
@@ -53,18 +53,18 @@ namespace DuckCity.Api.Controllers
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );
             
-            UserWithToken userWithToken = _mapper.Map<UserWithToken>(user);
-            userWithToken.Token = new JwtSecurityTokenHandler().WriteToken(token);
+            UserWithTokenDto userWithTokenDto = _mapper.Map<UserWithTokenDto>(user);
+            userWithTokenDto.Token = new JwtSecurityTokenHandler().WriteToken(token);
             
-            return new OkObjectResult(userWithToken);
+            return new OkObjectResult(userWithTokenDto);
         }
 
         [HttpPost]
         [Route("")]
-        public ActionResult<UserWithToken> SignUp(Register register)
+        public ActionResult<UserWithTokenDto> SignUp(RegisterDto registerDto)
         {
-            _authenticationService.SignUp(register.Name, register.Email, register.Password, register.PasswordConfirmation);
-            return Login(new Identifier { Name = register.Name, Password = register.Password });
+            _authenticationService.SignUp(registerDto.Name, registerDto.Email, registerDto.Password, registerDto.PasswordConfirmation);
+            return Login(new IdentifierDto { Name = registerDto.Name, Password = registerDto.Password });
         }
     }
 }
