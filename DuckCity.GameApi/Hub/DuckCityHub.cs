@@ -1,16 +1,15 @@
-using DuckCity.Application.Services;
+using DuckCity.Application.Services.Interfaces;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
 using DuckCity.GameApi.DTO;
-using MongoDB.Driver;
 
 namespace DuckCity.GameApi.Hub;
 
 public class DuckCityHub : Microsoft.AspNetCore.SignalR.Hub
 {
-    private readonly RoomService _roomService;
+    private readonly IRoomService _roomService;
 
-    public DuckCityHub(RoomService roomService)
+    public DuckCityHub(IRoomService roomService)
     {
         _roomService = roomService;
     }

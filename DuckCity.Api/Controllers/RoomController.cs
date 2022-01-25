@@ -25,12 +25,7 @@ namespace DuckCity.Api.Controllers
         public ActionResult<Room> CreateRoom(RoomCreationDto room)
         {
             Room roomCreated = _roomService.AddRooms(room.Name, room.HostId, room.HostName, room.IsPrivate, room.NbPlayers);
-            if (roomCreated.Id == null)
-            {
-                throw new RoomIdNoExistException();
-            }
-            ActionResult<Room> newRoom = JoinRoom(new UserAndRoomDto {UserId = room.HostId, UserName = room.HostName, RoomId = roomCreated.Id});
-            return newRoom;
+            return roomCreated;
         }
         
         [HttpPost]

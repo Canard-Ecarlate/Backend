@@ -23,7 +23,7 @@ public class RoomService : IRoomService
 
     public Room AddRooms(string? roomName, string? hostId, string? hostName, bool isPrivate, int nbPlayers)
     {
-        CheckValid.CreateRoom(_userRepository, roomName, hostId);
+        CheckValid.CreateRoom(_roomRepository, _userRepository, roomName, hostId);
         Room room = new()
         {
             Name = roomName,
@@ -32,7 +32,7 @@ public class RoomService : IRoomService
             HostName = hostName,
             ContainerId = "to do : a container id",
             RoomConfiguration = new RoomConfiguration(isPrivate, nbPlayers),
-            Players = new HashSet<PlayerInRoom>()
+            Players = new HashSet<PlayerInRoom> {new() {Id = hostId, Name = hostName}}
         };
         _roomRepository.Create(room);
         return room;

@@ -7,7 +7,7 @@ namespace DuckCity.Application.Validations
 {
     public static class CheckValid
     {
-        public static void CreateRoom(IUserRepository userRepository, string? roomName, string? hostId)
+        public static void CreateRoom(IRoomRepository roomRepository, IUserRepository userRepository, string? roomName, string? hostId)
         {
             if (string.IsNullOrEmpty(roomName))
             {
@@ -22,6 +22,12 @@ namespace DuckCity.Application.Validations
             if (userRepository.CountUserById(hostId) == 0)
             {
                 throw new HostIdNoExistException(hostId);
+            }
+            
+            if (roomRepository.FindAllRooms()
+                .Any(r => r.Players != null && r.Players.Contains(new PlayerInRoom {Id = hostId})))
+            {
+                throw new UserAlreadyInRoomException(hostId);
             }
         }
 

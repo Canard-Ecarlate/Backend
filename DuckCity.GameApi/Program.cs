@@ -1,6 +1,8 @@
 using DuckCity.Application.Services;
+using DuckCity.Application.Services.Interfaces;
 using DuckCity.GameApi.Hub;
 using DuckCity.Infrastructure.Repositories;
+using DuckCity.Infrastructure.Repositories.Interfaces;
 using DuckCity.Infrastructure.StoreDatabaseSettings;
 using DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces;
 using Microsoft.Extensions.Options;
@@ -50,10 +52,10 @@ void Cors()
 }
 void Singletons()
 {
-    services.AddSingleton<UserRepository>();
-    services.AddSingleton<RoomRepository>();
-    services.AddSingleton<AuthenticationService>();
-    services.AddSingleton<RoomService>();
+    services.AddSingleton<IUserRepository, UserRepository>();
+    services.AddSingleton<IRoomRepository, RoomRepository>();
+    services.AddSingleton<IAuthenticationService, AuthenticationService>();
+    services.AddSingleton<IRoomService, RoomService>();
 }
 void MongoServices()
 {

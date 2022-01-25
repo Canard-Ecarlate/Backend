@@ -1,4 +1,5 @@
 ﻿using DuckCity.Application.Services;
+using DuckCity.Application.Services.Interfaces;
 using DuckCity.GameApi.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +9,9 @@ namespace DuckCity.GameApi.Controllers;
 [ApiController]
 public class RoomController
 {
-    private readonly RoomService _roomService;
+    private readonly IRoomService _roomService;
 
-    public RoomController(RoomService roomService)
+    public RoomController(IRoomService roomService)
     {
         _roomService = roomService;
     }
