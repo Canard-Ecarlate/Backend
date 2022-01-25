@@ -25,13 +25,7 @@ public class RoomController : ControllerBase
     public ActionResult<Room> CreateRoom(RoomCreationDto room)
     {
         Room roomCreated = _roomService.AddRooms(room.Name, room.HostId, room.HostName, room.IsPrivate, room.NbPlayers);
-        if (roomCreated.Id == null)
-        {
-            Room roomCreated = _roomService.AddRooms(room.Name, room.HostId, room.HostName, room.IsPrivate, room.NbPlayers);
-            return roomCreated;
-        }
-        ActionResult<Room> newRoom = JoinRoom(new UserAndRoomDto {UserId = room.HostId, UserName = room.HostName, RoomId = roomCreated.Id});
-        return newRoom;
+        return new OkObjectResult(roomCreated);
     }
         
     [HttpPost]

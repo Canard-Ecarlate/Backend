@@ -11,6 +11,7 @@ namespace DuckCity.Infrastructure.Repositories.Interfaces
         public void Create(User user);
 
         public long CountUserByName(string? name);
+
         public long CountUserById(string? id);
 
         public long CountUserByEmail(string? email);

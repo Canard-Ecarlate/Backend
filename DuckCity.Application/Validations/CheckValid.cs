@@ -15,7 +15,7 @@ namespace DuckCity.Application.Validations
             }
         }
         
-        public static void CreateRoom(IUserRepository userRepository, string roomName, string hostId)
+        public static void CreateRoom(IRoomRepository roomRepository, IUserRepository userRepository, string roomName, string hostId)
         {
             IsObjectId(hostId);
 
