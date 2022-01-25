@@ -1,14 +1,13 @@
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
-using DuckCity.Infrastructure.Repositories;
+using DuckCity.Infrastructure.Repositories.Interfaces;
 using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace DuckCity.Application.Validations
 {
     public static class CheckValid
     {
-        public static void CreateRoom(UserRepository userRepository, string? roomName, string? hostId)
+        public static void CreateRoom(IRoomRepository roomRepository, IUserRepository userRepository, string? roomName, string? hostId)
         {
             if (string.IsNullOrEmpty(roomName))
             {
@@ -24,9 +23,15 @@ namespace DuckCity.Application.Validations
             {
                 throw new HostIdNoExistException(hostId);
             }
+            
+            if (roomRepository.FindAllRooms()
+                .Any(r => r.Players != null && r.Players.Contains(new PlayerInRoom {Id = hostId})))
+            {
+                throw new UserAlreadyInRoomException(hostId);
+            }
         }
 
-        public static void JoinRoom(RoomRepository roomRepository, UserRepository userRepository, string? userId,
+        public static void JoinRoom(IRoomRepository roomRepository, IUserRepository userRepository, string? userId,
             string? roomId)
         {
             if (!ObjectId.TryParse(userId, out _))
@@ -51,7 +56,7 @@ namespace DuckCity.Application.Validations
             }
         }
 
-        public static Room LeaveRoom(RoomRepository roomRepository, UserRepository userRepository, string userId,
+        public static Room LeaveRoom(IRoomRepository roomRepository, IUserRepository userRepository, string userId,
             string roomId)
         {
             if (!ObjectId.TryParse(userId, out _))

@@ -2,10 +2,10 @@ using System.Text;
 using AutoMapper;
 using DuckCity.Api;
 using DuckCity.Api.Mappings;
-using DuckCity.Application;
 using DuckCity.Application.Services;
-using DuckCity.Infrastructure;
+using DuckCity.Application.Services.Interfaces;
 using DuckCity.Infrastructure.Repositories;
+using DuckCity.Infrastructure.Repositories.Interfaces;
 using DuckCity.Infrastructure.StoreDatabaseSettings;
 using DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -62,10 +62,10 @@ void Cors()
 }
 void Singletons()
 {
-    services.AddSingleton<UserRepository>();
-    services.AddSingleton<RoomRepository>();
-    services.AddSingleton<AuthenticationService>();
-    services.AddSingleton<RoomService>();
+    services.AddSingleton<IUserRepository, UserRepository>();
+    services.AddSingleton<IRoomRepository, RoomRepository>();
+    services.AddSingleton<IAuthenticationService, AuthenticationService>();
+    services.AddSingleton<IRoomService, RoomService>();
 }
 void MongoServices()
 {

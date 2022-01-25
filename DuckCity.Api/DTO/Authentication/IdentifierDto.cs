@@ -1,6 +1,6 @@
-﻿namespace DuckCity.Api.Models.Authentication
+﻿namespace DuckCity.Api.DTO.Authentication
 {
-    public class Identifier
+    public class IdentifierDto
     {
         public string? Name { get; set; }
         public string? Password { get; set; }

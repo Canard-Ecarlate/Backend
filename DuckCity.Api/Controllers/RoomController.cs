@@ -1,5 +1,6 @@
-using DuckCity.Api.Models.Room;
+using DuckCity.Api.DTO.Room;
 using DuckCity.Application.Services;
+using DuckCity.Application.Services.Interfaces;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,9 @@ namespace DuckCity.Api.Controllers
     [ApiController]
     public class RoomController : ControllerBase
     {
-        private readonly RoomService _roomService;
+        private readonly IRoomService _roomService;
 
-        public RoomController(RoomService roomService)
+        public RoomController(IRoomService roomService)
         {
             _roomService = roomService;
         }
@@ -21,21 +22,16 @@ namespace DuckCity.Api.Controllers
         public ActionResult<IEnumerable<Room>> FindAllRooms() => new OkObjectResult(_roomService.FindAllRooms());
 
         [HttpPost]
-        public ActionResult<Room> CreateRoom(RoomCreation room)
+        public ActionResult<Room> CreateRoom(RoomCreationDto room)
         {
             Room roomCreated = _roomService.AddRooms(room.Name, room.HostId, room.HostName, room.IsPrivate, room.NbPlayers);
-            if (roomCreated.Id == null)
-            {
-                throw new RoomIdNoExistException();
-            }
-            ActionResult<Room> newRoom = JoinRoom(new UserAndRoom {UserId = room.HostId, UserName = room.HostName, RoomId = roomCreated.Id});
-            return newRoom;
+            return roomCreated;
         }
         
         [HttpPost]
-        public ActionResult<Room> JoinRoom(UserAndRoom userAndRoom)
+        public ActionResult<Room> JoinRoom(UserAndRoomDto userAndRoomDto)
         {
-            Room roomJoined = _roomService.JoinRoom(userAndRoom.RoomId, userAndRoom.UserId, userAndRoom.UserName);
+            Room roomJoined = _roomService.JoinRoom(userAndRoomDto.RoomId, userAndRoomDto.UserId, userAndRoomDto.UserName);
             return new OkObjectResult(roomJoined);
         }
     }

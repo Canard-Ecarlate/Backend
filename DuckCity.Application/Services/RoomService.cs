@@ -1,17 +1,17 @@
-﻿using DuckCity.Application.Validations;
+﻿using DuckCity.Application.Services.Interfaces;
+using DuckCity.Application.Validations;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
-using DuckCity.Infrastructure.Repositories;
-using MongoDB.Driver;
+using DuckCity.Infrastructure.Repositories.Interfaces;
 
 namespace DuckCity.Application.Services;
 
-public class RoomService
+public class RoomService : IRoomService
 {
-    private readonly UserRepository _userRepository;
-    private readonly RoomRepository _roomRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly IRoomRepository _roomRepository;
 
-    public RoomService(UserRepository userRepository, RoomRepository roomRepository)
+    public RoomService(IUserRepository userRepository, IRoomRepository roomRepository)
     {
         _userRepository = userRepository;
         _roomRepository = roomRepository;
@@ -23,7 +23,7 @@ public class RoomService
 
     public Room AddRooms(string? roomName, string? hostId, string? hostName, bool isPrivate, int nbPlayers)
     {
-        CheckValid.CreateRoom(_userRepository, roomName, hostId);
+        CheckValid.CreateRoom(_roomRepository, _userRepository, roomName, hostId);
         Room room = new()
         {
             Name = roomName,
@@ -32,7 +32,7 @@ public class RoomService
             HostName = hostName,
             ContainerId = "to do : a container id",
             RoomConfiguration = new RoomConfiguration(isPrivate, nbPlayers),
-            Players = new HashSet<PlayerInRoom>()
+            Players = new HashSet<PlayerInRoom> {new() {Id = hostId, Name = hostName}}
         };
         _roomRepository.Create(room);
         return room;

@@ -1,16 +1,15 @@
-using DuckCity.Application.Services;
+using DuckCity.Application.Services.Interfaces;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
-using DuckCity.GameApi.Models;
-using MongoDB.Driver;
+using DuckCity.GameApi.DTO;
 
 namespace DuckCity.GameApi.Hub;
 
 public class DuckCityHub : Microsoft.AspNetCore.SignalR.Hub
 {
-    private readonly RoomService _roomService;
+    private readonly IRoomService _roomService;
 
-    public DuckCityHub(RoomService roomService)
+    public DuckCityHub(IRoomService roomService)
     {
         _roomService = roomService;
     }
@@ -68,18 +67,18 @@ public class DuckCityHub : Microsoft.AspNetCore.SignalR.Hub
         }
     }
 
-    public async Task PlayerReadyHubAsync(UserAndRoom userAndRoom)
+    public async Task PlayerReadyHubAsync(UserAndRoomDto userAndRoomDto)
     {
         // Validations roomId is a signalR group and User is in
         string roomId = HubGroupManagement.FindUserRoom(Context);
-        if (string.IsNullOrEmpty(roomId) || !roomId.Equals(userAndRoom.RoomId))
+        if (string.IsNullOrEmpty(roomId) || !roomId.Equals(userAndRoomDto.RoomId))
         {
             throw new RoomIdNoExistException();
         }
 
         // update list of players and send it
         IEnumerable<PlayerInRoom> playersUpToDate =
-            _roomService.UpdatePlayerReadyInRoom(userAndRoom.UserId, userAndRoom.RoomId);
-        await HubMessageSender.AlertGroupOfPlayersUpToDate(Context, Clients, userAndRoom.RoomId, playersUpToDate);
+            _roomService.UpdatePlayerReadyInRoom(userAndRoomDto.UserId, userAndRoomDto.RoomId);
+        await HubMessageSender.AlertGroupOfPlayersUpToDate(Context, Clients, userAndRoomDto.RoomId, playersUpToDate);
     }
 }

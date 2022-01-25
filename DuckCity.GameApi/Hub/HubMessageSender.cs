@@ -1,5 +1,4 @@
 using DuckCity.Domain.Rooms;
-using DuckCity.GameApi.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace DuckCity.GameApi.Hub

@@ -1,4 +1,3 @@
-using DuckCity.Api.Models.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

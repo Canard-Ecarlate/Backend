@@ -1,5 +1,6 @@
 ﻿using DuckCity.Application.Services;
-using DuckCity.GameApi.Models;
+using DuckCity.Application.Services.Interfaces;
+using DuckCity.GameApi.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DuckCity.GameApi.Controllers;
@@ -8,17 +9,17 @@ namespace DuckCity.GameApi.Controllers;
 [ApiController]
 public class RoomController
 {
-    private readonly RoomService _roomService;
+    private readonly IRoomService _roomService;
 
-    public RoomController(RoomService roomService)
+    public RoomController(IRoomService roomService)
     {
         _roomService = roomService;
     }
 
     [HttpPost]
-    public ActionResult<bool> LeaveRoom(UserAndRoom userAndRoom)
+    public ActionResult<bool> LeaveRoom(UserAndRoomDto userAndRoomDto)
     {
-        bool left = _roomService.LeaveRoom(userAndRoom.RoomId, userAndRoom.UserId);
+        bool left = _roomService.LeaveRoom(userAndRoomDto.RoomId, userAndRoomDto.UserId);
         return new OkObjectResult(left);
     }
 }

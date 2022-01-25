@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DuckCity.Api.Models.Room
+namespace DuckCity.Api.DTO.Room
 {
-    public class UserAndRoom
+    public class UserAndRoomDto
     {
         [Required]
         public string UserId { get; init; } = "";
