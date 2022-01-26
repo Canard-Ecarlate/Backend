@@ -1,6 +1,5 @@
 ﻿using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.Repositories.Interfaces;
-using DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces;
 using MongoDB.Driver;
 
 namespace DuckCity.Infrastructure.Repositories
@@ -9,7 +8,7 @@ namespace DuckCity.Infrastructure.Repositories
     {
         private readonly IMongoCollection<User> _users;
 
-        public UserRepository(IUserStoreDatabaseSettings settings)
+        public UserRepository(IMongoDbSettings settings)
         {
             MongoClient client = new(settings.ConnectionString);
             IMongoDatabase? database = client.GetDatabase(settings.DatabaseName);
