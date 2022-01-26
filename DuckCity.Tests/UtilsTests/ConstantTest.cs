@@ -1,4 +1,4 @@
-﻿namespace DuckCity.Application.Tests
+﻿namespace DuckCity.Tests.UtilsTests
 {
     public static class ConstantTest
     {
