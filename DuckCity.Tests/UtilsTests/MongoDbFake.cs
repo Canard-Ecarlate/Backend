@@ -12,13 +12,17 @@ namespace DuckCity.Tests.UtilsTests
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("UtilsTests/appsettings.json")
                 .Build();
-            
+
             string connString = config.GetConnectionString("db");
             string usersCollectionName = config.GetConnectionString("UsersCollectionName");
             string roomsCollectionName = config.GetConnectionString("RoomsCollectionName");
             string dbName = $"test_db_{Guid.NewGuid()}";
 
-            MongoSettings = new MongoDbSettings{ConnectionString = connString, DatabaseName = dbName, UsersCollectionName = usersCollectionName, RoomsCollectionName = roomsCollectionName};
+            MongoSettings = new MongoDbSettings
+            {
+                ConnectionString = connString, DatabaseName = dbName, UsersCollectionName = usersCollectionName,
+                RoomsCollectionName = roomsCollectionName
+            };
         }
 
         public MongoDbSettings MongoSettings { get; }
@@ -31,9 +35,11 @@ namespace DuckCity.Tests.UtilsTests
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposing) return;
-            MongoClient client = new(MongoSettings.ConnectionString);
-            client.DropDatabase(MongoSettings.DatabaseName);
+            if (disposing)
+            {
+                MongoClient client = new(MongoSettings.ConnectionString);
+                client.DropDatabase(MongoSettings.DatabaseName);
+            }
         }
     }
 }
