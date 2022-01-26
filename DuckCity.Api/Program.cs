@@ -4,10 +4,9 @@ using DuckCity.Api;
 using DuckCity.Api.Mappings;
 using DuckCity.Application.Services;
 using DuckCity.Application.Services.Interfaces;
+using DuckCity.Infrastructure;
 using DuckCity.Infrastructure.Repositories;
 using DuckCity.Infrastructure.Repositories.Interfaces;
-using DuckCity.Infrastructure.StoreDatabaseSettings;
-using DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -27,7 +26,6 @@ IServiceCollection services = builder.Services;
 Cors();
 Singletons();
 services.AddControllers();
-MongoServices();
 services.AddEndpointsApiExplorer();
 SwaggerServices();
 AutoMapperServices();
@@ -66,29 +64,12 @@ void Singletons()
     services.AddSingleton<IRoomRepository, RoomRepository>();
     services.AddSingleton<IAuthenticationService, AuthenticationService>();
     services.AddSingleton<IRoomService, RoomService>();
+    
+    // Mongo
+    services.Configure<MongoDbSettings>(configuration.GetSection(nameof(MongoDbSettings)));
+    services.AddSingleton<IMongoDbSettings>(sp => sp.GetRequiredService<IOptions<MongoDbSettings>>().Value);
 }
-void MongoServices()
-{
-    services.Configure<UserStoreDatabaseSettings>(configuration.GetSection(nameof(UserStoreDatabaseSettings)));
-    services.AddSingleton<IUserStoreDatabaseSettings>(sp =>
-        sp.GetRequiredService<IOptions<UserStoreDatabaseSettings>>().Value);
 
-    services.Configure<RoomStoreDatabaseSettings>(configuration.GetSection(nameof(RoomStoreDatabaseSettings)));
-    services.AddSingleton<IRoomStoreDatabaseSettings>(sp =>
-        sp.GetRequiredService<IOptions<RoomStoreDatabaseSettings>>().Value);
-
-    services.Configure<UserStatisticsStoreDatabaseSettings>(configuration.GetSection(nameof(UserStatisticsStoreDatabaseSettings)));
-    services.AddSingleton<IUserStatisticsStoreDatabaseSettings>(sp =>
-        sp.GetRequiredService<IOptions<UserStatisticsStoreDatabaseSettings>>().Value);
-            
-    services.Configure<GlobalStatisticsStoreDatabaseSettings>(configuration.GetSection(nameof(GlobalStatisticsStoreDatabaseSettings)));
-    services.AddSingleton<IGlobalStatisticsStoreDatabaseSettings>(sp =>
-        sp.GetRequiredService<IOptions<GlobalStatisticsStoreDatabaseSettings>>().Value);
-            
-    services.Configure<CardsConfigurationUserStoreDatabaseSettings>(configuration.GetSection(nameof(CardsConfigurationUserStoreDatabaseSettings)));
-    services.AddSingleton<ICardsConfigurationUserStoreDatabaseSettings>(sp =>
-        sp.GetRequiredService<IOptions<CardsConfigurationUserStoreDatabaseSettings>>().Value);
-}
 void SwaggerServices()
 {
     services.AddSwaggerGen(c =>

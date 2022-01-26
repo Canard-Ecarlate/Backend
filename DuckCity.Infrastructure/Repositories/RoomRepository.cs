@@ -1,6 +1,5 @@
 ﻿using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.Repositories.Interfaces;
-using DuckCity.Infrastructure.StoreDatabaseSettings.Interfaces;
 using MongoDB.Driver;
 
 namespace DuckCity.Infrastructure.Repositories;
@@ -9,7 +8,7 @@ public class RoomRepository : IRoomRepository
 {
     private readonly IMongoCollection<Room> _rooms;
 
-    public RoomRepository(IRoomStoreDatabaseSettings settings)
+    public RoomRepository(IMongoDbSettings settings)
     {
         MongoClient client = new(settings.ConnectionString);
         IMongoDatabase database = client.GetDatabase(settings.DatabaseName);

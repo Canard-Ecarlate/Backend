@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckCity.Infrastructure", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckCity.GameApi", "DuckCity.GameApi\DuckCity.GameApi.csproj", "{CCED80BA-D6FC-4266-AF42-8D33A01909FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckCity.Application.Tests", "DuckCity.Application.Tests\DuckCity.Application.Tests.csproj", "{D7EBE822-E909-4C04-A512-01A1C8546F52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckCity.Tests", "DuckCity.Tests\DuckCity.Tests.csproj", "{7BA55B04-87FC-4B2E-8860-377A1EE69941}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,9 +38,9 @@ Global
 		{CCED80BA-D6FC-4266-AF42-8D33A01909FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCED80BA-D6FC-4266-AF42-8D33A01909FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCED80BA-D6FC-4266-AF42-8D33A01909FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7EBE822-E909-4C04-A512-01A1C8546F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7EBE822-E909-4C04-A512-01A1C8546F52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7EBE822-E909-4C04-A512-01A1C8546F52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7EBE822-E909-4C04-A512-01A1C8546F52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BA55B04-87FC-4B2E-8860-377A1EE69941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BA55B04-87FC-4B2E-8860-377A1EE69941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BA55B04-87FC-4B2E-8860-377A1EE69941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BA55B04-87FC-4B2E-8860-377A1EE69941}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

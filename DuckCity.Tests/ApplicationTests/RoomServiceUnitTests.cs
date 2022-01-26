@@ -3,19 +3,20 @@ using DuckCity.Application.Services;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.Repositories.Interfaces;
+using DuckCity.Tests.UtilsTests;
 using MongoDB.Bson;
 using Moq;
 using Xunit;
 
-namespace DuckCity.Application.Tests.Services
+namespace DuckCity.Tests.ApplicationTests
 {
-    public class RoomServiceTests
+    public class RoomServiceUnitTests
     {
         private readonly RoomService _roomService;
         private readonly Mock<IUserRepository> _mockUserRep = new();
         private readonly Mock<IRoomRepository> _mockRoomRep = new();
 
-        public RoomServiceTests()
+        public RoomServiceUnitTests()
         {
             _roomService = new RoomService(_mockUserRep.Object, _mockRoomRep.Object);
         }
@@ -45,14 +46,8 @@ namespace DuckCity.Application.Tests.Services
             }
             catch (IdNotValidException e)
             {
-                if (!ObjectId.TryParse(roomId, out _))
-                {
-                    // error because an id is not valid => OK
-                }
-                else
-                {
-                    throw;
-                }
+                Assert.True(!ObjectId.TryParse(roomId, out _));
+                Assert.NotNull(e);
             }
         }
 
@@ -83,36 +78,18 @@ namespace DuckCity.Application.Tests.Services
             }
             catch (IdNotValidException e)
             {
-                if (!ObjectId.TryParse(hostId, out _))
-                {
-                    // error because an id is not valid => OK
-                }
-                else
-                {
-                    throw;
-                }
+                Assert.True(!ObjectId.TryParse(hostId, out _));
+                Assert.NotNull(e);
             }
             catch (RoomNameNullException e)
             {
-                if (string.IsNullOrEmpty(roomName))
-                {
-                    // error because an id is not valid => OK
-                }
-                else
-                {
-                    throw;
-                }
+                Assert.True(string.IsNullOrEmpty(roomName));
+                Assert.NotNull(e);
             }
             catch (HostIdNoExistException e)
             {
-                if (_mockUserRep.Object.CountUserById(hostId) == 0)
-                {
-                    // error because an id is not valid => OK
-                }
-                else
-                {
-                    throw;
-                }
+                Assert.True(_mockUserRep.Object.CountUserById(hostId) == 0);
+                Assert.NotNull(e);
             }
         }
     }
