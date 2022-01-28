@@ -1,26 +1,28 @@
-﻿using DuckCity.Infrastructure;
+﻿using DuckCity.Api;
+using DuckCity.Infrastructure;
 using DuckCity.Tests.UtilsTests;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DuckCity.Tests.ApiTests;
-
-public class ApiApplication : WebApplicationFactory<ProgramApi>
+namespace DuckCity.Tests.ApiTests
 {
-    private readonly MongoDbFake _mongoDbFake;
-
-    public ApiApplication(MongoDbFake mongoDbFake)
+    public class ApiApplication : WebApplicationFactory<ProgramApi>
     {
-        _mongoDbFake = mongoDbFake;
-    }
+        private readonly MongoDbFake _mongoDbFake;
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        builder.ConfigureTestServices(services =>
+        public ApiApplication(MongoDbFake mongoDbFake)
         {
-            services.AddSingleton<IMongoDbSettings>(sp => _mongoDbFake.MongoSettings);
-        });
+            _mongoDbFake = mongoDbFake;
+        }
+
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddSingleton<IMongoDbSettings>(sp => _mongoDbFake.MongoSettings);
+            });
+        }
     }
 }

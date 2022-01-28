@@ -122,4 +122,7 @@ void AuthenticationAuthorisationServices()
     });
 }
 
-public partial class ProgramApi { }
+namespace DuckCity.Api
+{
+    public class ProgramApi { }
+}
