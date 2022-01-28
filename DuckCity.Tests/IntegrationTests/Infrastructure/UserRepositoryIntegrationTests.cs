@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.Repositories;
-using DuckCity.Tests.UtilsTests;
 using Xunit;
 
-namespace DuckCity.Tests.InfrastructureTests
+namespace DuckCity.Tests.IntegrationTests.Infrastructure
 {
     public class UserRepositoryIntegrationTests : IClassFixture<MongoDbFake>
     {

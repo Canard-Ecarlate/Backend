@@ -3,10 +3,9 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DuckCity.Api.DTO.Authentication;
-using DuckCity.Tests.UtilsTests;
 using Xunit;
 
-namespace DuckCity.Tests.ApiTests
+namespace DuckCity.Tests.IntegrationTests.Api
 {
     public sealed class AuthenticationControllerIntegrationTests : IClassFixture<MongoDbFake>
     {

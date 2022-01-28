@@ -3,13 +3,12 @@ using DuckCity.Api.Controllers;
 using DuckCity.Api.DTO.Authentication;
 using DuckCity.Application.Services.Interfaces;
 using DuckCity.Domain.Users;
-using DuckCity.Tests.UtilsTests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
-namespace DuckCity.Tests.ApiTests
+namespace DuckCity.Tests.UnitTests.Api
 {
     public class AuthenticationControllerUnitTests
     {

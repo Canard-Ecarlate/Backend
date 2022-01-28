@@ -3,14 +3,14 @@ using DuckCity.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
-namespace DuckCity.Tests.UtilsTests
+namespace DuckCity.Tests.IntegrationTests
 {
     public class MongoDbFake : IDisposable
     {
         public MongoDbFake()
         {
             IConfiguration config = new ConfigurationBuilder()
-                .AddJsonFile("UtilsTests/appsettings.json")
+                .AddJsonFile("IntegrationTests/appsettingstest.json")
                 .Build();
 
             string connString = config.GetConnectionString("db");

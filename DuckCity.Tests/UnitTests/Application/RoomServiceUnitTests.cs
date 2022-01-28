@@ -3,12 +3,11 @@ using DuckCity.Application.Services;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.Repositories.Interfaces;
-using DuckCity.Tests.UtilsTests;
 using MongoDB.Bson;
 using Moq;
 using Xunit;
 
-namespace DuckCity.Tests.ApplicationTests
+namespace DuckCity.Tests.UnitTests.Application
 {
     public class RoomServiceUnitTests
     {

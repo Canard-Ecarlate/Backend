@@ -1,12 +1,11 @@
 ﻿using DuckCity.Api;
 using DuckCity.Infrastructure;
-using DuckCity.Tests.UtilsTests;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DuckCity.Tests.ApiTests
+namespace DuckCity.Tests.IntegrationTests
 {
     public class ApiApplication : WebApplicationFactory<ProgramApi>
     {

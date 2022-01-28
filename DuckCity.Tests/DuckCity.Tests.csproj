@@ -33,7 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="UtilsTests\appsettings.json">
+      <None Update="IntegrationTests\appsettingstest.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
