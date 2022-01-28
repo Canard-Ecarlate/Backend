@@ -121,3 +121,5 @@ void AuthenticationAuthorisationServices()
         cfg.AddPolicy("ClearanceLevel1", policy => policy.RequireClaim("ClearanceLevel", "1"));
     });
 }
+
+public partial class ProgramApi { }
