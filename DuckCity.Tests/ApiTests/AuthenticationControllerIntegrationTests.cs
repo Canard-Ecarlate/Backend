@@ -18,13 +18,13 @@ namespace DuckCity.Tests.ApiTests
             mongoDbFake.Dispose();
         }
 
-        [Fact]
-        public async Task SignUpTest()
+        [Theory]
+        [InlineData(ConstantTest.String, ConstantTest.Email, ConstantTest.String)]
+        public async Task SignUpTest(string name, string email, string password)
         {
             RegisterDto registerDto = new()
             {
-                Name = ConstantTest.String, Email = ConstantTest.Email, Password = ConstantTest.String,
-                PasswordConfirmation = ConstantTest.String
+                Name = name, Email = email, Password = password, PasswordConfirmation = password
             };
             JsonContent jsonIn = JsonContent.Create(registerDto);
             HttpResponseMessage signUp = await _client.PostAsync("/api/Authentication/SignUp", jsonIn);
@@ -32,32 +32,32 @@ namespace DuckCity.Tests.ApiTests
             UserWithTokenDto? userSignUp = JsonSerializer.Deserialize<UserWithTokenDto>(contentSignUp,
                 new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
 
-            Assert.Equal(ConstantTest.String, userSignUp?.Name);
-            Assert.Equal(ConstantTest.Email, userSignUp?.Email);
+            Assert.Equal(name, userSignUp?.Name);
+            Assert.Equal(email, userSignUp?.Email);
             Assert.NotNull(userSignUp?.Id);
             Assert.NotNull(userSignUp?.Token);
         }
 
-        [Fact]
-        public async Task LoginTest()
+        [Theory]
+        [InlineData(ConstantTest.String, ConstantTest.Email, ConstantTest.String)]
+        public async Task LoginTest(string name, string email, string password)
         {
             RegisterDto registerDto = new()
             {
-                Name = ConstantTest.String, Email = ConstantTest.Email, Password = ConstantTest.String,
-                PasswordConfirmation = ConstantTest.String
+                Name = name, Email = email, Password = password, PasswordConfirmation = password
             };
             JsonContent jsonIn = JsonContent.Create(registerDto);
             await _client.PostAsync("/api/Authentication/SignUp", jsonIn);
 
-            IdentifierDto identifierDto = new() {Name = ConstantTest.String, Password = ConstantTest.String};
+            IdentifierDto identifierDto = new() {Name = name, Password = password};
             JsonContent json = JsonContent.Create(identifierDto);
             HttpResponseMessage login = await _client.PostAsync("/api/Authentication/Login", json);
             string contentLogin = login.Content.ReadAsStringAsync().Result;
             UserWithTokenDto? userLogin = JsonSerializer.Deserialize<UserWithTokenDto>(contentLogin,
                 new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
 
-            Assert.Equal(ConstantTest.String, userLogin?.Name);
-            Assert.Equal(ConstantTest.Email, userLogin?.Email);
+            Assert.Equal(name, userLogin?.Name);
+            Assert.Equal(email, userLogin?.Email);
             Assert.NotNull(userLogin?.Id);
             Assert.NotNull(userLogin?.Token);
         }
