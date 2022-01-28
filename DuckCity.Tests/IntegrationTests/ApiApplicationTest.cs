@@ -7,11 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DuckCity.Tests.IntegrationTests
 {
-    public class ApiApplication : WebApplicationFactory<ProgramApi>
+    public class ApiApplicationTest : WebApplicationFactory<ProgramApi>
     {
         private readonly MongoDbFake _mongoDbFake;
 
-        public ApiApplication(MongoDbFake mongoDbFake)
+        public ApiApplicationTest(MongoDbFake mongoDbFake)
         {
             _mongoDbFake = mongoDbFake;
         }

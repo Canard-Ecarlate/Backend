@@ -13,7 +13,7 @@ namespace DuckCity.Tests.IntegrationTests.Api
 
         public AuthenticationControllerIntegrationTests(MongoDbFake mongoDbFake)
         {
-            _client = new ApiApplication(mongoDbFake).CreateClient();
+            _client = new ApiApplicationTest(mongoDbFake).CreateClient();
             mongoDbFake.Dispose();
         }
 
