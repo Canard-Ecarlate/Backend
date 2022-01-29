@@ -5,6 +5,8 @@ on:
     branches: [ develop ]
   pull_request:
     branches: [ develop ]
+    
+    
 
 jobs:
   build:
@@ -12,6 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Start MongoDB As Docker
+      uses: wbari/start-mongoDB@v0.2
+      with:
+        mongoDBVersion: 3.6
     - uses: actions/checkout@v2
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
