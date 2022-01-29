@@ -31,7 +31,7 @@ namespace DuckCity.Tests.IntegrationTests.Api
             UserWithTokenDto? userSignUp = JsonSerializer.Deserialize<UserWithTokenDto>(contentSignUp,
                 new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
 
-            Assert.Equal(name, userSignUp?.Name);
+            Assert.Equal("error", userSignUp?.Name);
             Assert.Equal(email, userSignUp?.Email);
             Assert.NotNull(userSignUp?.Id);
             Assert.NotNull(userSignUp?.Token);
