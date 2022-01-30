@@ -10,7 +10,7 @@ namespace DuckCity.Tests.IntegrationTests
         public MongoDbFake()
         {
             IConfiguration config = new ConfigurationBuilder()
-                .AddJsonFile("IntegrationTests/appsettingstest.json")
+                .AddJsonFile("Fake/appsettingsfake.json")
                 .Build();
 
             string connString = config.GetConnectionString("db");
