@@ -72,7 +72,8 @@ namespace DuckCity.Tests.UnitTests.Api
             ActionResult<UserWithTokenDto> actionResult = _authenticationController.Login(new IdentifierDto());
             UnauthorizedObjectResult? result = actionResult.Result as UnauthorizedObjectResult;
             Assert.NotNull(result);
-            Assert.Equal(401, result?.StatusCode);
+            const int unauthorizedStatus = 401;
+            Assert.Equal(unauthorizedStatus, result?.StatusCode);
             Assert.True(result?.Value is UnauthorizedAccessException);
         }
 
