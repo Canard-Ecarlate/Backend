@@ -9,17 +9,24 @@ using Xunit;
 
 namespace DuckCity.Tests.UnitTests.Application
 {
-    public class RoomServiceUnitTests
+    public class RoomServiceUt
     {
+        // Class to test
         private readonly RoomService _roomService;
+        
+        // Mock
         private readonly Mock<IUserRepository> _mockUserRep = new();
         private readonly Mock<IRoomRepository> _mockRoomRep = new();
 
-        public RoomServiceUnitTests()
+        // Constructor
+        public RoomServiceUt()
         {
             _roomService = new RoomService(_mockUserRep.Object, _mockRoomRep.Object);
         }
 
+        /**
+         * Tests
+         */
         [Fact]
         public void FindAllRoomsTest()
         {

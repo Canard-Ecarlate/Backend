@@ -7,16 +7,20 @@ using Xunit;
 
 namespace DuckCity.Tests.IntegrationTests.Api
 {
-    public sealed class AuthenticationControllerIntegrationTests : IClassFixture<MongoDbFake>
+    public sealed class AuthenticationControllerIt : IClassFixture<MongoDbFake>
     {
         private readonly HttpClient _client;
 
-        public AuthenticationControllerIntegrationTests(MongoDbFake mongoDbFake)
+        // Constructor
+        public AuthenticationControllerIt(MongoDbFake mongoDbFake)
         {
-            _client = new ApiApplicationTest(mongoDbFake).CreateClient();
+            _client = new ApiApplicationFake(mongoDbFake).CreateClient();
             mongoDbFake.Dispose();
         }
 
+        /**
+         * Tests
+         */
         [Theory]
         [InlineData(ConstantTest.String, ConstantTest.Email, ConstantTest.String)]
         public async Task SignUpTest(string name, string email, string password)

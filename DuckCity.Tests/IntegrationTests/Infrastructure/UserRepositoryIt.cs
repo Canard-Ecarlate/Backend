@@ -5,15 +5,19 @@ using Xunit;
 
 namespace DuckCity.Tests.IntegrationTests.Infrastructure
 {
-    public class UserRepositoryIntegrationTests : IClassFixture<MongoDbFake>
+    public class UserRepositoryIt : IClassFixture<MongoDbFake>
     {
         private readonly MongoDbFake _mongoDbFake;
 
-        public UserRepositoryIntegrationTests(MongoDbFake mongoDbFake)
+        // Constructor
+        public UserRepositoryIt(MongoDbFake mongoDbFake)
         {
             _mongoDbFake = mongoDbFake;
         }
 
+        /**
+         * Tests
+         */
         [Fact]
         public void CreateTest()
         {

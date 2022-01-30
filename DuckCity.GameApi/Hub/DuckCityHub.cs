@@ -67,18 +67,18 @@ public class DuckCityHub : Microsoft.AspNetCore.SignalR.Hub
         }
     }
 
-    public async Task PlayerReadyHubAsync(UserAndRoomDto userAndRoomDto)
+    public async Task PlayerReadyHubAsync(UserIdAndRoomIdDto userIdAndRoomIdDto)
     {
         // Validations roomId is a signalR group and User is in
         string roomId = HubGroupManagement.FindUserRoom(Context);
-        if (string.IsNullOrEmpty(roomId) || !roomId.Equals(userAndRoomDto.RoomId))
+        if (string.IsNullOrEmpty(roomId) || !roomId.Equals(userIdAndRoomIdDto.RoomId))
         {
             throw new RoomIdNoExistException();
         }
 
         // update list of players and send it
         IEnumerable<PlayerInRoom> playersUpToDate =
-            _roomService.UpdatePlayerReadyInRoom(userAndRoomDto.UserId, userAndRoomDto.RoomId);
-        await HubMessageSender.AlertGroupOfPlayersUpToDate(Context, Clients, userAndRoomDto.RoomId, playersUpToDate);
+            _roomService.UpdatePlayerReadyInRoom(userIdAndRoomIdDto.UserId, userIdAndRoomIdDto.RoomId);
+        await HubMessageSender.AlertGroupOfPlayersUpToDate(Context, Clients, userIdAndRoomIdDto.RoomId, playersUpToDate);
     }
 }

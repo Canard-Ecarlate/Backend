@@ -1,8 +1,12 @@
-﻿using System.Security.Cryptography;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using DuckCity.Application.Services.Interfaces;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.Repositories.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DuckCity.Application.Services;
 
@@ -74,7 +78,27 @@ public class AuthenticationService : IAuthenticationService
             throw new UsernameAlreadyExistException(name);
         }
     }
-        
+
+    public string GenerateJsonWebToken(User user)
+    {
+        List<Claim> claims = new()
+        {
+            new Claim("userId",user.Id!),
+            new Claim("type", "player")
+        };
+
+        SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ"));
+
+        JwtSecurityToken token = new(
+            "https://canardecarlate.fr",
+            "https://canardecarlate.fr",
+            claims,
+            expires: DateTime.Now.AddDays(30.0),
+            signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+        );
+            
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
     private static string HashPassword(string? password)
     {
         byte[] salt = new byte[HashSize];
