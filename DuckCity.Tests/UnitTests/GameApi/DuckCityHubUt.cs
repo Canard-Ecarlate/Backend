@@ -21,7 +21,6 @@ namespace DuckCity.Tests.UnitTests.GameApi
             Mock<IClientProxy> mockClientProxy = new();
             mockClients.Setup(clients => clients.All).Returns(mockClientProxy.Object);
 
-
             DuckCityHub hub = new(_mockRoomService.Object);
             hub.Context = mockHubContext.Object;
             hub.Clients = mockClients.Object;
