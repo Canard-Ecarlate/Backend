@@ -11,12 +11,16 @@ namespace DuckCity.Tests.IntegrationTests.Api
     {
         private readonly HttpClient _client;
 
+        // Constructor
         public AuthenticationControllerIt(MongoDbFake mongoDbFake)
         {
             _client = new ApiApplicationFake(mongoDbFake).CreateClient();
             mongoDbFake.Dispose();
         }
 
+        /**
+         * Tests
+         */
         [Theory]
         [InlineData(ConstantTest.String, ConstantTest.Email, ConstantTest.String)]
         public async Task SignUpTest(string name, string email, string password)

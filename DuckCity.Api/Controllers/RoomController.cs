@@ -1,7 +1,5 @@
 using DuckCity.Api.DTO.Room;
-using DuckCity.Application.Services;
 using DuckCity.Application.Services.Interfaces;
-using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
 using Microsoft.AspNetCore.Mvc;
 

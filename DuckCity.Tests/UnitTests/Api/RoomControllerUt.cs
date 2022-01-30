@@ -12,11 +12,13 @@ namespace DuckCity.Tests.UnitTests.Api;
 
 public class RoomControllerUt
 {
+    // Class to test
     private readonly RoomController _roomController;
     
     // Mock
     private readonly Mock<IRoomService> _mockRoomService = new();
 
+    // Constructor
     public RoomControllerUt()
     {
         _roomController = new RoomController(_mockRoomService.Object)
@@ -25,6 +27,9 @@ public class RoomControllerUt
         };
     }
 
+    /**
+     * Tests
+     */
     [Theory]
     [InlineData(ConstantTest.String)]
     public void FindAllRoomsTest(string roomName)

@@ -7,5 +7,6 @@
         public const string Email = "email@email.fr";
         public const int Five = 5;
         public const bool True = true;
+        public const bool False = false;
     }
 }

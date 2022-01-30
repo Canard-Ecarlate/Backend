@@ -14,12 +14,14 @@ namespace DuckCity.Tests.UnitTests.Api
 {
     public class AuthenticationControllerUt
     {
+        // Class to test
         private readonly AuthenticationController _authenticationController;
 
         // Mock
         private readonly Mock<IAuthenticationService> _mockAuthenticationService = new();
         private readonly Mock<IMapper> _mockMapper = new();
 
+        // Constructor
         public AuthenticationControllerUt()
         {
             _authenticationController =
@@ -29,6 +31,9 @@ namespace DuckCity.Tests.UnitTests.Api
                 };
         }
 
+        /**
+         * Tests
+         */
         [Theory]
         [InlineData(ConstantTest.String, ConstantTest.String, ConstantTest.String)]
         public void LoginTest(string name, string password, string token)

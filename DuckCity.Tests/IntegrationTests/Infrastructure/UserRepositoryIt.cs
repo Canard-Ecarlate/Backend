@@ -9,11 +9,15 @@ namespace DuckCity.Tests.IntegrationTests.Infrastructure
     {
         private readonly MongoDbFake _mongoDbFake;
 
+        // Constructor
         public UserRepositoryIt(MongoDbFake mongoDbFake)
         {
             _mongoDbFake = mongoDbFake;
         }
 
+        /**
+         * Tests
+         */
         [Fact]
         public void CreateTest()
         {
