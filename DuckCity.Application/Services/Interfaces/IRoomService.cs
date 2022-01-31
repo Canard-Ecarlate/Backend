@@ -12,7 +12,7 @@ namespace DuckCity.Application.Services.Interfaces
 
         Room JoinRoom(string roomId, string userId, string userName);
 
-        IEnumerable<PlayerInRoom> UpdatePlayerReadyInRoom(string userId, string roomId);
+        Room UpdatedRoomReady(string userId, string roomId);
 
         bool LeaveRoom(string roomId, string userId);
     }
