@@ -10,24 +10,39 @@ namespace DuckCity.Tests.UnitTests.GameApi
 {
     public class DuckCityHubUt : HubUnitTestsBase
     {
+        // Class to test
+        private readonly DuckCityHub _duckCityHub;
+        
         // Mock
         private readonly Mock<IRoomService> _mockRoomService = new();
+        private readonly Mock<HubCallerContext> _mockHubContext = new();
+        private readonly Mock<IHubCallerClients<IDuckCityClient>> _mockClients = new();
+        private readonly Mock<IGroupManager> _mockGroups = new();
+        private readonly Mock<IDuckCityClient> _mockClientProxy = new();
 
+        // Constructor
+        public DuckCityHubUt()
+        {
+            _duckCityHub = new DuckCityHub(_mockRoomService.Object)
+            {
+                Context = _mockHubContext.Object,
+                Clients = _mockClients.Object,
+                Groups = _mockGroups.Object
+            };
+            _mockClients.Setup(clients => clients.All).Returns(_mockClientProxy.Object);
+        }
+
+        /**
+         * Tests
+         */
         [Fact]
         public async Task SendNotification()
         {
-            Mock<HubCallerContext> mockHubContext = new();
-            Mock<IHubCallerClients> mockClients = new();
-            Mock<IClientProxy> mockClientProxy = new();
-            mockClients.Setup(clients => clients.All).Returns(mockClientProxy.Object);
-
-            DuckCityHub hub = new(_mockRoomService.Object);
-            hub.Context = mockHubContext.Object;
-            hub.Clients = mockClients.Object;
-
-            await hub.SendMessageHubAsync("Yo! This is the unit test.");
-
-            mockClients.Verify(clients => clients.All, Times.Once);
+            //When
+            await _duckCityHub.SendMessageHubAsync("Yo! This is the unit test.");
+            
+            // Verify
+            _mockClients.Verify(clients => clients.All, Times.Once);
         }
     }
 }

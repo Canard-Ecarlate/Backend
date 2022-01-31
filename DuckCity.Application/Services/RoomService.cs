@@ -61,7 +61,7 @@ public class RoomService : IRoomService
         return room;
     }
 
-    public IEnumerable<PlayerInRoom> UpdatePlayerReadyInRoom(string userId, string roomId)
+    public Room UpdatedRoomReady(string userId, string roomId)
     {
         Room? room = _roomRepository.FindById(roomId);
         if (room == null)
@@ -80,7 +80,7 @@ public class RoomService : IRoomService
         }
         playerInRoom.Ready = !playerInRoom.Ready;
         _roomRepository.Replace(room);
-        return playerInRooms;
+        return room;
     }
 
     public bool LeaveRoom(string roomId, string userId)
