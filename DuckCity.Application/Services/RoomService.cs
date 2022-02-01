@@ -19,7 +19,7 @@ public class RoomService : IRoomService
 
     public IEnumerable<Room> FindAllRooms() => _roomRepository.FindAllRooms();
 
-    public Room? FindRoom(string roomId)
+    public Room FindRoom(string roomId)
     {
         CheckValid.IsObjectId(roomId);
         return _roomRepository.FindById(roomId);
@@ -28,33 +28,16 @@ public class RoomService : IRoomService
     public Room AddRooms(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers)
     {
         CheckValid.CreateRoom(_roomRepository, _userRepository, roomName, hostId);
-        Room room = new()
-        {
-            Name = roomName,
-            Code = "to do : random code",
-            HostId = hostId,
-            HostName = hostName,
-            ContainerId = "to do : a container id",
-            RoomConfiguration = new RoomConfiguration(isPrivate, nbPlayers),
-            Players = new HashSet<PlayerInRoom> {new() {Id = hostId, Name = hostName}}
-        };
+        Room room = new(roomName, hostId, hostName, isPrivate, nbPlayers);
         _roomRepository.Create(room);
         return room;
     }
 
     public Room JoinRoom(string roomId, string userId, string userName)
     {
-        CheckValid.JoinRoom(_roomRepository, _userRepository, userId, roomId);
+        CheckValid.JoinRoom(_roomRepository, _userRepository, userId);
             
-        Room? room = _roomRepository.FindById(roomId);
-        if (room == null)
-        {
-            throw new RoomNotFoundException();
-        }
-        if (room.Players == null)
-        {
-            throw new PlayersNotFoundException();
-        }
+        Room room = _roomRepository.FindById(roomId);
         PlayerInRoom playerInRoom = new() {Id = userId, Name = userName}; 
         room.Players.Add(playerInRoom);
         _roomRepository.Replace(room);
@@ -63,15 +46,7 @@ public class RoomService : IRoomService
 
     public Room UpdatedRoomReady(string userId, string roomId)
     {
-        Room? room = _roomRepository.FindById(roomId);
-        if (room == null)
-        {
-            throw new RoomNotFoundException();
-        }
-        if (room.Players == null)
-        {
-            throw new PlayersNotFoundException();
-        }
+        Room room = _roomRepository.FindById(roomId);
         IEnumerable<PlayerInRoom> playerInRooms = room.Players;
         PlayerInRoom? playerInRoom = playerInRooms.SingleOrDefault(player => player.Id != null && player.Id.Equals(userId));
         if (playerInRoom == null)
@@ -83,18 +58,20 @@ public class RoomService : IRoomService
         return room;
     }
 
-    public bool LeaveRoom(string roomId, string userId)
+    public Room? LeaveRoom(string roomId, string userId)
     {
-        Room room = CheckValid.LeaveRoom(_roomRepository, _userRepository, userId, roomId);
-        room.Players?.RemoveWhere(p => p.Id == userId);
+        Room room = _roomRepository.FindById(roomId);
+        CheckValid.LeaveRoom(_userRepository, userId, room);
+        room.Players.RemoveWhere(p => p.Id == userId);
         if (room.Players is {Count: 0})
         {
             _roomRepository.Delete(room);
+            return null;
         }
         else
         {
             _roomRepository.Replace(room);
+            return room;
         }
-        return true;
     }
 }

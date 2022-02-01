@@ -30,14 +30,13 @@ namespace DuckCity.Application.Validations
             }
             
             if (roomRepository.FindAllRooms()
-                .Any(r => r.Players != null && r.Players.Contains(new PlayerInRoom {Id = hostId})))
+                .Any(r => r.Players.Contains(new PlayerInRoom {Id = hostId})))
             {
                 throw new UserAlreadyInRoomException(hostId);
             }
         }
 
-        public static void JoinRoom(IRoomRepository roomRepository, IUserRepository userRepository, string userId,
-            string roomId)
+        public static void JoinRoom(IRoomRepository roomRepository, IUserRepository userRepository, string userId)
         {
             IsObjectId(userId);
             
@@ -46,47 +45,26 @@ namespace DuckCity.Application.Validations
                 throw new UserIdNoExistException();
             }
 
-            if (roomRepository.FindById(roomId) == null)
-            {
-                throw new RoomIdNoExistException();
-            }
-
             if (roomRepository.FindAllRooms()
-                .Any(r => r.Players != null && r.Players.Contains(new PlayerInRoom {Id = userId})))
+                .Any(r => r.Players.Contains(new PlayerInRoom {Id = userId})))
             {
                 throw new UserAlreadyInRoomException(userId);
             }
         }
 
-        public static Room LeaveRoom(IRoomRepository roomRepository, IUserRepository userRepository, string userId,
-            string roomId)
+        public static void LeaveRoom(IUserRepository userRepository, string userId, Room room)
         {
             IsObjectId(userId);
-            IsObjectId(roomId);
 
             if (userRepository.CountUserById(userId) == 0)
             {
                 throw new UserIdNoExistException();
             }
             
-            Room? room = roomRepository.FindById(roomId);
-            
-            if (room == null)
-            {
-                throw new RoomIdNoExistException();
-            }
-
-            if (room.Players == null)
-            {
-                throw new PlayersNotFoundException();
-            }
-
             if (!room.Players.Contains(new PlayerInRoom {Id = userId}))
             {
                 throw new UserNotInRoomException(userId);
             }
-
-            return room;
         }
     }
 }

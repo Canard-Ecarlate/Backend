@@ -8,7 +8,7 @@ namespace DuckCity.Infrastructure.Repositories.Interfaces
 
         void Replace(Room room);
 
-        Room? FindById(string? id);
+        Room FindById(string id);
 
         IEnumerable<Room> FindAllRooms();
 

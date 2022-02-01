@@ -1,4 +1,5 @@
-﻿using DuckCity.Domain.Rooms;
+﻿using DuckCity.Domain.Exceptions;
+using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.Repositories.Interfaces;
 using MongoDB.Driver;
 
@@ -19,16 +20,15 @@ public class RoomRepository : IRoomRepository
 
     public void Replace(Room room) => _rooms.ReplaceOne(Builders<Room>.Filter.Eq(r => r.Id, room.Id), room);
 
-    public Room? FindById(string? id)
+    public Room FindById(string id)
     {
         try
         {
             return _rooms.Find(room => room.Id == id).First();
         }
-        catch (Exception e)
+        catch
         {
-            Console.WriteLine(e);
-            return null;
+            throw new RoomNotFoundException(id);
         }
     }
 

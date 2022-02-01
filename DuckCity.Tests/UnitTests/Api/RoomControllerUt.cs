@@ -35,7 +35,7 @@ namespace DuckCity.Tests.UnitTests.Api
         public void FindAllRoomsTest(string roomName)
         {
             // Given
-            IEnumerable<Room> rooms = new List<Room> {new() {Name = roomName}};
+            IEnumerable<Room> rooms = new List<Room> {new(roomName, "","",true,5)};
 
             // Mock
             _mockRoomService.Setup(mock => mock.FindAllRooms()).Returns(rooms);
@@ -52,18 +52,14 @@ namespace DuckCity.Tests.UnitTests.Api
         }
 
         [Theory]
-        [InlineData(ConstantTest.String, ConstantTest.ObjectId, ConstantTest.String, ConstantTest.True,
+        [InlineData(ConstantTest.String, ConstantTest.ObjectId1, ConstantTest.String, ConstantTest.True,
             ConstantTest.Five)]
         public void CreateRoomTest(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers)
         {
             // Given
             RoomCreationDto creationDto = new()
                 {HostId = hostId, Name = roomName, HostName = hostName, IsPrivate = isPrivate, NbPlayers = nbPlayers};
-            Room room = new()
-            {
-                Name = roomName, HostId = hostId, HostName = hostName,
-                RoomConfiguration = new RoomConfiguration(isPrivate, nbPlayers)
-            };
+            Room room = new(roomName, "", "", isPrivate, nbPlayers);
 
             // Mock
             _mockRoomService.Setup(mock => mock.AddRooms(roomName, hostId, hostName, isPrivate, nbPlayers))
@@ -80,13 +76,13 @@ namespace DuckCity.Tests.UnitTests.Api
         }
 
         [Theory]
-        [InlineData(ConstantTest.ObjectId, ConstantTest.String, ConstantTest.ObjectId)]
+        [InlineData(ConstantTest.ObjectId1, ConstantTest.String, ConstantTest.ObjectId1)]
         public void JoinRoomTest(string userId, string userName, string roomId)
         {
             // Given
             UserAndRoomDto userAndRoomDto = new()
                 {UserId = userId, UserName = userName, RoomId = roomId};
-            Room room = new();
+            Room room = new(roomId, "", "", true, 5);
 
             // Mock
             _mockRoomService.Setup(mock => mock.JoinRoom(roomId, userId, userName)).Returns(room);

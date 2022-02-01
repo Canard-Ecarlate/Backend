@@ -12,10 +12,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
     {
         _roomService = roomService;
     }
-
-    /**
-     * Life cycle of signalR's users
-     */
+    
     public override async Task OnConnectedAsync()
     {
         await base.OnConnectedAsync();
@@ -23,44 +20,60 @@ public class DuckCityHub : Hub<IDuckCityClient>
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        string roomId = SignalRGroupManagement.FindUserRoom(Context, string.Empty);
-        await SignalRGroupManagement.RemoveUser(Context, Groups, roomId);
-        await Clients.Group(roomId).PushPlayersInSignalRGroup(SignalRGroupManagement.ConnectedPlayers(roomId));
+        // Find user
+        SignalRUser signalRUser = SignalRUsers.FindSignalRUser(Context.ConnectionId);
+        
+        // Remove user from signalR
+        await SignalRUsers.RemoveUser(Groups, signalRUser);
+        
+        // push connected players to group
+        await Clients.Group(signalRUser.RoomId).PushPlayersInSignalRGroup(SignalRUsers.ConnectedPlayers(signalRUser.RoomId));
+        
         await base.OnDisconnectedAsync(exception);
     }
-
-    /**
-     * Methods
-     */
-    public async Task SendMessageHubAsync(string user)
+    
+    [HubMethodName("JoinSignalRGroup")]
+    public async Task JoinSignalRGroupAsync(string roomId, string userId)
     {
-        await Clients.All.PushMessage($"Good Morning in GameApi {user}");
+        // Find room
+        Room room = _roomService.FindRoom(roomId);
+        
+        // Add user in signalR
+        await SignalRUsers.AddUser(Groups, Context.ConnectionId, roomId, userId);
+
+        // Push players to group
+        await Clients.Group(roomId).PushPlayersInRoom(SignalRUsers.UpdateConnectedPlayers(room));
     }
 
-    [HubMethodName("JoinSignalRGroup")] 
-    public async Task JoinSignalRGroupAsync(string userId, string roomId)
+    [HubMethodName("LeaveRoomAndSignalRGroup")]
+    public async Task LeaveRoomAndSignalRGroupAsync()
     {
-        await SignalRGroupManagement.AddUser(Context, Groups, userId, roomId);
-        Room room = CheckValid.JoinSignalRGroup(_roomService, roomId);
-        await Clients.Group(roomId).PushPlayersInRoom(SignalRGroupManagement.UpdateConnectedPlayers(room));
-    }
-
-    [HubMethodName("LeaveSignalRGroup")]
-    public async Task LeaveSignalRGroupAsync(string roomId)
-    {
-        await SignalRGroupManagement.RemoveUser(Context, Groups, roomId);
-        Room? room = CheckValid.LeaveSignalRGroup(_roomService, roomId);
+        // Find user
+        SignalRUser signalRUser = SignalRUsers.FindSignalRUser(Context.ConnectionId);
+        
+        // Leave room
+        Room? room = _roomService.LeaveRoom(signalRUser.RoomId, signalRUser.UserId);
+        
+        // Remove user from signalR
+        await SignalRUsers.RemoveUser(Groups, signalRUser);
+        
+        // If room still exists, push players to group
         if (room != null)
         {
-            await Clients.Group(roomId).PushPlayersInRoom(SignalRGroupManagement.UpdateConnectedPlayers(room));
+            await Clients.Group(signalRUser.RoomId).PushPlayersInRoom(SignalRUsers.UpdateConnectedPlayers(room));
         }
     }
 
     [HubMethodName("PlayerReady")] 
-    public async Task PlayerReadyAsync(string userId, string roomId)
+    public async Task PlayerReadyAsync()
     {
-        CheckValid.PlayerReady(Context, userId, roomId);
-        Room room = _roomService.UpdatedRoomReady(userId, roomId);
-        await Clients.Group(roomId).PushPlayersInRoom(SignalRGroupManagement.UpdateConnectedPlayers(room));
+        // Find user
+        SignalRUser signalRUser = SignalRUsers.FindSignalRUser(Context.ConnectionId);
+
+        // Update Ready property
+        Room room = _roomService.UpdatedRoomReady(signalRUser.UserId, signalRUser.RoomId);
+        
+        // Push updated info to group
+        await Clients.Group(signalRUser.RoomId).PushPlayersInRoom(SignalRUsers.UpdateConnectedPlayers(room));
     }
 }

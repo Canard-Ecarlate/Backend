@@ -6,7 +6,7 @@ namespace DuckCity.Application.Services.Interfaces
     {
         IEnumerable<Room> FindAllRooms();
 
-        Room? FindRoom(string roomId);
+        Room FindRoom(string roomId);
 
         Room AddRooms(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers);
 
@@ -14,6 +14,6 @@ namespace DuckCity.Application.Services.Interfaces
 
         Room UpdatedRoomReady(string userId, string roomId);
 
-        bool LeaveRoom(string roomId, string userId);
+        Room? LeaveRoom(string roomId, string userId);
     }
 }
