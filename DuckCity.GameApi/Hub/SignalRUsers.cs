@@ -26,18 +26,22 @@ namespace DuckCity.GameApi.Hub
         
         public static IEnumerable<PlayerInRoom> UpdateConnectedPlayers(Room room)
         {
-            IEnumerable<SignalRUser> users = List.Where(u => u.RoomId == room.Id);
+            HashSet<SignalRUser> users = ConnectedPlayers(room.Id);
             foreach (PlayerInRoom player in room.Players)
             {
-                player.Connected = users.Count(u => u.UserId == player.Id) == 1;
+                SignalRUser? signalRUser = users.SingleOrDefault(u => u.UserId == player.Id);
+                if (signalRUser != null)
+                {
+                    player.Connected = true;
+                }
             }
 
-            return room.Players!;
+            return room.Players;
         }
 
-        public static IEnumerable<SignalRUser> ConnectedPlayers(string roomId)
+        public static HashSet<SignalRUser> ConnectedPlayers(string roomId)
         {
-            return List.Where(u => u.RoomId == roomId);
+            return List.Where(u => u.RoomId == roomId).ToHashSet();
         }
     }
 }

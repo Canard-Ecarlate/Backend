@@ -48,11 +48,7 @@ public class RoomService : IRoomService
     {
         Room room = _roomRepository.FindById(roomId);
         IEnumerable<PlayerInRoom> playerInRooms = room.Players;
-        PlayerInRoom? playerInRoom = playerInRooms.SingleOrDefault(player => player.Id != null && player.Id.Equals(userId));
-        if (playerInRoom == null)
-        {
-            throw new PlayerNotFoundException();
-        }
+        PlayerInRoom playerInRoom = playerInRooms.Single(player => player.Id != null && player.Id.Equals(userId));
         playerInRoom.Ready = !playerInRoom.Ready;
         _roomRepository.Replace(room);
         return room;
@@ -68,10 +64,7 @@ public class RoomService : IRoomService
             _roomRepository.Delete(room);
             return null;
         }
-        else
-        {
-            _roomRepository.Replace(room);
-            return room;
-        }
+        _roomRepository.Replace(room);
+        return room;
     }
 }

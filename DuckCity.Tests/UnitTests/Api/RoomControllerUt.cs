@@ -52,7 +52,7 @@ namespace DuckCity.Tests.UnitTests.Api
         }
 
         [Theory]
-        [InlineData(ConstantTest.String, ConstantTest.ObjectId1, ConstantTest.String, ConstantTest.True,
+        [InlineData(ConstantTest.String, ConstantTest.UserId, ConstantTest.String, ConstantTest.True,
             ConstantTest.Five)]
         public void CreateRoomTest(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers)
         {
@@ -76,7 +76,7 @@ namespace DuckCity.Tests.UnitTests.Api
         }
 
         [Theory]
-        [InlineData(ConstantTest.ObjectId1, ConstantTest.String, ConstantTest.ObjectId1)]
+        [InlineData(ConstantTest.UserId, ConstantTest.String, ConstantTest.UserId)]
         public void JoinRoomTest(string userId, string userName, string roomId)
         {
             // Given

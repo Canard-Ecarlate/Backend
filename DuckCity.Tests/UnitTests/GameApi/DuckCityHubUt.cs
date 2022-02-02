@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DuckCity.Application.Services.Interfaces;
 using DuckCity.Domain.Rooms;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.SignalR;
 using Moq;
 using SignalR_UnitTestingSupportXUnit.Hubs;
 using Xunit;
+using Xunit.Sdk;
 
 namespace DuckCity.Tests.UnitTests.GameApi
 {
@@ -32,15 +35,16 @@ namespace DuckCity.Tests.UnitTests.GameApi
                 Clients = _mockClients.Object,
                 Groups = _mockGroups.Object
             };
-            _mockHubContext.Setup(context => context.ConnectionId).Returns(ConstantTest.ObjectId1);
+            _mockHubContext.Setup(context => context.ConnectionId).Returns(ConstantTest.ConnectionId);
             _mockClients.Setup(clients => clients.All).Returns(_mockDuckCityClient.Object);
+            SignalRUsers.List.Clear();
         }
 
         /**
          * Tests
          */
         [Theory]
-        [InlineData(ConstantTest.ObjectId1, ConstantTest.ObjectId1)]
+        [InlineData(ConstantTest.UserId, ConstantTest.RoomId)]
         public async Task JoinSignalRGroupAsyncTest(string userId, string roomId)
         {
             // Given
@@ -67,7 +71,7 @@ namespace DuckCity.Tests.UnitTests.GameApi
         }
 
         [Theory]
-        [InlineData(ConstantTest.ObjectId1, ConstantTest.ObjectId1, ConstantTest.ObjectId2)]
+        [InlineData(ConstantTest.UserId, ConstantTest.RoomId, ConstantTest.UserId2)]
         public async Task JoinSignalRGroupAsyncTwoPlayersTest(string userId, string roomId, string userId2)
         {
             // Given
@@ -94,6 +98,121 @@ namespace DuckCity.Tests.UnitTests.GameApi
             _mockRoomService.Verify(service => service.FindRoom(roomId), Times.Exactly(2));
             _mockClients.Verify(clients => clients.Group(roomId), Times.Exactly(2));
             _mockDuckCityClient.Verify(duck => duck.PushPlayersInRoom(players), Times.Exactly(2));
+        }
+        
+        [Theory]
+        [InlineData(ConstantTest.ConnectionId, ConstantTest.UserId, ConstantTest.RoomId)]
+        public async Task LeaveRoomAndRoomDeletedTest(string connectionId, string userId, string roomId)
+        {
+            // Given
+            SignalRUser signalRUser = new() {ConnectionId = connectionId, RoomId = roomId, UserId = userId};
+            SignalRUsers.List.Add(signalRUser);
+            Room? room = null;
+            
+            // Mock
+            _mockRoomService.Setup(mock => mock.LeaveRoom(roomId, userId)).Returns(room);
+            _mockClients.Setup(clients => clients.Group(roomId)).Returns(_mockDuckCityClient.Object);
+
+            // When
+            await _duckCityHub.LeaveRoomAndSignalRGroupAsync();
+
+            // Then
+            Assert.Empty(SignalRUsers.List);
+            _mockRoomService.Verify(mock => mock.LeaveRoom(roomId, userId), Times.Once);
+            _mockGroups.Verify(mock => mock.RemoveFromGroupAsync(connectionId, roomId, CancellationToken.None), Times.Once);
+            _mockDuckCityClient.Verify(duck => duck.PushPlayersInRoom(It.IsAny<HashSet<PlayerInRoom>>()), Times.Never);
+        }
+        
+        [Theory]
+        [InlineData(ConstantTest.ConnectionId, ConstantTest.UserId, ConstantTest.RoomId, ConstantTest.ConnectionId2, ConstantTest.UserId2)]
+        public async Task LeaveRoomAndRoomKeptTest(string connectionId, string userId, string roomId, string connectionId2, string userId2)
+        {
+            // Given
+            SignalRUser signalRUser = new() {ConnectionId = connectionId, RoomId = roomId, UserId = userId};
+            SignalRUser signalRUser2 = new() {ConnectionId = connectionId2, RoomId = roomId, UserId = userId2};
+            SignalRUsers.List.Add(signalRUser);
+            SignalRUsers.List.Add(signalRUser2);
+            Room room = new("roomName", userId2, userId2, true, 5)
+            {
+                Id = roomId
+            };
+            
+            // Mock
+            _mockRoomService.Setup(mock => mock.LeaveRoom(roomId, userId)).Returns(room);
+            _mockClients.Setup(clients => clients.Group(roomId)).Returns(_mockDuckCityClient.Object);
+
+            // When
+            await _duckCityHub.LeaveRoomAndSignalRGroupAsync();
+
+            // Then
+            Assert.NotEmpty(SignalRUsers.List);
+            Assert.True(room.Players.First(p => p.Id == userId2).Connected);
+            
+            // Verify
+            _mockRoomService.Verify(mock => mock.LeaveRoom(roomId, userId), Times.Once);
+            _mockGroups.Verify(mock => mock.RemoveFromGroupAsync(connectionId, roomId, CancellationToken.None), Times.Once);
+            _mockDuckCityClient.Verify(duck => duck.PushPlayersInRoom(room.Players), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(ConstantTest.RoomId, ConstantTest.ConnectionId, ConstantTest.UserId)]
+        public async Task OnDisconnectedAsyncTest(string roomId, string connectionId, string userId)
+        {
+            // Given
+            SignalRUser signalRUser = new() {ConnectionId = connectionId, RoomId = roomId, UserId = userId};
+            SignalRUsers.List.Add(signalRUser);
+
+            // Mock
+            _mockClients.Setup(clients => clients.Group(roomId)).Returns(_mockDuckCityClient.Object);
+
+            // When
+            await _duckCityHub.OnDisconnectedAsync(new Exception());
+            
+            // Then
+            Assert.Empty(SignalRUsers.List);
+            
+            // Verify
+            _mockGroups.Verify(mock => mock.RemoveFromGroupAsync(connectionId, roomId, CancellationToken.None), Times.Once);
+            _mockDuckCityClient.Verify(duck => duck.PushPlayersInSignalRGroup(It.IsAny<IEnumerable<SignalRUser>>()), Times.Once);
+        }
+        
+        [Theory]
+        [InlineData(ConstantTest.RoomId, ConstantTest.ConnectionId, ConstantTest.UserId, ConstantTest.ConnectionId2, ConstantTest.UserId2)]
+        public async Task OnDisconnectedAsyncStillOnePlayerConnectedTest(string roomId, string connectionId, string userId, string connectionId2, string userId2)
+        {
+            // Given
+            SignalRUser signalRUser = new() {ConnectionId = connectionId, RoomId = roomId, UserId = userId};
+            SignalRUser signalRUser2 = new() {ConnectionId = connectionId2, RoomId = roomId, UserId = userId2};
+            SignalRUsers.List.Add(signalRUser);
+            SignalRUsers.List.Add(signalRUser2);
+
+            // Mock
+            _mockClients.Setup(clients => clients.Group(roomId)).Returns(_mockDuckCityClient.Object);
+
+            // When
+            await _duckCityHub.OnDisconnectedAsync(new Exception());
+           
+            // Then
+            Assert.NotEmpty(SignalRUsers.List);
+            Assert.Single(SignalRUsers.List);
+            
+            // Verify
+            _mockGroups.Verify(mock => mock.RemoveFromGroupAsync(connectionId, roomId, CancellationToken.None), Times.Once);
+            _mockDuckCityClient.Verify(duck => duck.PushPlayersInSignalRGroup(It.IsAny<IEnumerable<SignalRUser>>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task OnConnectedAsync()
+        { 
+            try
+            {
+                // When
+                await _duckCityHub.OnConnectedAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new XunitException(ex.Message);
+            }
         }
     }
 }

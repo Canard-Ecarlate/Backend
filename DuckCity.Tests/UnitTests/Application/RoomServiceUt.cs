@@ -39,7 +39,7 @@ namespace DuckCity.Tests.UnitTests.Application
 
         [Theory]
         [InlineData("something not ObjectId")]
-        [InlineData(ConstantTest.ObjectId1)]
+        [InlineData(ConstantTest.UserId)]
         public void FindRoomTest(string roomId)
         {
             _mockRoomRep.Setup(mock => mock.FindById(roomId)).Returns(new Room(roomId, "", "", true, 5));
@@ -58,13 +58,13 @@ namespace DuckCity.Tests.UnitTests.Application
         }
 
         [Theory]
-        [InlineData(ConstantTest.String, ConstantTest.ObjectId1, ConstantTest.String, ConstantTest.True,
+        [InlineData(ConstantTest.String, ConstantTest.UserId, ConstantTest.String, ConstantTest.True,
             ConstantTest.Five, 1)]
         [InlineData(ConstantTest.String, ConstantTest.String, ConstantTest.String, ConstantTest.True, ConstantTest.Five,
             1)]
-        [InlineData(ConstantTest.String, ConstantTest.ObjectId1, ConstantTest.String, ConstantTest.True,
+        [InlineData(ConstantTest.String, ConstantTest.UserId, ConstantTest.String, ConstantTest.True,
             ConstantTest.Five, 0)]
-        [InlineData("", ConstantTest.ObjectId1, ConstantTest.String, ConstantTest.True, ConstantTest.Five, 1)]
+        [InlineData("", ConstantTest.UserId, ConstantTest.String, ConstantTest.True, ConstantTest.Five, 1)]
         public void AddRoomsTest(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers,
             int countUser)
         {
