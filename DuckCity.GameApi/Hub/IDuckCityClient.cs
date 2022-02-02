@@ -1,4 +1,4 @@
-﻿using DuckCity.Domain.Rooms;
+﻿using DuckCity.Domain.Users;
 
 namespace DuckCity.GameApi.Hub;
 
@@ -6,7 +6,5 @@ public interface IDuckCityClient
 {
     Task PushMessage(string message);
     
-    Task PushPlayersInRoom(IEnumerable<PlayerInRoom> players);
-    
-    Task PushPlayersInSignalRGroup(IEnumerable<SignalRUser> users);
+    Task PushPlayers(IEnumerable<Player> players);
 }

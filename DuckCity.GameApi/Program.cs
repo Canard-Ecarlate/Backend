@@ -2,6 +2,7 @@ using DuckCity.Application.Services;
 using DuckCity.Application.Services.Interfaces;
 using DuckCity.GameApi.Hub;
 using DuckCity.Infrastructure;
+using DuckCity.Infrastructure.Cache;
 using DuckCity.Infrastructure.Repositories;
 using DuckCity.Infrastructure.Repositories.Interfaces;
 using Microsoft.Extensions.Options;
@@ -52,6 +53,7 @@ void Singletons()
 {
     services.AddSingleton<IUserRepository, UserRepository>();
     services.AddSingleton<IRoomRepository, RoomRepository>();
+    services.AddSingleton<IPlayerRepository, PlayerRepository>();
     services.AddSingleton<IAuthenticationService, AuthenticationService>();
     services.AddSingleton<IRoomService, RoomService>();
     

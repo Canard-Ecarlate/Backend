@@ -16,19 +16,19 @@ namespace DuckCity.Domain.Rooms
         public string HostName { get; set; }
         public string ContainerId { get; set; }
         public bool IsPlaying { get; set; } = false;
+        public HashSet<string> PlayersId { get; set; }
         public RoomConfiguration RoomConfiguration { get; set; }
-        public HashSet<PlayerInRoom> Players { get; set; }
 
         public Room(string name, string hostId, string hostName, bool isPrivate, int nbPlayers)
         {
-            Id = "";
+            Id = ObjectId.GenerateNewId().ToString();
             Name = name;
             Code = "Code to generate";
             HostId = hostId;
             HostName = hostName;
             ContainerId = "To do";
             RoomConfiguration = new RoomConfiguration(isPrivate, nbPlayers);
-            Players = new HashSet<PlayerInRoom> {new() {Id = hostId, Name = hostName}};
+            PlayersId = new HashSet<string> {hostId};
         }
     }
 }

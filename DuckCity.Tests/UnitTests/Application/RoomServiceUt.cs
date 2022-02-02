@@ -2,6 +2,7 @@
 using DuckCity.Application.Services;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
+using DuckCity.Infrastructure.Cache;
 using DuckCity.Infrastructure.Repositories.Interfaces;
 using MongoDB.Bson;
 using Moq;
@@ -17,11 +18,12 @@ namespace DuckCity.Tests.UnitTests.Application
         // Mock
         private readonly Mock<IUserRepository> _mockUserRep = new();
         private readonly Mock<IRoomRepository> _mockRoomRep = new();
+        private readonly Mock<IPlayerRepository> _mockPlayerRep = new();
 
         // Constructor
         public RoomServiceUt()
         {
-            _roomService = new RoomService(_mockUserRep.Object, _mockRoomRep.Object);
+            _roomService = new RoomService(_mockUserRep.Object, _mockRoomRep.Object, _mockPlayerRep.Object);
         }
 
         /**
@@ -72,7 +74,7 @@ namespace DuckCity.Tests.UnitTests.Application
 
             try
             {
-                Room roomResult = _roomService.AddRooms(roomName, hostId, hostName, isPrivate, nbPlayers);
+                Room roomResult = _roomService.CreateRoom(roomName, hostId, hostName, isPrivate, nbPlayers);
                 Assert.NotNull(roomResult);
                 Assert.NotNull(roomResult.RoomConfiguration);
                 Assert.Equal(roomName, roomResult.Name);

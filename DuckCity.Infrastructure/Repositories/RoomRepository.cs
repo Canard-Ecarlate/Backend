@@ -16,7 +16,10 @@ public class RoomRepository : IRoomRepository
         _rooms = database.GetCollection<Room>(settings.RoomsCollectionName);
     }
 
-    public void Create(Room room) => _rooms.InsertOne(room);
+    public void Create(Room room)
+    {
+        _rooms.InsertOne(room);
+    }
 
     public void Replace(Room room) => _rooms.ReplaceOne(Builders<Room>.Filter.Eq(r => r.Id, room.Id), room);
 

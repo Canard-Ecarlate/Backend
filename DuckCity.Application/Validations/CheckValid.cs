@@ -30,7 +30,7 @@ namespace DuckCity.Application.Validations
             }
             
             if (roomRepository.FindAllRooms()
-                .Any(r => r.Players.Contains(new PlayerInRoom {Id = hostId})))
+                .Any(r => r.PlayersId.Contains(hostId)))
             {
                 throw new UserAlreadyInRoomException(hostId);
             }
@@ -46,7 +46,7 @@ namespace DuckCity.Application.Validations
             }
 
             if (roomRepository.FindAllRooms()
-                .Any(r => r.Players.Contains(new PlayerInRoom {Id = userId})))
+                .Any(r => r.PlayersId.Contains(userId)))
             {
                 throw new UserAlreadyInRoomException(userId);
             }
@@ -61,7 +61,7 @@ namespace DuckCity.Application.Validations
                 throw new UserIdNoExistException();
             }
             
-            if (!room.Players.Contains(new PlayerInRoom {Id = userId}))
+            if (!room.PlayersId.Contains(userId))
             {
                 throw new UserNotInRoomException(userId);
             }

@@ -1,5 +1,4 @@
 using DuckCity.Application.Services.Interfaces;
-using DuckCity.Domain.Rooms;
 using Microsoft.AspNetCore.SignalR;
 
 namespace DuckCity.GameApi.Hub;
@@ -8,11 +7,15 @@ public class DuckCityHub : Hub<IDuckCityClient>
 {
     private readonly IRoomService _roomService;
 
+    // Constructor
     public DuckCityHub(IRoomService roomService)
     {
         _roomService = roomService;
     }
-    
+
+    /**
+     * Methods
+     */
     public override async Task OnConnectedAsync()
     {
         await base.OnConnectedAsync();
@@ -20,60 +23,44 @@ public class DuckCityHub : Hub<IDuckCityClient>
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        // Find user
-        SignalRUser signalRUser = SignalRUsers.FindSignalRUser(Context.ConnectionId);
-        
-        // Remove user from signalR
-        await SignalRUsers.RemoveUser(Groups, signalRUser);
-        
-        // push connected players to group
-        await Clients.Group(signalRUser.RoomId).PushPlayersInSignalRGroup(SignalRUsers.ConnectedPlayers(signalRUser.RoomId));
-        
+        string? roomId = _roomService.DisConnectToRoom(Context.ConnectionId);
+        if (roomId != null)
+        {
+            // Send
+            await Clients.Group(roomId).PushPlayers(_roomService.FindPlayersInRoom(roomId));
+        }
         await base.OnDisconnectedAsync(exception);
     }
-    
-    [HubMethodName("JoinSignalRGroup")]
-    public async Task JoinSignalRGroupAsync(string roomId, string userId)
-    {
-        // Find room
-        Room room = _roomService.FindRoom(roomId);
-        
-        // Add user in signalR
-        await SignalRUsers.AddUser(Groups, Context.ConnectionId, roomId, userId);
 
-        // Push players to group
-        await Clients.Group(roomId).PushPlayersInRoom(SignalRUsers.UpdateConnectedPlayers(room));
+    [HubMethodName("ConnectToRoom")]
+    public async Task ConnectToRoomAsync(string userId, string userName, string roomId)
+    {
+        _roomService.ConnectToRoom(Context.ConnectionId, userId, userName, roomId);
+        await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+
+        // Send
+        await Clients.Group(roomId).PushPlayers(_roomService.FindPlayersInRoom(roomId));
     }
 
-    [HubMethodName("LeaveRoomAndSignalRGroup")]
-    public async Task LeaveRoomAndSignalRGroupAsync()
+    [HubMethodName("LeaveRoomAndDisconnect")]
+    public async Task LeaveRoomAndDisconnectAsync()
     {
-        // Find user
-        SignalRUser signalRUser = SignalRUsers.FindSignalRUser(Context.ConnectionId);
-        
-        // Leave room
-        Room? room = _roomService.LeaveRoom(signalRUser.RoomId, signalRUser.UserId);
-        
-        // Remove user from signalR
-        await SignalRUsers.RemoveUser(Groups, signalRUser);
-        
-        // If room still exists, push players to group
-        if (room != null)
+        string? roomId = _roomService.LeaveAndDisconnectRoom(Context.ConnectionId);
+        if (roomId != null)
         {
-            await Clients.Group(signalRUser.RoomId).PushPlayersInRoom(SignalRUsers.UpdateConnectedPlayers(room));
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
+                   
+            // Send
+            await Clients.Group(roomId).PushPlayers(_roomService.FindPlayersInRoom(roomId));
         }
     }
 
-    [HubMethodName("PlayerReady")] 
+    [HubMethodName("PlayerReady")]
     public async Task PlayerReadyAsync()
     {
-        // Find user
-        SignalRUser signalRUser = SignalRUsers.FindSignalRUser(Context.ConnectionId);
+        string roomId = _roomService.SetReadyToPlayer(Context.ConnectionId);
 
-        // Update Ready property
-        Room room = _roomService.UpdatedRoomReady(signalRUser.UserId, signalRUser.RoomId);
-        
-        // Push updated info to group
-        await Clients.Group(signalRUser.RoomId).PushPlayersInRoom(SignalRUsers.UpdateConnectedPlayers(room));
+        // Send
+        await Clients.Group(roomId).PushPlayers(_roomService.FindPlayersInRoom(roomId));
     }
 }
