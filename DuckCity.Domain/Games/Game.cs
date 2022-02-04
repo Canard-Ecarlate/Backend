@@ -6,7 +6,7 @@ namespace DuckCity.Domain.Games
 {
     public class Game
     {
-        public Room? Room { get; init; }
+        public Room Room { get; init; }
         public int NbRedPlayers { get; set; }
         public HashSet<Player> Players { get; } = new();
         public string? CurrentPlayerId { get; set; }
