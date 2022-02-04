@@ -1,6 +1,7 @@
 ﻿using DuckCity.Application.Services.Interfaces;
 using DuckCity.GameApi.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DuckCity.GameApi.Controllers;
 
