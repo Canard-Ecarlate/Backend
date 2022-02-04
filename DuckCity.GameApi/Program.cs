@@ -1,6 +1,8 @@
+using AutoMapper;
 using DuckCity.Application.Services;
 using DuckCity.Application.Services.Interfaces;
 using DuckCity.GameApi.Hub;
+using DuckCity.GameApi.Mappings;
 using DuckCity.Infrastructure;
 using DuckCity.Infrastructure.Cache;
 using DuckCity.Infrastructure.Repositories;
@@ -20,7 +22,7 @@ services.AddControllers();
 services.AddSignalR();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
-
+AutoMapperServices();
 /*
  * Build app
  */
@@ -60,4 +62,10 @@ void Singletons()
     // Mongo
     services.Configure<MongoDbSettings>(configuration.GetSection(nameof(MongoDbSettings)));
     services.AddSingleton<IMongoDbSettings>(sp => sp.GetRequiredService<IOptions<MongoDbSettings>>().Value);
+}
+void AutoMapperServices()
+{
+    MapperConfiguration mapperConfig = new(mc => { mc.AddProfile(new MappingProfile()); });
+    IMapper mapper = mapperConfig.CreateMapper();
+    services.AddSingleton(mapper);
 }

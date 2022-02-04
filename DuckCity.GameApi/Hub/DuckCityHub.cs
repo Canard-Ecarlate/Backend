@@ -1,4 +1,7 @@
+using AutoMapper;
 using DuckCity.Application.Services.Interfaces;
+using DuckCity.Domain.Users;
+using DuckCity.GameApi.Dto;
 using Microsoft.AspNetCore.SignalR;
 
 namespace DuckCity.GameApi.Hub;
@@ -6,11 +9,13 @@ namespace DuckCity.GameApi.Hub;
 public class DuckCityHub : Hub<IDuckCityClient>
 {
     private readonly IRoomService _roomService;
+    private readonly IMapper _mapper;
 
     // Constructor
-    public DuckCityHub(IRoomService roomService)
+    public DuckCityHub(IRoomService roomService, IMapper mapper)
     {
         _roomService = roomService;
+        _mapper = mapper;
     }
 
     /**
@@ -27,7 +32,9 @@ public class DuckCityHub : Hub<IDuckCityClient>
         if (roomId != null)
         {
             // Send
-            await Clients.Group(roomId).PushPlayers(_roomService.FindPlayersInRoom(roomId));
+            IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);
+            IEnumerable<PlayerInWaitingRoomDto> playersInRoom = _mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(players);
+            await Clients.Group(roomId).PushPlayers(playersInRoom);
         }
         await base.OnDisconnectedAsync(exception);
     }
@@ -39,7 +46,9 @@ public class DuckCityHub : Hub<IDuckCityClient>
         await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
 
         // Send
-        await Clients.Group(roomId).PushPlayers(_roomService.FindPlayersInRoom(roomId));
+        IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);
+        IEnumerable<PlayerInWaitingRoomDto> playersInRoom = _mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(players);
+        await Clients.Group(roomId).PushPlayers(playersInRoom);
     }
 
     [HubMethodName("LeaveRoomAndDisconnect")]
@@ -49,9 +58,11 @@ public class DuckCityHub : Hub<IDuckCityClient>
         if (roomId != null)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
-                   
+
             // Send
-            await Clients.Group(roomId).PushPlayers(_roomService.FindPlayersInRoom(roomId));
+            IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);
+            IEnumerable<PlayerInWaitingRoomDto> playersInRoom = _mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(players);
+            await Clients.Group(roomId).PushPlayers(playersInRoom);
         }
     }
 
@@ -61,6 +72,8 @@ public class DuckCityHub : Hub<IDuckCityClient>
         string roomId = _roomService.SetReadyToPlayer(Context.ConnectionId);
 
         // Send
-        await Clients.Group(roomId).PushPlayers(_roomService.FindPlayersInRoom(roomId));
+        IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);
+        IEnumerable<PlayerInWaitingRoomDto> playersInRoom = _mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(players);
+        await Clients.Group(roomId).PushPlayers(playersInRoom);
     }
 }

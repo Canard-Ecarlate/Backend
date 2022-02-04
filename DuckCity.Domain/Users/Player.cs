@@ -5,7 +5,7 @@ namespace DuckCity.Domain.Users;
 
 public class Player : User
 {
-    public string RoomId { get; }
+    public string RoomId { get; set; }
     public string? ConnectionId { get; set; }
     public bool Ready { get; set; }
     public IRole Role { get; set; } = new BlueRole();
