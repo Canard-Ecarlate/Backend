@@ -42,7 +42,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
     [HubMethodName("ConnectToRoom")]
     public async Task ConnectToRoomAsync(string userId, string userName, string roomId)
     {
-        _roomService.ConnectToRoom(Context.ConnectionId, userId, userName, roomId);
+        _roomService.ConnectOrReconnectToRoom(Context.ConnectionId, userId, userName, roomId);
         await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
 
         // Send

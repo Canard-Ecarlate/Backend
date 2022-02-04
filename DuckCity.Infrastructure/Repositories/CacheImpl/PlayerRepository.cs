@@ -6,20 +6,14 @@ public class PlayerRepository : IPlayerRepository
 {
     private static readonly HashSet<Player> Players = new();
 
-    public void AddOrReconnectPlayer(string connectionId, string userId, string userName, string roomId)
+    public void ConnectPlayer(string connectionId, string userId, string userName, string roomId) =>
+        Players.Add(new Player(connectionId, userId, userName, roomId));
+
+    public void ReconnectPlayer(Player player, string connectionId)
     {
-        Player? player = Players.SingleOrDefault(p => p.Id == userId);
-        if (player != null)
-        {
-            player.ConnectionId = connectionId;
-        }
-        else
-        {
-            player = new Player(connectionId, userId, userName, roomId);
-            Players.Add(player);
-        }
+        player.ConnectionId = connectionId;
     }
-    
+
     public void RemovePlayer(Player player)
     {
         Players.Remove(player);
@@ -29,12 +23,12 @@ public class PlayerRepository : IPlayerRepository
     {
         return Players.Single(u => u.ConnectionId == connectionId);
     }
-        
-    public Player FindPlayerByUserId(string userId)
+
+    public Player? FindPlayerByUserId(string userId)
     {
-        return Players.Single(u => u.Id == userId);
+        return Players.SingleOrDefault(u => u.Id == userId);
     }
-        
+
     public IEnumerable<Player> FindPlayersInRoom(string roomId)
     {
         return Players.Where(u => u.RoomId == roomId);
@@ -47,7 +41,7 @@ public class PlayerRepository : IPlayerRepository
         return player.RoomId;
     }
 
-    public string? DisconnectToRoom(string connectionId)
+    public string? DisconnectPlayer(string connectionId)
     {
         Player? player = Players.SingleOrDefault(u => u.ConnectionId == connectionId);
         if (player != null)

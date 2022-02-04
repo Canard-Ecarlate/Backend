@@ -80,14 +80,21 @@ public class RoomService : IRoomService
         return _playerRepository.ReadyToPlay(connectionId);
     }
 
-    public void ConnectToRoom(string connectionId, string userId, string userName,string roomId)
+    public void ConnectOrReconnectToRoom(string connectionId, string userId, string userName,string roomId)
     {
-        // Add player in cache
-        _playerRepository.AddOrReconnectPlayer(connectionId, userId, userName, roomId);
+        Player? player = _playerRepository.FindPlayerByUserId(userId);
+        if (player != null)
+        {
+            _playerRepository.ReconnectPlayer(player, connectionId);
+        }
+        else
+        {
+            _playerRepository.ConnectPlayer(connectionId, userId, userName, roomId);
+        }
     }
 
     public string? DisConnectToRoom(string connectionId)
     {
-        return _playerRepository.DisconnectToRoom(connectionId);
+        return _playerRepository.DisconnectPlayer(connectionId);
     }
 }

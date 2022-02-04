@@ -4,11 +4,12 @@ namespace DuckCity.Infrastructure.Repositories;
 
 public interface IPlayerRepository
 {
-    void AddOrReconnectPlayer(string connectionId, string userId, string userName, string roomId);
+    void ConnectPlayer(string connectionId, string userId, string userName, string roomId);
+    void ReconnectPlayer(Player player, string connectionId);
     void RemovePlayer(Player player);
     Player FindPlayerByConnectionId(string connectionId);
-    Player FindPlayerByUserId(string userId);
+    Player? FindPlayerByUserId(string userId);
     IEnumerable<Player> FindPlayersInRoom(string roomId);
     string ReadyToPlay(string connectionId);
-    string? DisconnectToRoom(string connectionId);
+    string? DisconnectPlayer(string connectionId);
 }
