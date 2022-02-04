@@ -38,8 +38,4 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="UnitTests\GameApi" />
-    </ItemGroup>
 </Project>

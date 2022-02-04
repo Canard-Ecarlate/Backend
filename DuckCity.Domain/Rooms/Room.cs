@@ -15,7 +15,7 @@ namespace DuckCity.Domain.Rooms
         public string HostId { get; set; }
         public string HostName { get; set; }
         public string ContainerId { get; set; }
-        public bool IsPlaying { get; set; } = false;
+        public bool IsPlaying { get; set; }
         public HashSet<string> PlayersId { get; set; }
         public RoomConfiguration RoomConfiguration { get; set; }
 

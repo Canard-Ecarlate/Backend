@@ -44,7 +44,7 @@ namespace DuckCity.Tests.UnitTests.Application
         [InlineData(ConstantTest.UserId)]
         public void FindRoomTest(string roomId)
         {
-            _mockRoomRep.Setup(mock => mock.FindById(roomId)).Returns(new Room(roomId, "", "", true, 5));
+            _mockRoomRep.Setup(mock => mock.FindById(roomId)).Returns(new Room(roomId, "", "", ConstantTest.True, ConstantTest.Five));
 
             try
             {
