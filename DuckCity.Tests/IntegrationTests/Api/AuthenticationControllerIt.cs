@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DuckCity.Api.DTO.Authentication;
+using DuckCity.Tests.Fake;
 using Xunit;
 
 namespace DuckCity.Tests.IntegrationTests.Api

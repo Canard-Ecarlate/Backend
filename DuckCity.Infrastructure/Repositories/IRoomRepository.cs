@@ -1,6 +1,6 @@
 ﻿using DuckCity.Domain.Rooms;
 
-namespace DuckCity.Infrastructure.Repositories.Interfaces
+namespace DuckCity.Infrastructure.Repositories
 {
     public interface IRoomRepository
     {
@@ -8,10 +8,11 @@ namespace DuckCity.Infrastructure.Repositories.Interfaces
 
         void Replace(Room room);
 
-        Room? FindById(string? id);
+        Room FindById(string id);
 
         IEnumerable<Room> FindAllRooms();
 
         void Delete(Room room);
+        Room JoinRoom(string roomId, string userId);
     }
 }

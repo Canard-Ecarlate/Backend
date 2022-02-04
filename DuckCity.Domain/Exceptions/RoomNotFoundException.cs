@@ -11,7 +11,7 @@ namespace DuckCity.Domain.Exceptions
         }
 
         public RoomNotFoundException(string message) :
-            base(message)
+            base("Room " + message + " does not exist")
         {
         }
 

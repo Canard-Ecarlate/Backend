@@ -78,7 +78,7 @@ namespace DuckCity.Tests.UnitTests.Api
         }
 
         [Theory]
-        [InlineData(ConstantTest.String, ConstantTest.Email, ConstantTest.String, ConstantTest.ObjectId,
+        [InlineData(ConstantTest.String, ConstantTest.Email, ConstantTest.String, ConstantTest.UserId,
             ConstantTest.String)]
         public void SignUpTest(string name, string email, string password, string id, string token)
         {

@@ -1,19 +1,18 @@
 ﻿using DuckCity.Domain.Rooms;
+using DuckCity.Domain.Users;
 
 namespace DuckCity.Application.Services.Interfaces
 {
     public interface IRoomService
     {
         IEnumerable<Room> FindAllRooms();
-
-        Room? FindRoom(string roomId);
-
-        Room AddRooms(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers);
-
+        Room FindRoom(string roomId);
+        Room CreateAndJoinRoom(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers);
         Room JoinRoom(string roomId, string userId, string userName);
-
-        Room UpdatedRoomReady(string userId, string roomId);
-
-        bool LeaveRoom(string roomId, string userId);
+        void ConnectOrReconnectPlayer(string connectionId, string userId, string userName,string roomId);
+        string? DisconnectPlayerAndLeaveRoom(string connectionId);
+        IEnumerable<Player> FindPlayersInRoom(string roomId);
+        string PlayerReady(string connectionId);
+        string? DisConnectToRoom(string connectionId);
     }
 }
