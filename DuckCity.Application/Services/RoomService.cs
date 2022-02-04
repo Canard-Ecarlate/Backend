@@ -27,7 +27,7 @@ public class RoomService : IRoomService
         return _roomRepository.FindById(roomId);
     } 
 
-    public Room CreateRoom(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers)
+    public Room CreateAndJoinRoom(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers)
     {
         CheckValid.CreateRoom(_roomRepository, _userRepository, roomName, hostId);
         
@@ -40,16 +40,11 @@ public class RoomService : IRoomService
     public Room JoinRoom(string roomId, string userId, string userName)
     {
         CheckValid.JoinRoom(_roomRepository, _userRepository, userId);
-        Room room = _roomRepository.FindById(roomId);
-        
-        // Add player in database
-        room.PlayersId.Add(userId);
-
-        _roomRepository.Replace(room);
+        Room room = _roomRepository.JoinRoom(roomId, userId);
         return room;
     }
     
-    public string? LeaveAndDisconnectRoom(string connectionId)
+    public string? DisconnectPlayerAndLeaveRoom(string connectionId)
     {
         Player player = _playerRepository.FindPlayerByConnectionId(connectionId);
         
@@ -75,12 +70,12 @@ public class RoomService : IRoomService
         return _playerRepository.FindPlayersInRoom(roomId);
     }
 
-    public string SetReadyToPlayer(string connectionId)
+    public string PlayerReady(string connectionId)
     {
-        return _playerRepository.ReadyToPlay(connectionId);
+        return _playerRepository.PlayerReady(connectionId);
     }
 
-    public void ConnectOrReconnectToRoom(string connectionId, string userId, string userName,string roomId)
+    public void ConnectOrReconnectPlayer(string connectionId, string userId, string userName,string roomId)
     {
         Player? player = _playerRepository.FindPlayerByUserId(userId);
         if (player != null)

@@ -39,10 +39,10 @@ public class DuckCityHub : Hub<IDuckCityClient>
         await base.OnDisconnectedAsync(exception);
     }
 
-    [HubMethodName("ConnectToRoom")]
-    public async Task ConnectToRoomAsync(string userId, string userName, string roomId)
+    [HubMethodName("ConnectOrReconnectPlayer")]
+    public async Task ConnectOrReconnectPlayerAsync(string userId, string userName, string roomId)
     {
-        _roomService.ConnectOrReconnectToRoom(Context.ConnectionId, userId, userName, roomId);
+        _roomService.ConnectOrReconnectPlayer(Context.ConnectionId, userId, userName, roomId);
         await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
 
         // Send
@@ -51,10 +51,10 @@ public class DuckCityHub : Hub<IDuckCityClient>
         await Clients.Group(roomId).PushPlayers(playersInRoom);
     }
 
-    [HubMethodName("LeaveRoomAndDisconnect")]
-    public async Task LeaveRoomAndDisconnectAsync()
+    [HubMethodName("DisconnectPlayerAndLeaveRoom")]
+    public async Task DisconnectPlayerAndLeaveRoomAsync()
     {
-        string? roomId = _roomService.LeaveAndDisconnectRoom(Context.ConnectionId);
+        string? roomId = _roomService.DisconnectPlayerAndLeaveRoom(Context.ConnectionId);
         if (roomId != null)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
@@ -69,7 +69,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
     [HubMethodName("PlayerReady")]
     public async Task PlayerReadyAsync()
     {
-        string roomId = _roomService.SetReadyToPlayer(Context.ConnectionId);
+        string roomId = _roomService.PlayerReady(Context.ConnectionId);
 
         // Send
         IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);

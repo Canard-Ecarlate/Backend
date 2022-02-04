@@ -13,5 +13,6 @@ namespace DuckCity.Infrastructure.Repositories
         IEnumerable<Room> FindAllRooms();
 
         void Delete(Room room);
+        Room JoinRoom(string roomId, string userId);
     }
 }

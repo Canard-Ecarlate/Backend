@@ -37,4 +37,12 @@ public class RoomRepository : IRoomRepository
     public IEnumerable<Room> FindAllRooms() => _rooms.Find(_ => true).ToList();
 
     public void Delete(Room room) => _rooms.DeleteOne(Builders<Room>.Filter.Eq(r => r.Id, room.Id));
+    
+    public Room JoinRoom(string roomId, string userId)
+    {
+        Room room = FindById(roomId);
+        room.PlayersId.Add(userId);
+        Replace(room);
+        return room;
+    }
 }

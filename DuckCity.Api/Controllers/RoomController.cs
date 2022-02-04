@@ -22,7 +22,7 @@ public class RoomController : ControllerBase
     [HttpPost]
     public ActionResult<Room> CreateAndJoinRoom(RoomCreationDto room)
     {
-        Room roomCreated = _roomService.CreateRoom(room.Name, room.HostId, room.HostName, room.IsPrivate, room.NbPlayers);
+        Room roomCreated = _roomService.CreateAndJoinRoom(room.Name, room.HostId, room.HostName, room.IsPrivate, room.NbPlayers);
         return new OkObjectResult(roomCreated);
     }
         

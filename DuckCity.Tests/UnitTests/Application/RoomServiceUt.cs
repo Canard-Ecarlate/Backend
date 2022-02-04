@@ -73,7 +73,7 @@ namespace DuckCity.Tests.UnitTests.Application
 
             try
             {
-                Room roomResult = _roomService.CreateRoom(roomName, hostId, hostName, isPrivate, nbPlayers);
+                Room roomResult = _roomService.CreateAndJoinRoom(roomName, hostId, hostName, isPrivate, nbPlayers);
                 Assert.NotNull(roomResult);
                 Assert.NotNull(roomResult.RoomConfiguration);
                 Assert.Equal(roomName, roomResult.Name);

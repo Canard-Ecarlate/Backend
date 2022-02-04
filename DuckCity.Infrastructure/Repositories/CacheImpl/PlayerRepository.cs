@@ -34,7 +34,7 @@ public class PlayerRepository : IPlayerRepository
         return Players.Where(u => u.RoomId == roomId);
     }
 
-    public string ReadyToPlay(string connectionId)
+    public string PlayerReady(string connectionId)
     {
         Player player = FindPlayerByConnectionId(connectionId);
         player.Ready = !player.Ready;

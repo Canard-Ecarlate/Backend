@@ -3,7 +3,7 @@ using DuckCity.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
-namespace DuckCity.Tests.IntegrationTests
+namespace DuckCity.Tests.Fake
 {
     public class MongoDbFake : IDisposable
     {

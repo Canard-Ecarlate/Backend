@@ -10,6 +10,6 @@ public interface IPlayerRepository
     Player FindPlayerByConnectionId(string connectionId);
     Player? FindPlayerByUserId(string userId);
     IEnumerable<Player> FindPlayersInRoom(string roomId);
-    string ReadyToPlay(string connectionId);
+    string PlayerReady(string connectionId);
     string? DisconnectPlayer(string connectionId);
 }

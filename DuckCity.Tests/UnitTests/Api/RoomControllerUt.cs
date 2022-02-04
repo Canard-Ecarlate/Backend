@@ -62,7 +62,7 @@ namespace DuckCity.Tests.UnitTests.Api
             Room room = new(roomName, "", "", isPrivate, nbPlayers);
 
             // Mock
-            _mockRoomService.Setup(mock => mock.CreateRoom(roomName, hostId, hostName, isPrivate, nbPlayers))
+            _mockRoomService.Setup(mock => mock.CreateAndJoinRoom(roomName, hostId, hostName, isPrivate, nbPlayers))
                 .Returns(room);
 
             // When
