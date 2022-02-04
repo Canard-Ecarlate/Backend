@@ -1,6 +1,6 @@
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
-using DuckCity.Infrastructure.Repositories.Interfaces;
+using DuckCity.Infrastructure.Repositories;
 using MongoDB.Bson;
 
 namespace DuckCity.Application.Validations

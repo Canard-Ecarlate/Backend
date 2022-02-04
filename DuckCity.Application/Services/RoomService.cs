@@ -2,8 +2,7 @@
 using DuckCity.Application.Validations;
 using DuckCity.Domain.Rooms;
 using DuckCity.Domain.Users;
-using DuckCity.Infrastructure.Cache;
-using DuckCity.Infrastructure.Repositories.Interfaces;
+using DuckCity.Infrastructure.Repositories;
 
 namespace DuckCity.Application.Services;
 

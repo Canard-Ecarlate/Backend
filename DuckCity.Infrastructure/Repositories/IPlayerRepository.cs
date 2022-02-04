@@ -1,6 +1,6 @@
 using DuckCity.Domain.Users;
 
-namespace DuckCity.Infrastructure.Cache;
+namespace DuckCity.Infrastructure.Repositories;
 
 public interface IPlayerRepository
 {

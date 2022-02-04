@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.Repositories;
+using DuckCity.Infrastructure.Repositories.MongoImpl;
 using Xunit;
 
 namespace DuckCity.Tests.IntegrationTests.Infrastructure

@@ -4,9 +4,9 @@ using DuckCity.Application.Services.Interfaces;
 using DuckCity.GameApi.Hub;
 using DuckCity.GameApi.Mappings;
 using DuckCity.Infrastructure;
-using DuckCity.Infrastructure.Cache;
 using DuckCity.Infrastructure.Repositories;
-using DuckCity.Infrastructure.Repositories.Interfaces;
+using DuckCity.Infrastructure.Repositories.CacheImpl;
+using DuckCity.Infrastructure.Repositories.MongoImpl;
 using Microsoft.Extensions.Options;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -56,6 +56,7 @@ void Singletons()
     services.AddSingleton<IUserRepository, UserRepository>();
     services.AddSingleton<IRoomRepository, RoomRepository>();
     services.AddSingleton<IPlayerRepository, PlayerRepository>();
+    services.AddSingleton<IGameRepository, GameRepository>();
     services.AddSingleton<IAuthenticationService, AuthenticationService>();
     services.AddSingleton<IRoomService, RoomService>();
     

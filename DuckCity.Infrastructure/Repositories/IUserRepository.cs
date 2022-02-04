@@ -1,6 +1,6 @@
 ﻿using DuckCity.Domain.Users;
 
-namespace DuckCity.Infrastructure.Repositories.Interfaces
+namespace DuckCity.Infrastructure.Repositories
 {
     public interface IUserRepository
     {

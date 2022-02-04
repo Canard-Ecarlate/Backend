@@ -2,8 +2,7 @@
 using DuckCity.Application.Services;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
-using DuckCity.Infrastructure.Cache;
-using DuckCity.Infrastructure.Repositories.Interfaces;
+using DuckCity.Infrastructure.Repositories;
 using MongoDB.Bson;
 using Moq;
 using Xunit;

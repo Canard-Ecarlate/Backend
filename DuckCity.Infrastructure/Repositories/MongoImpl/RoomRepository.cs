@@ -1,9 +1,8 @@
 ﻿using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
-using DuckCity.Infrastructure.Repositories.Interfaces;
 using MongoDB.Driver;
 
-namespace DuckCity.Infrastructure.Repositories;
+namespace DuckCity.Infrastructure.Repositories.MongoImpl;
 
 public class RoomRepository : IRoomRepository
 {
