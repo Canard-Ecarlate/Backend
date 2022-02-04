@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DuckCity.Tests.IntegrationTests
+namespace DuckCity.Tests.Fake
 {
     public class ApiApplicationFake : WebApplicationFactory<ProgramApi>
     {

@@ -1,5 +1,7 @@
+using AutoMapper;
 using DuckCity.Application.Services.Interfaces;
-using DuckCity.Domain.Rooms;
+using DuckCity.Domain.Users;
+using DuckCity.GameApi.Dto;
 using Microsoft.AspNetCore.SignalR;
 
 namespace DuckCity.GameApi.Hub;
@@ -7,14 +9,17 @@ namespace DuckCity.GameApi.Hub;
 public class DuckCityHub : Hub<IDuckCityClient>
 {
     private readonly IRoomService _roomService;
+    private readonly IMapper _mapper;
 
-    public DuckCityHub(IRoomService roomService)
+    // Constructor
+    public DuckCityHub(IRoomService roomService, IMapper mapper)
     {
         _roomService = roomService;
+        _mapper = mapper;
     }
 
     /**
-     * Life cycle of signalR's users
+     * Methods
      */
     public override async Task OnConnectedAsync()
     {
@@ -23,44 +28,52 @@ public class DuckCityHub : Hub<IDuckCityClient>
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        string roomId = SignalRGroupManagement.FindUserRoom(Context, string.Empty);
-        await SignalRGroupManagement.RemoveUser(Context, Groups, roomId);
-        await Clients.Group(roomId).PushPlayersInSignalRGroup(SignalRGroupManagement.ConnectedPlayers(roomId));
+        string? roomId = _roomService.DisConnectToRoom(Context.ConnectionId);
+        if (roomId != null)
+        {
+            // Send
+            IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);
+            IEnumerable<PlayerInWaitingRoomDto> playersInRoom = _mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(players);
+            await Clients.Group(roomId).PushPlayers(playersInRoom);
+        }
         await base.OnDisconnectedAsync(exception);
     }
 
-    /**
-     * Methods
-     */
-    public async Task SendMessageHubAsync(string user)
+    [HubMethodName("ConnectOrReconnectPlayer")]
+    public async Task ConnectOrReconnectPlayerAsync(string userId, string userName, string roomId)
     {
-        await Clients.All.PushMessage($"Good Morning in GameApi {user}");
+        _roomService.ConnectOrReconnectPlayer(Context.ConnectionId, userId, userName, roomId);
+        await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+
+        // Send
+        IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);
+        IEnumerable<PlayerInWaitingRoomDto> playersInRoom = _mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(players);
+        await Clients.Group(roomId).PushPlayers(playersInRoom);
     }
 
-    [HubMethodName("JoinSignalRGroup")] 
-    public async Task JoinSignalRGroupAsync(string userId, string roomId)
+    [HubMethodName("DisconnectPlayerAndLeaveRoom")]
+    public async Task DisconnectPlayerAndLeaveRoomAsync()
     {
-        await SignalRGroupManagement.AddUser(Context, Groups, userId, roomId);
-        Room room = CheckValid.JoinSignalRGroup(_roomService, roomId);
-        await Clients.Group(roomId).PushPlayersInRoom(SignalRGroupManagement.UpdateConnectedPlayers(room));
-    }
-
-    [HubMethodName("LeaveSignalRGroup")]
-    public async Task LeaveSignalRGroupAsync(string roomId)
-    {
-        await SignalRGroupManagement.RemoveUser(Context, Groups, roomId);
-        Room? room = CheckValid.LeaveSignalRGroup(_roomService, roomId);
-        if (room != null)
+        string? roomId = _roomService.DisconnectPlayerAndLeaveRoom(Context.ConnectionId);
+        if (roomId != null)
         {
-            await Clients.Group(roomId).PushPlayersInRoom(SignalRGroupManagement.UpdateConnectedPlayers(room));
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
+
+            // Send
+            IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);
+            IEnumerable<PlayerInWaitingRoomDto> playersInRoom = _mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(players);
+            await Clients.Group(roomId).PushPlayers(playersInRoom);
         }
     }
 
-    [HubMethodName("PlayerReady")] 
-    public async Task PlayerReadyAsync(string userId, string roomId)
+    [HubMethodName("PlayerReady")]
+    public async Task PlayerReadyAsync()
     {
-        CheckValid.PlayerReady(Context, userId, roomId);
-        Room room = _roomService.UpdatedRoomReady(userId, roomId);
-        await Clients.Group(roomId).PushPlayersInRoom(SignalRGroupManagement.UpdateConnectedPlayers(room));
+        string roomId = _roomService.PlayerReady(Context.ConnectionId);
+
+        // Send
+        IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);
+        IEnumerable<PlayerInWaitingRoomDto> playersInRoom = _mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(players);
+        await Clients.Group(roomId).PushPlayers(playersInRoom);
     }
 }

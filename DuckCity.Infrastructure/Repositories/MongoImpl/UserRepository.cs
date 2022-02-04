@@ -1,8 +1,7 @@
 ﻿using DuckCity.Domain.Users;
-using DuckCity.Infrastructure.Repositories.Interfaces;
 using MongoDB.Driver;
 
-namespace DuckCity.Infrastructure.Repositories
+namespace DuckCity.Infrastructure.Repositories.MongoImpl
 {
     public class UserRepository : IUserRepository
     {

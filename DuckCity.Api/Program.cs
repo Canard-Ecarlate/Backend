@@ -6,7 +6,8 @@ using DuckCity.Application.Services;
 using DuckCity.Application.Services.Interfaces;
 using DuckCity.Infrastructure;
 using DuckCity.Infrastructure.Repositories;
-using DuckCity.Infrastructure.Repositories.Interfaces;
+using DuckCity.Infrastructure.Repositories.CacheImpl;
+using DuckCity.Infrastructure.Repositories.MongoImpl;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -62,6 +63,7 @@ void Singletons()
 {
     services.AddSingleton<IUserRepository, UserRepository>();
     services.AddSingleton<IRoomRepository, RoomRepository>();
+    services.AddSingleton<IPlayerRepository, PlayerRepository>();
     services.AddSingleton<IAuthenticationService, AuthenticationService>();
     services.AddSingleton<IRoomService, RoomService>();
     

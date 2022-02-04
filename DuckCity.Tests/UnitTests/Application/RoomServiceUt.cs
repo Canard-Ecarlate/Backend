@@ -2,7 +2,7 @@
 using DuckCity.Application.Services;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
-using DuckCity.Infrastructure.Repositories.Interfaces;
+using DuckCity.Infrastructure.Repositories;
 using MongoDB.Bson;
 using Moq;
 using Xunit;
@@ -17,11 +17,12 @@ namespace DuckCity.Tests.UnitTests.Application
         // Mock
         private readonly Mock<IUserRepository> _mockUserRep = new();
         private readonly Mock<IRoomRepository> _mockRoomRep = new();
+        private readonly Mock<IPlayerRepository> _mockPlayerRep = new();
 
         // Constructor
         public RoomServiceUt()
         {
-            _roomService = new RoomService(_mockUserRep.Object, _mockRoomRep.Object);
+            _roomService = new RoomService(_mockUserRep.Object, _mockRoomRep.Object, _mockPlayerRep.Object);
         }
 
         /**
@@ -39,10 +40,10 @@ namespace DuckCity.Tests.UnitTests.Application
 
         [Theory]
         [InlineData("something not ObjectId")]
-        [InlineData(ConstantTest.ObjectId)]
+        [InlineData(ConstantTest.UserId)]
         public void FindRoomTest(string roomId)
         {
-            _mockRoomRep.Setup(mock => mock.FindById(roomId)).Returns(new Room());
+            _mockRoomRep.Setup(mock => mock.FindById(roomId)).Returns(new Room(roomId, "", "", ConstantTest.True, ConstantTest.Five));
 
             try
             {
@@ -58,13 +59,13 @@ namespace DuckCity.Tests.UnitTests.Application
         }
 
         [Theory]
-        [InlineData(ConstantTest.String, ConstantTest.ObjectId, ConstantTest.String, ConstantTest.True,
+        [InlineData(ConstantTest.String, ConstantTest.UserId, ConstantTest.String, ConstantTest.True,
             ConstantTest.Five, 1)]
         [InlineData(ConstantTest.String, ConstantTest.String, ConstantTest.String, ConstantTest.True, ConstantTest.Five,
             1)]
-        [InlineData(ConstantTest.String, ConstantTest.ObjectId, ConstantTest.String, ConstantTest.True,
+        [InlineData(ConstantTest.String, ConstantTest.UserId, ConstantTest.String, ConstantTest.True,
             ConstantTest.Five, 0)]
-        [InlineData("", ConstantTest.ObjectId, ConstantTest.String, ConstantTest.True, ConstantTest.Five, 1)]
+        [InlineData("", ConstantTest.UserId, ConstantTest.String, ConstantTest.True, ConstantTest.Five, 1)]
         public void AddRoomsTest(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers,
             int countUser)
         {
@@ -72,7 +73,7 @@ namespace DuckCity.Tests.UnitTests.Application
 
             try
             {
-                Room roomResult = _roomService.AddRooms(roomName, hostId, hostName, isPrivate, nbPlayers);
+                Room roomResult = _roomService.CreateAndJoinRoom(roomName, hostId, hostName, isPrivate, nbPlayers);
                 Assert.NotNull(roomResult);
                 Assert.NotNull(roomResult.RoomConfiguration);
                 Assert.Equal(roomName, roomResult.Name);

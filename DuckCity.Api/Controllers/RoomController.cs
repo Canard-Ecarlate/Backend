@@ -20,9 +20,9 @@ public class RoomController : ControllerBase
     public ActionResult<IEnumerable<Room>> FindAllRooms() => new OkObjectResult(_roomService.FindAllRooms());
 
     [HttpPost]
-    public ActionResult<Room> CreateRoom(RoomCreationDto room)
+    public ActionResult<Room> CreateAndJoinRoom(RoomCreationDto room)
     {
-        Room roomCreated = _roomService.AddRooms(room.Name, room.HostId, room.HostName, room.IsPrivate, room.NbPlayers);
+        Room roomCreated = _roomService.CreateAndJoinRoom(room.Name, room.HostId, room.HostName, room.IsPrivate, room.NbPlayers);
         return new OkObjectResult(roomCreated);
     }
         

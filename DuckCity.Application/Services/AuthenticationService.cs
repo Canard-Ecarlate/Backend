@@ -5,7 +5,7 @@ using System.Text;
 using DuckCity.Application.Services.Interfaces;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
-using DuckCity.Infrastructure.Repositories.Interfaces;
+using DuckCity.Infrastructure.Repositories;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DuckCity.Application.Services;
