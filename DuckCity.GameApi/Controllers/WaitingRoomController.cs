@@ -6,6 +6,7 @@ namespace DuckCity.GameApi.Controllers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
+[Authorize]
 public class WaitingRoomController : ControllerBase
 {
     private readonly IRoomService _roomService;
