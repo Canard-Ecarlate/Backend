@@ -66,7 +66,7 @@ void Singletons()
 {
     services.AddSingleton<IUserRepository, UserRepository>();
     services.AddSingleton<IRoomRepository, RoomRepository>();
-    services.AddSingleton<IPlayerRepository, PlayerRepository>();
+    services.AddSingleton<IGameRepository, GameRepository>();
     services.AddSingleton<IAuthenticationService, AuthenticationService>();
     services.AddSingleton<IRoomService, RoomService>();
     

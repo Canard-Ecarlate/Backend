@@ -17,12 +17,12 @@ namespace DuckCity.Tests.UnitTests.Application
         // Mock
         private readonly Mock<IUserRepository> _mockUserRep = new();
         private readonly Mock<IRoomRepository> _mockRoomRep = new();
-        private readonly Mock<IPlayerRepository> _mockPlayerRep = new();
+        private readonly Mock<IGameRepository> _mockGameRep = new();
 
         // Constructor
         public RoomServiceUt()
         {
-            _roomService = new RoomService(_mockUserRep.Object, _mockRoomRep.Object, _mockPlayerRep.Object);
+            _roomService = new RoomService(_mockUserRep.Object, _mockRoomRep.Object, _mockGameRep.Object);
         }
 
         /**
@@ -47,7 +47,7 @@ namespace DuckCity.Tests.UnitTests.Application
 
             try
             {
-                Room? result = _roomService.FindRoom(roomId);
+                Room result = _roomService.FindRoom(roomId);
                 Assert.NotNull(result);
                 _mockRoomRep.Verify(mock => mock.FindById(roomId), Times.Once);
             }
@@ -79,8 +79,8 @@ namespace DuckCity.Tests.UnitTests.Application
                 Assert.Equal(roomName, roomResult.Name);
                 Assert.Equal(hostId, roomResult.HostId);
                 Assert.Equal(hostName, roomResult.HostName);
-                Assert.Equal(isPrivate, roomResult.RoomConfiguration?.IsPrivate);
-                Assert.Equal(nbPlayers, roomResult.RoomConfiguration?.NbPlayers);
+                Assert.Equal(isPrivate, roomResult.RoomConfiguration.IsPrivate);
+                Assert.Equal(nbPlayers, roomResult.RoomConfiguration.NbPlayers);
                 _mockRoomRep.Verify(mock => mock.Create(It.IsAny<Room>()), Times.Once);
             }
             catch (IdNotValidException e)

@@ -1,5 +1,6 @@
 ﻿using DuckCity.Application.Services.Interfaces;
 using DuckCity.Application.Validations;
+using DuckCity.Domain.Games;
 using DuckCity.Domain.Rooms;
 using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.Repositories;
@@ -10,13 +11,13 @@ public class RoomService : IRoomService
 {
     private readonly IUserRepository _userRepository;
     private readonly IRoomRepository _roomRepository;
-    private readonly IPlayerRepository _playerRepository;
+    private readonly IGameRepository _gameRepository;
 
-    public RoomService(IUserRepository userRepository, IRoomRepository roomRepository, IPlayerRepository playerRepository)
+    public RoomService(IUserRepository userRepository, IRoomRepository roomRepository, IGameRepository gameRepository)
     {
         _userRepository = userRepository;
         _roomRepository = roomRepository;
-        _playerRepository = playerRepository;
+        _gameRepository = gameRepository;
     }
 
     public IEnumerable<Room> FindAllRooms() => _roomRepository.FindAllRooms();
@@ -44,52 +45,58 @@ public class RoomService : IRoomService
         return room;
     }
     
-    public string? DisconnectPlayerAndLeaveRoom(string connectionId)
+    public Game JoinGameAndConnect(string connectionId, string userId, string userName, string roomId)
     {
-        Player player = _playerRepository.FindPlayerByConnectionId(connectionId);
-        
-        Room room = _roomRepository.FindById(player.RoomId);
-        CheckValid.LeaveRoom(_userRepository, player.Id!, room);
+        Game? game = _gameRepository.FindGameByRoomId(roomId);
+        if (game == null)
+        {
+            Game newGame = new(roomId, connectionId, userId, userName);
+            _gameRepository.Add(newGame);
+            return newGame;
+        }
+        Player? player = game.Players.SingleOrDefault(p => p.Id == userId);
+        if (player == null)
+        {
+            Player newPlayer = new(connectionId, userId, userName);
+            game.Players.Add(newPlayer);
+        }
+        else
+        {
+            player.ConnectionId = connectionId;
+        }
+
+        return game;
+    }
+
+    public Game? LeaveGameAndDisconnect(string roomId, string connectionId)
+    {
+        Game game = _gameRepository.FindGameByRoomId(roomId)!;
+        Player player = game.Players.Single(p => p.ConnectionId == connectionId);
+        Room room = _roomRepository.FindById(roomId);
+        CheckValid.LeaveRoom(_userRepository, player.Id, room);
         
         // Remove player in cache
-        _playerRepository.RemovePlayer(player);
-        
+        game.Players.Remove(player); 
+
         // Remove player in database
-        room.PlayersId.Remove(player.Id!);
+        room.PlayersId.Remove(player.Id);
         if (room.PlayersId is {Count: 0})
         {
+            _gameRepository.Remove(game);
             _roomRepository.Delete(room);
             return null;
         }
         _roomRepository.Replace(room);
-        return room.Id;
+        return game;
+    }
+    
+    public Game PlayerReady(string roomId, string connectionId)
+    {
+        return _gameRepository.SetPlayerReadyInGame(roomId, connectionId);
     }
 
-    public IEnumerable<Player> FindPlayersInRoom(string roomId)
+    public Game? DisConnectToRoom(string connectionId)
     {
-        return _playerRepository.FindPlayersInRoom(roomId);
-    }
-
-    public string PlayerReady(string connectionId)
-    {
-        return _playerRepository.PlayerReady(connectionId);
-    }
-
-    public void ConnectOrReconnectPlayer(string connectionId, string userId, string userName,string roomId)
-    {
-        Player? player = _playerRepository.FindPlayerByUserId(userId);
-        if (player != null)
-        {
-            _playerRepository.ReconnectPlayer(player, connectionId);
-        }
-        else
-        {
-            _playerRepository.ConnectPlayer(connectionId, userId, userName, roomId);
-        }
-    }
-
-    public string? DisConnectToRoom(string connectionId)
-    {
-        return _playerRepository.DisconnectPlayer(connectionId);
+        return _gameRepository.DisconnectPlayerFromGame(connectionId);
     }
 }
