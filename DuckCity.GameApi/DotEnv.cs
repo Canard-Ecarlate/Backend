@@ -1,4 +1,4 @@
-namespace DuckCity.GameApi
+﻿namespace DuckCity.GameApi
 {
     public static class DotEnv
     {

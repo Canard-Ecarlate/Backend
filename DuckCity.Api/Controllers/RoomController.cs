@@ -1,12 +1,14 @@
 using DuckCity.Api.DTO.Room;
 using DuckCity.Application.Services.Interfaces;
 using DuckCity.Domain.Rooms;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DuckCity.Api.Controllers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
+[Authorize]
 public class RoomController : ControllerBase
 {
     private readonly IRoomService _roomService;

@@ -359,6 +359,8 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
+DuckCity.Domain/.env
+
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
@@ -367,3 +369,5 @@ FodyWeavers.xsd
 
 # Idea
 .idea
+
+

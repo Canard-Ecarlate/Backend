@@ -87,8 +87,9 @@ public class AuthenticationService : IAuthenticationService
             new Claim("type", "player")
         };
 
-        SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ"));
-
+        string strKey = Environment.GetEnvironmentVariable("SIGNATURE_KEY") ?? throw new InvalidOperationException();
+        SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(strKey));
+        
         JwtSecurityToken token = new(
             "https://canardecarlate.fr",
             "https://canardecarlate.fr",
