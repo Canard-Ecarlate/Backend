@@ -1,6 +1,6 @@
 using AutoMapper;
 using DuckCity.Application.Services.Interfaces;
-using DuckCity.Domain.Users;
+using DuckCity.Domain.Games;
 using DuckCity.GameApi.Dto;
 using Microsoft.AspNetCore.SignalR;
 
@@ -28,52 +28,44 @@ public class DuckCityHub : Hub<IDuckCityClient>
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        string? roomId = _roomService.DisConnectToRoom(Context.ConnectionId);
-        if (roomId != null)
+        Game? game = _roomService.DisConnectToRoom(Context.ConnectionId);
+        if (game != null)
         {
             // Send
-            IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);
-            IEnumerable<PlayerInWaitingRoomDto> playersInRoom = _mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(players);
-            await Clients.Group(roomId).PushPlayers(playersInRoom);
+            await Clients.Group(game.RoomId).PushPlayers(_mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(game.Players));
         }
         await base.OnDisconnectedAsync(exception);
     }
-
-    [HubMethodName("ConnectOrReconnectPlayer")]
-    public async Task ConnectOrReconnectPlayerAsync(string userId, string userName, string roomId)
+    
+    [HubMethodName("JoinGameAndConnect")]
+    public async Task JoinGameAndConnectAsync(string userId, string userName, string roomId)
     {
-        _roomService.ConnectOrReconnectPlayer(Context.ConnectionId, userId, userName, roomId);
+        Game game = _roomService.JoinGameAndConnect(Context.ConnectionId, userId, userName, roomId);
         await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
 
         // Send
-        IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);
-        IEnumerable<PlayerInWaitingRoomDto> playersInRoom = _mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(players);
-        await Clients.Group(roomId).PushPlayers(playersInRoom);
+        await Clients.Group(roomId).PushPlayers(_mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(game.Players));
     }
 
-    [HubMethodName("DisconnectPlayerAndLeaveRoom")]
-    public async Task DisconnectPlayerAndLeaveRoomAsync()
+    [HubMethodName("LeaveGameAndDisconnect")]
+    public async Task LeaveGameAndDisconnectAsync(string roomId)
     {
-        string? roomId = _roomService.DisconnectPlayerAndLeaveRoom(Context.ConnectionId);
-        if (roomId != null)
+        Game? game = _roomService.LeaveGameAndDisconnect(roomId, Context.ConnectionId);
+        if (game != null)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
 
             // Send
-            IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);
-            IEnumerable<PlayerInWaitingRoomDto> playersInRoom = _mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(players);
-            await Clients.Group(roomId).PushPlayers(playersInRoom);
+            await Clients.Group(roomId).PushPlayers(_mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(game.Players));
         }
     }
 
     [HubMethodName("PlayerReady")]
-    public async Task PlayerReadyAsync()
+    public async Task PlayerReadyAsync(string roomId)
     {
-        string roomId = _roomService.PlayerReady(Context.ConnectionId);
+        Game game = _roomService.PlayerReady(roomId, Context.ConnectionId);
 
         // Send
-        IEnumerable<Player> players = _roomService.FindPlayersInRoom(roomId);
-        IEnumerable<PlayerInWaitingRoomDto> playersInRoom = _mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(players);
-        await Clients.Group(roomId).PushPlayers(playersInRoom);
+        await Clients.Group(roomId).PushPlayers(_mapper.Map <IEnumerable<PlayerInWaitingRoomDto>>(game.Players));
     }
 }
