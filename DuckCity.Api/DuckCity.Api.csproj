@@ -25,10 +25,5 @@
     <ItemGroup>
       <None Remove="..\.dockerignore" />
     </ItemGroup>
-    <ItemGroup>
-        <None Include="..\DuckCity.Domain\.env">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
 
 </Project>

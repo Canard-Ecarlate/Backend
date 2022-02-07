@@ -134,7 +134,7 @@ void SwaggerServices()
 }
 
 void InitDotEnv() {
-    string? root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+    string? root = Path.GetDirectoryName(typeof(Program).Assembly.Location);
     string dotenv = Path.Combine(root ?? throw new InvalidOperationException(), ".env");
     DotEnv.Load(dotenv);
 }

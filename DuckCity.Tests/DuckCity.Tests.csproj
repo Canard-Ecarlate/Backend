@@ -39,7 +39,7 @@
         </None>
     </ItemGroup>
     <ItemGroup>
-        <None Include="..\DuckCity.Domain\.env">
+        <None Update=".env">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>

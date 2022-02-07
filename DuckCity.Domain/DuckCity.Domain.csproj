@@ -10,4 +10,10 @@
       <PackageReference Include="MongoDB.Bson" Version="2.14.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update=".env">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
