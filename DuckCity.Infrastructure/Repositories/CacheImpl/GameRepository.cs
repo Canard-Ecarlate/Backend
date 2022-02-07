@@ -37,7 +37,10 @@ public class GameRepository : IGameRepository
     public Game? DisconnectPlayerFromGame(string connectionId)
     {
         Game? game = FindGameByConnectionId(connectionId);
-        if (game == null) return game;
+        if (game == null)
+        {
+            return game;
+        }
         
         Player player = game.Players.Single(p => p.ConnectionId == connectionId);
         player.ConnectionId = null;
