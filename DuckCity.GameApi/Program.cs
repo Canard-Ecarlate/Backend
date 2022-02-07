@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using AutoMapper;
 using DuckCity.Application.Services;
@@ -133,7 +134,7 @@ void SwaggerServices()
 }
 
 void InitDotEnv() {
-    string root = Directory.GetCurrentDirectory();
-    string dotenv = Path.Combine(root, "../DuckCity.Domain/.env");
+    string? root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+    string dotenv = Path.Combine(root ?? throw new InvalidOperationException(), ".env");
     DotEnv.Load(dotenv);
 }
