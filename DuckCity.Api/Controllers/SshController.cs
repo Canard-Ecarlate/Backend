@@ -6,7 +6,6 @@ namespace DuckCity.Api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
     public class SshController : ControllerBase
     {
         [HttpGet]

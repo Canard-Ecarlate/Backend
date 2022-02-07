@@ -13,9 +13,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-string root = Directory.GetCurrentDirectory();
-string dotenv = Path.Combine(root, ".env");
-DotEnv.Load(dotenv);
+InitDotEnv();
+
+new ConfigurationBuilder()
+        .AddEnvironmentVariables()
+        .Build();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -104,12 +106,13 @@ void AutoMapperServices()
 }
 void AuthenticationAuthorisationServices()
 {
+    string strKey = Environment.GetEnvironmentVariable("SIGNATURE_KEY") ?? throw new InvalidOperationException();
     TokenValidationParameters tokenValidationParameters = new()
     {
         ValidIssuer = "https://canardecarlate.fr",
         ValidAudience = "https://canardecarlate.fr",
         IssuerSigningKey =
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ")),
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(strKey)),
         ClockSkew = TimeSpan.Zero // remove delay of token when expire
     };
 
@@ -122,6 +125,12 @@ void AuthenticationAuthorisationServices()
         cfg.AddPolicy("player", policy => policy.RequireClaim("type", "player"));
         cfg.AddPolicy("ClearanceLevel1", policy => policy.RequireClaim("ClearanceLevel", "1"));
     });
+}
+
+void InitDotEnv() {
+    string root = Directory.GetCurrentDirectory();
+    string dotenv = Path.Combine(root, "../DuckCity.Domain/.env");
+    DotEnv.Load(dotenv);
 }
 
 namespace DuckCity.Api

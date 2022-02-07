@@ -1,15 +1,25 @@
+using System.Text;
 using AutoMapper;
 using DuckCity.Application.Services;
 using DuckCity.Application.Services.Interfaces;
+using DuckCity.GameApi;
 using DuckCity.GameApi.Hub;
 using DuckCity.GameApi.Mappings;
 using DuckCity.Infrastructure;
 using DuckCity.Infrastructure.Repositories;
 using DuckCity.Infrastructure.Repositories.CacheImpl;
 using DuckCity.Infrastructure.Repositories.MongoImpl;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+
+InitDotEnv();
+
+
+new ConfigurationBuilder()
+    .AddEnvironmentVariables()
+    .Build();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -76,12 +86,13 @@ void AutoMapperServices()
 }
 void AuthenticationAuthorisationServices()
 {
+    string strKey = Environment.GetEnvironmentVariable("SIGNATURE_KEY") ?? throw new InvalidOperationException();
     TokenValidationParameters tokenValidationParameters = new()
     {
         ValidIssuer = "https://canardecarlate.fr",
         ValidAudience = "https://canardecarlate.fr",
         IssuerSigningKey =
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ")),
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(strKey)),
         ClockSkew = TimeSpan.Zero // remove delay of token when expire
     };
 
@@ -119,4 +130,10 @@ void SwaggerServices()
             }
         });
     });
+}
+
+void InitDotEnv() {
+    string root = Directory.GetCurrentDirectory();
+    string dotenv = Path.Combine(root, "../DuckCity.Domain/.env");
+    DotEnv.Load(dotenv);
 }

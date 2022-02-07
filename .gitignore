@@ -367,3 +367,4 @@ FodyWeavers.xsd
 
 # Idea
 .idea
+DuckCity.Domain/.env
