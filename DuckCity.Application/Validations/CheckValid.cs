@@ -70,7 +70,10 @@ namespace DuckCity.Application.Validations
 
         public static void ExistUser(IUserRepository userRepository, string? userId)
         {
-            if (userId == null) throw new IdNotValidException(userId);
+            if (userId == null)
+            {
+                throw new IdNotValidException(userId);
+            }
             IsObjectId(userId);
 
             if (userRepository.CountUserById(userId) == 0)

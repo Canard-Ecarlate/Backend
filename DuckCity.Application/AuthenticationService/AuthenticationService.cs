@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using DuckCity.Application.Services.Utils;
+using DuckCity.Application.Utils;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.UserRepository;

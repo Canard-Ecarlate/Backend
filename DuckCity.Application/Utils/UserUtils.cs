@@ -2,9 +2,9 @@
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
 
-namespace DuckCity.Application.Services.Utils;
+namespace DuckCity.Application.Utils;
 
-public class UserUtils
+public static class UserUtils
 {
     private const int HashSize = 16;
     private const int Iterations = 100000;
