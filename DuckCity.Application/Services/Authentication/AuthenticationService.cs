@@ -2,13 +2,13 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using DuckCity.Application.Services.Interfaces;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.Repositories;
+using DuckCity.Infrastructure.Repositories.User;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DuckCity.Application.Services;
+namespace DuckCity.Application.Services.Authentication;
 
 public class AuthenticationService : IAuthenticationService
 {

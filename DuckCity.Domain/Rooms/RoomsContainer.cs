@@ -1,6 +1,6 @@
-﻿namespace DuckCity.Domain.Games
+﻿namespace DuckCity.Domain.Rooms
 {
-    public class GameContainer
+    public class RoomsContainer
     {
         public string? GameContainerId { get; set; }
         public int NbRooms { get; set; }

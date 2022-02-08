@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using DuckCity.Application.Services;
+using DuckCity.Application.Services.RoomPreview;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.Repositories;
+using DuckCity.Infrastructure.Repositories.RoomPreview;
+using DuckCity.Infrastructure.Repositories.User;
 using MongoDB.Bson;
 using Moq;
 using Xunit;
@@ -12,17 +15,16 @@ namespace DuckCity.Tests.UnitTests.Application
     public class RoomServiceUt
     {
         // Class to test
-        private readonly RoomService _roomService;
+        private readonly RoomPreviewService _roomPreviewService;
         
         // Mock
         private readonly Mock<IUserRepository> _mockUserRep = new();
-        private readonly Mock<IRoomRepository> _mockRoomRep = new();
-        private readonly Mock<IGameRepository> _mockGameRep = new();
+        private readonly Mock<IRoomPreviewRepository> _mockRoomRep = new();
 
         // Constructor
         public RoomServiceUt()
         {
-            _roomService = new RoomService(_mockUserRep.Object, _mockRoomRep.Object, _mockGameRep.Object);
+            _roomPreviewService = new RoomPreviewService(_mockRoomRep.Object, _mockUserRep.Object);
         }
 
         /**
@@ -31,9 +33,9 @@ namespace DuckCity.Tests.UnitTests.Application
         [Fact]
         public void FindAllRoomsTest()
         {
-            _mockRoomRep.Setup(mock => mock.FindAllRooms()).Returns(new List<Room>());
+            _mockRoomRep.Setup(mock => mock.FindAllRooms()).Returns(new List<RoomPreview>());
 
-            IEnumerable<Room> result = _roomService.FindAllRooms();
+            IEnumerable<RoomPreview> result = _roomPreviewService.FindAllRooms();
             Assert.Empty(result);
             _mockRoomRep.Verify(mock => mock.FindAllRooms(), Times.Once);
         }
@@ -43,11 +45,11 @@ namespace DuckCity.Tests.UnitTests.Application
         [InlineData(ConstantTest.UserId)]
         public void FindRoomTest(string roomId)
         {
-            _mockRoomRep.Setup(mock => mock.FindById(roomId)).Returns(new Room(roomId, "", "", ConstantTest.True, ConstantTest.Five));
+            _mockRoomRep.Setup(mock => mock.FindById(roomId)).Returns(new RoomPreview(roomId, "", "", ConstantTest.True, ConstantTest.Five));
 
             try
             {
-                Room result = _roomService.FindRoom(roomId);
+                RoomPreview result = _roomPreviewService.FindRoom(roomId);
                 Assert.NotNull(result);
                 _mockRoomRep.Verify(mock => mock.FindById(roomId), Times.Once);
             }
@@ -73,15 +75,15 @@ namespace DuckCity.Tests.UnitTests.Application
 
             try
             {
-                Room roomResult = _roomService.CreateAndJoinRoom(roomName, hostId, hostName, isPrivate, nbPlayers);
-                Assert.NotNull(roomResult);
-                Assert.NotNull(roomResult.RoomConfiguration);
-                Assert.Equal(roomName, roomResult.Name);
-                Assert.Equal(hostId, roomResult.HostId);
-                Assert.Equal(hostName, roomResult.HostName);
-                Assert.Equal(isPrivate, roomResult.RoomConfiguration.IsPrivate);
-                Assert.Equal(nbPlayers, roomResult.RoomConfiguration.NbPlayers);
-                _mockRoomRep.Verify(mock => mock.Create(It.IsAny<Room>()), Times.Once);
+                RoomPreview roomPreviewResult = _roomPreviewService.CreateAndJoinRoomPreview(roomName, hostId, hostName, isPrivate, nbPlayers);
+                Assert.NotNull(roomPreviewResult);
+                Assert.NotNull(roomPreviewResult.RoomConfiguration);
+                Assert.Equal(roomName, roomPreviewResult.Name);
+                Assert.Equal(hostId, roomPreviewResult.HostId);
+                Assert.Equal(hostName, roomPreviewResult.HostName);
+                Assert.Equal(isPrivate, roomPreviewResult.RoomConfiguration.IsPrivate);
+                Assert.Equal(nbPlayers, roomPreviewResult.RoomConfiguration.NbPlayers);
+                _mockRoomRep.Verify(mock => mock.Create(It.IsAny<RoomPreview>()), Times.Once);
             }
             catch (IdNotValidException e)
             {

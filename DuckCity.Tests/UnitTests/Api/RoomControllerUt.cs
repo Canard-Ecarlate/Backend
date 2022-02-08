@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DuckCity.Api.Controllers;
 using DuckCity.Api.DTO.Room;
-using DuckCity.Application.Services.Interfaces;
+using DuckCity.Application.Services.RoomPreview;
 using DuckCity.Domain.Rooms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,15 +13,15 @@ namespace DuckCity.Tests.UnitTests.Api
     public class RoomControllerUt
     {
         // Class to test
-        private readonly RoomController _roomController;
+        private readonly RoomPreviewController _roomPreviewController;
 
         // Mock
-        private readonly Mock<IRoomService> _mockRoomService = new();
+        private readonly Mock<IRoomPreviewService> _mockRoomPreviewService = new();
 
         // Constructor
         public RoomControllerUt()
         {
-            _roomController = new RoomController(_mockRoomService.Object)
+            _roomPreviewController = new RoomPreviewController(_mockRoomPreviewService.Object)
             {
                 ControllerContext = {HttpContext = new Mock<HttpContext>().Object}
             };
@@ -35,18 +35,18 @@ namespace DuckCity.Tests.UnitTests.Api
         public void FindAllRoomsTest(string roomName)
         {
             // Given
-            IEnumerable<Room> rooms = new List<Room> {new(roomName, "","",true,5)};
+            IEnumerable<RoomPreview> rooms = new List<RoomPreview> {new(roomName, "","",true,5)};
 
             // Mock
-            _mockRoomService.Setup(mock => mock.FindAllRooms()).Returns(rooms);
+            _mockRoomPreviewService.Setup(mock => mock.FindAllRooms()).Returns(rooms);
 
             // When
-            OkObjectResult? allRooms = _roomController.FindAllRooms().Result as OkObjectResult;
+            OkObjectResult? allRooms = _roomPreviewController.FindAllRooms().Result as OkObjectResult;
 
             // Then
             Assert.NotNull(allRooms);
-            Assert.True(allRooms?.Value is IEnumerable<Room>);
-            List<Room> roomsResult = (List<Room>) allRooms?.Value!;
+            Assert.True(allRooms?.Value is IEnumerable<RoomPreview>);
+            List<RoomPreview> roomsResult = (List<RoomPreview>) allRooms?.Value!;
             Assert.Single(roomsResult);
             Assert.Equal(rooms, roomsResult);
         }
@@ -59,20 +59,20 @@ namespace DuckCity.Tests.UnitTests.Api
             // Given
             RoomCreationDto creationDto = new()
                 {HostId = hostId, Name = roomName, HostName = hostName, IsPrivate = isPrivate, NbPlayers = nbPlayers};
-            Room room = new(roomName, "", "", isPrivate, nbPlayers);
+            RoomPreview roomPreview = new(roomName, "", "", isPrivate, nbPlayers);
 
             // Mock
-            _mockRoomService.Setup(mock => mock.CreateAndJoinRoom(roomName, hostId, hostName, isPrivate, nbPlayers))
-                .Returns(room);
+            _mockRoomPreviewService.Setup(mock => mock.CreateAndJoinRoomPreview(roomName, hostId, hostName, isPrivate, nbPlayers))
+                .Returns(roomPreview);
 
             // When
-            OkObjectResult? roomCreated = _roomController.CreateAndJoinRoom(creationDto).Result as OkObjectResult;
+            OkObjectResult? roomCreated = _roomPreviewController.CreateAndJoinRoom(creationDto).Result as OkObjectResult;
 
             // Then
             Assert.NotNull(roomCreated);
-            Assert.True(roomCreated?.Value is Room);
-            Room roomResult = (Room) roomCreated?.Value!;
-            Assert.Equal(room, roomResult);
+            Assert.True(roomCreated?.Value is RoomPreview);
+            RoomPreview roomPreviewResult = (RoomPreview) roomCreated?.Value!;
+            Assert.Equal(roomPreview, roomPreviewResult);
         }
 
         [Theory]
@@ -82,19 +82,19 @@ namespace DuckCity.Tests.UnitTests.Api
             // Given
             UserAndRoomDto userAndRoomDto = new()
                 {UserId = userId, UserName = userName, RoomId = roomId};
-            Room room = new(roomId, "", "", true, 5);
+            RoomPreview roomPreview = new(roomId, "", "", true, 5);
 
             // Mock
-            _mockRoomService.Setup(mock => mock.JoinRoom(roomId, userId, userName)).Returns(room);
+            _mockRoomPreviewService.Setup(mock => mock.JoinRoomPreview(roomId, userId)).Returns(roomPreview);
 
             // When
-            OkObjectResult? roomJoined = _roomController.JoinRoom(userAndRoomDto).Result as OkObjectResult;
+            OkObjectResult? roomJoined = _roomPreviewController.JoinRoom(userAndRoomDto).Result as OkObjectResult;
 
             // Then
             Assert.NotNull(roomJoined);
-            Assert.True(roomJoined?.Value is Room);
-            Room roomResult = (Room) roomJoined?.Value!;
-            Assert.Equal(room, roomResult);
+            Assert.True(roomJoined?.Value is RoomPreview);
+            RoomPreview roomPreviewResult = (RoomPreview) roomJoined?.Value!;
+            Assert.Equal(roomPreview, roomPreviewResult);
         }
     }
 }

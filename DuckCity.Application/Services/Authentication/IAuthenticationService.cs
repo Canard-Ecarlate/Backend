@@ -1,6 +1,6 @@
 ﻿using DuckCity.Domain.Users;
 
-namespace DuckCity.Application.Services.Interfaces
+namespace DuckCity.Application.Services.Authentication
 {
     public interface IAuthenticationService
     {

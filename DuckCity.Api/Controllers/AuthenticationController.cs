@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DuckCity.Api.DTO.Authentication;
-using DuckCity.Application.Services.Interfaces;
+using DuckCity.Application.Services.Authentication;
 using DuckCity.Domain.Users;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,26 +1,25 @@
-﻿using DuckCity.Domain.Users;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 
-namespace DuckCity.Infrastructure.Repositories.MongoImpl
+namespace DuckCity.Infrastructure.Repositories.User
 {
-    public class UserRepository : IUserRepository
+    public class UserMongoRepository : IUserRepository
     {
-        private readonly IMongoCollection<User> _users;
+        private readonly IMongoCollection<Domain.Users.User> _users;
 
-        public UserRepository(IMongoDbSettings settings)
+        public UserMongoRepository(IMongoDbSettings settings)
         {
             MongoClient client = new(settings.ConnectionString);
             IMongoDatabase? database = client.GetDatabase(settings.DatabaseName);
-            _users = database.GetCollection<User>(settings.UsersCollectionName);
+            _users = database.GetCollection<Domain.Users.User>(settings.UsersCollectionName);
         }
 
-        public IList<User> GetByName(string? name) =>
+        public IList<Domain.Users.User> GetByName(string? name) =>
             _users.Find(user => user.Name == name).ToList();
 
-        public IList<User> GetById(string? id) =>
+        public IList<Domain.Users.User> GetById(string? id) =>
             _users.Find(user => user.Id == id).ToList();
 
-        public void Create(User user)
+        public void Create(Domain.Users.User user)
         {
             _users.InsertOne(user);
         }
