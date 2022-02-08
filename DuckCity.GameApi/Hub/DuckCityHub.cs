@@ -22,7 +22,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
     }
 
     /**
-     * Methods
+     * Methods 
      */
     public override async Task OnConnectedAsync()
     {
