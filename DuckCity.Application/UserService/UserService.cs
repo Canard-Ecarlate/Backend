@@ -1,12 +1,11 @@
-﻿using System.Security.Cryptography;
-using DuckCity.Application.Services.Interfaces;
+﻿using DuckCity.Application.Services.Interfaces;
 using DuckCity.Application.Services.Utils;
 using DuckCity.Application.Validations;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
-using DuckCity.Infrastructure.Repositories;
+using DuckCity.Infrastructure.UserRepository;
 
-namespace DuckCity.Application.Services;
+namespace DuckCity.Application.UserService;
 
 public class UserService : IUserService
 {
@@ -26,7 +25,7 @@ public class UserService : IUserService
     public void ChangePasswordUser(string userId, string actualPassword, string newPassword,
         string newPasswordConfirmation)
     {
-        IList<User> users = _userRepository.GetById(userId ?? throw  new BadUserOrPasswordException());
+        IList<User> users = _userRepository.FindById(userId ?? throw  new BadUserOrPasswordException());
         User user = users[0];
         UserUtils.ComparePassword(user,actualPassword);
         if (newPassword == newPasswordConfirmation)

@@ -1,6 +1,7 @@
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
-using DuckCity.Infrastructure.Repositories;
+using DuckCity.Infrastructure.RoomPreviewRepository;
+using DuckCity.Infrastructure.UserRepository;
 using MongoDB.Bson;
 
 namespace DuckCity.Application.Validations
@@ -15,7 +16,7 @@ namespace DuckCity.Application.Validations
             }
         }
         
-        public static void CreateRoom(IRoomRepository roomRepository, IUserRepository userRepository, string roomName, string hostId)
+        public static void CreateRoom(IRoomPreviewRepository roomPreviewRepository, IUserRepository userRepository, string roomName, string hostId)
         {
             IsObjectId(hostId);
 
@@ -29,14 +30,14 @@ namespace DuckCity.Application.Validations
                 throw new HostIdNoExistException(hostId);
             }
             
-            if (roomRepository.FindAllRooms()
+            if (roomPreviewRepository.FindAllRooms()
                 .Any(r => r.PlayersId.Contains(hostId)))
             {
                 throw new UserAlreadyInRoomException(hostId);
             }
         }
 
-        public static void JoinRoom(IRoomRepository roomRepository, IUserRepository userRepository, string userId)
+        public static void JoinRoom(IRoomPreviewRepository roomPreviewRepository, IUserRepository userRepository, string userId)
         {
             IsObjectId(userId);
             
@@ -45,14 +46,14 @@ namespace DuckCity.Application.Validations
                 throw new UserIdNoExistException();
             }
 
-            if (roomRepository.FindAllRooms()
+            if (roomPreviewRepository.FindAllRooms()
                 .Any(r => r.PlayersId.Contains(userId)))
             {
                 throw new UserAlreadyInRoomException(userId);
             }
         }
 
-        public static void LeaveRoom(IUserRepository userRepository, string userId, Room room)
+        public static void LeaveRoom(IUserRepository userRepository, string userId, RoomPreview roomPreview)
         {
             IsObjectId(userId);
 
@@ -61,7 +62,7 @@ namespace DuckCity.Application.Validations
                 throw new UserIdNoExistException();
             }
             
-            if (!room.PlayersId.Contains(userId))
+            if (!roomPreview.PlayersId.Contains(userId))
             {
                 throw new UserNotInRoomException(userId);
             }
