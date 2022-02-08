@@ -69,6 +69,7 @@ void Singletons()
     services.AddSingleton<IGameRepository, GameRepository>();
     services.AddSingleton<IAuthenticationService, AuthenticationService>();
     services.AddSingleton<IRoomService, RoomService>();
+    services.AddSingleton<IUserService, UserService>();
     
     // Mongo
     services.Configure<MongoDbSettings>(configuration.GetSection(nameof(MongoDbSettings)));

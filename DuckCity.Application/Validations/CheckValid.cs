@@ -66,5 +66,16 @@ namespace DuckCity.Application.Validations
                 throw new UserNotInRoomException(userId);
             }
         }
+
+        public static void ExistUser(IUserRepository userRepository, string? userId)
+        {
+            if (userId == null) throw new IdNotValidException(userId);
+            IsObjectId(userId);
+
+            if (userRepository.CountUserById(userId) == 0)
+            {
+                throw new UserIdNoExistException();
+            }
+        }
     }
 }

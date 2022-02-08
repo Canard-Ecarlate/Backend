@@ -33,5 +33,10 @@ namespace DuckCity.Infrastructure.Repositories.MongoImpl
 
         public long CountUserByEmail(string? email) =>
             _users.Find(user => user.Email == email).CountDocuments();
+
+        public void DeleteUserById(string? id) =>
+            _users.DeleteOne(user => user.Id == id);
+        
+        public void Replace(User user) => _users.ReplaceOne(Builders<User>.Filter.Eq(u => u.Id, user.Id), user);
     }
 }

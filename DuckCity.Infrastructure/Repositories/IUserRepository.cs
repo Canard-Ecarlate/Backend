@@ -15,5 +15,9 @@ namespace DuckCity.Infrastructure.Repositories
         public long CountUserById(string? id);
 
         public long CountUserByEmail(string? email);
+
+        public void DeleteUserById(string? id);
+        
+        public void Replace(User user);
     }
 }
