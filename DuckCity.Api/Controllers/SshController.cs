@@ -2,37 +2,36 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 
-namespace DuckCity.Api.Controllers
+namespace DuckCity.Api.Controllers;
+
+[Route("api/[controller]/[action]")]
+[ApiController]
+public class SshController : ControllerBase
 {
-    [Route("api/[controller]/[action]")]
-    [ApiController]
-    public class SshController : ControllerBase
+    [HttpGet]
+    public ActionResult<string> TestSsh()
     {
-        [HttpGet]
-        public ActionResult<string> TestSsh()
+        const string strCmdText = "-c \"sshpass -p Iamroot!01 ssh localadm@54.36.80.250 -o StrictHostKeyChecking=no ls\"";
+
+        ProcessStartInfo procStartInfo = new("/bin/bash", strCmdText)
         {
-            const string strCmdText = "-c \"sshpass -p Iamroot!01 ssh localadm@54.36.80.250 -o StrictHostKeyChecking=no ls\"";
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
 
-            ProcessStartInfo procStartInfo = new("/bin/bash", strCmdText)
-            {
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
+        Process proc = new();
+        proc.StartInfo = procStartInfo;
+        proc.Start();
 
-            Process proc = new();
-            proc.StartInfo = procStartInfo;
-            proc.Start();
+        string result = proc.StandardOutput.ReadToEnd();
 
-            string result = proc.StandardOutput.ReadToEnd();
-
-            return new OkObjectResult("ok\n" + result);
-        }
+        return new OkObjectResult("ok\n" + result);
+    }
             
-        [HttpGet]
-        public ActionResult<string> Bonjour()
-        {
-            return new OkObjectResult("Bonjour");
-        }
+    [HttpGet]
+    public ActionResult<string> Bonjour()
+    {
+        return new OkObjectResult("Bonjour");
     }
 }

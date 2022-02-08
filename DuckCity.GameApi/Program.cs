@@ -1,15 +1,15 @@
-using System.Reflection;
 using System.Text;
 using AutoMapper;
-using DuckCity.Application.Services;
-using DuckCity.Application.Services.Interfaces;
+using DuckCity.Application.AuthenticationService;
+using DuckCity.Application.RoomPreviewService;
+using DuckCity.Application.RoomService;
 using DuckCity.GameApi;
 using DuckCity.GameApi.Hub;
 using DuckCity.GameApi.Mappings;
 using DuckCity.Infrastructure;
-using DuckCity.Infrastructure.Repositories;
-using DuckCity.Infrastructure.Repositories.CacheImpl;
-using DuckCity.Infrastructure.Repositories.MongoImpl;
+using DuckCity.Infrastructure.RoomPreviewRepository;
+using DuckCity.Infrastructure.RoomRepository;
+using DuckCity.Infrastructure.UserRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -68,11 +68,15 @@ void Cors()
 }
 void Singletons()
 {
-    services.AddSingleton<IUserRepository, UserRepository>();
-    services.AddSingleton<IRoomRepository, RoomRepository>();
-    services.AddSingleton<IGameRepository, GameRepository>();
+    // Repositories
+    services.AddSingleton<IUserRepository, UserMongoRepository>();
+    services.AddSingleton<IRoomPreviewRepository, RoomPreviewMongoRepository>();
+    services.AddSingleton<IRoomRepository, RoomCacheRepository>();
+    
+    // Services
     services.AddSingleton<IAuthenticationService, AuthenticationService>();
     services.AddSingleton<IRoomService, RoomService>();
+    services.AddSingleton<IRoomPreviewService, RoomPreviewService>();
     
     // Mongo
     services.Configure<MongoDbSettings>(configuration.GetSection(nameof(MongoDbSettings)));

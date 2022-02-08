@@ -29,7 +29,6 @@
       <ProjectReference Include="..\DuckCity.Api\DuckCity.Api.csproj" />
       <ProjectReference Include="..\DuckCity.Application\DuckCity.Application.csproj" />
       <ProjectReference Include="..\DuckCity.Domain\DuckCity.Domain.csproj" />
-      <ProjectReference Include="..\DuckCity.GameApi\DuckCity.GameApi.csproj" />
       <ProjectReference Include="..\DuckCity.Infrastructure\DuckCity.Infrastructure.csproj" />
     </ItemGroup>
 

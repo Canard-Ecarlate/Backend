@@ -2,13 +2,12 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using DuckCity.Application.Services.Interfaces;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
-using DuckCity.Infrastructure.Repositories;
+using DuckCity.Infrastructure.UserRepository;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DuckCity.Application.Services;
+namespace DuckCity.Application.AuthenticationService;
 
 public class AuthenticationService : IAuthenticationService
 {
@@ -24,7 +23,7 @@ public class AuthenticationService : IAuthenticationService
         
     public User Login(string? name, string? password)
     {
-        IList<User> users = _userRepository.GetByName(name);
+        IList<User> users = _userRepository.FindByName(name);
 
         if (users.Count != 1)
         {
