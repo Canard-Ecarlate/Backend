@@ -31,7 +31,7 @@ public class RoomPreviewService : IRoomPreviewService
         CheckValid.JoinRoom(_roomPreviewRepository, _userRepository, userId);
         RoomPreview roomPreview = _roomPreviewRepository.FindById(roomId);
         roomPreview.PlayersId.Add(userId);
-        _roomPreviewRepository.Replace(roomPreview);
+        _roomPreviewRepository.Update(roomPreview);
         return roomPreview;
     }
 
@@ -46,7 +46,7 @@ public class RoomPreviewService : IRoomPreviewService
             _roomPreviewRepository.Delete(roomPreview);
             return null;
         }
-        _roomPreviewRepository.Replace(roomPreview);
+        _roomPreviewRepository.Update(roomPreview);
         return roomPreview;
     }
     

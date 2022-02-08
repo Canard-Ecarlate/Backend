@@ -1,19 +1,16 @@
 ﻿using DuckCity.Domain.Users;
 
-namespace DuckCity.Infrastructure.UserRepository
+namespace DuckCity.Infrastructure.UserRepository;
+
+public interface IUserRepository
 {
-    public interface IUserRepository
-    {
-        public IList<User> GetByName(string? name);
+    public void Create(User user);
+        
+    public IList<User> FindByName(string? name);
 
-        public IList<User> GetById(string? id);
+    public long CountUserByName(string? name);
 
-        public void Create(User user);
+    public long CountUserById(string? id);
 
-        public long CountUserByName(string? name);
-
-        public long CountUserById(string? id);
-
-        public long CountUserByEmail(string? email);
-    }
+    public long CountUserByEmail(string? email);
 }

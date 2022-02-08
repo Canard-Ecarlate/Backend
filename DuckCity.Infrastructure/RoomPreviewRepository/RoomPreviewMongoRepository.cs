@@ -20,7 +20,7 @@ public class RoomPreviewMongoRepository : IRoomPreviewRepository
         _rooms.InsertOne(roomPreview);
     }
 
-    public void Replace(RoomPreview roomPreview) => _rooms.ReplaceOne(Builders<RoomPreview>.Filter.Eq(r => r.Id, roomPreview.Id), roomPreview);
+    public void Update(RoomPreview roomPreview) => _rooms.ReplaceOne(Builders<RoomPreview>.Filter.Eq(r => r.Id, roomPreview.Id), roomPreview);
 
     public RoomPreview FindById(string id)
     {

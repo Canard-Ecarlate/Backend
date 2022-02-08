@@ -4,13 +4,13 @@ namespace DuckCity.Infrastructure.RoomRepository;
 
 public interface IRoomRepository
 {
-    Room? FindRoomByRoomId(string gameId);
+    void Create(Room newRoom);
+
+    Room? FindById(string roomId);
     
-    void Add(Room newRoom);
-    
-    void Remove(Room room);
-    
-    Room SetPlayerReadyInRoom(string roomId, string connectionId);
-    
-    Room? DisconnectPlayerFromRoom(string connectionId);
+    Room? FindByConnectionId(string connectionId);
+
+    void Update(Room roomUpdated);
+
+    void Delete(Room room);
 }

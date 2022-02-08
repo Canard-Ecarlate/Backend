@@ -1,15 +1,14 @@
 ﻿using DuckCity.Domain.Rooms;
 
-namespace DuckCity.Application.RoomService
-{
-    public interface IRoomService
-    {
-        Room JoinRoomAndConnect(string connectionId, string userId, string userName,string roomId);
-        
-        Room? LeaveRoomAndDisconnect(string roomId, string connectionId);
+namespace DuckCity.Application.RoomService;
 
-        Room? DisconnectFromRoom(string connectionId);
+public interface IRoomService
+{
+    Room JoinRoomAndConnect(string connectionId, string userId, string userName,string roomId);
         
-        Room SetPlayerReady(string roomId, string connectionId);
-    }
+    Room? LeaveRoomAndDisconnect(string roomId, string connectionId);
+
+    Room? DisconnectFromRoom(string connectionId);
+        
+    Room SetPlayerReady(string roomId, string connectionId);
 }

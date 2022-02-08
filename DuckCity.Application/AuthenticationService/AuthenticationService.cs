@@ -23,7 +23,7 @@ public class AuthenticationService : IAuthenticationService
         
     public User Login(string? name, string? password)
     {
-        IList<User> users = _userRepository.GetByName(name);
+        IList<User> users = _userRepository.FindByName(name);
 
         if (users.Count != 1)
         {

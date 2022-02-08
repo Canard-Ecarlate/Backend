@@ -1,17 +1,16 @@
 ﻿using DuckCity.Domain.Rooms;
 
-namespace DuckCity.Infrastructure.RoomPreviewRepository
+namespace DuckCity.Infrastructure.RoomPreviewRepository;
+
+public interface IRoomPreviewRepository
 {
-    public interface IRoomPreviewRepository
-    {
-        void Create(RoomPreview roomPreview);
+    void Create(RoomPreview roomPreview);
         
-        void Replace(RoomPreview roomPreview);
+    RoomPreview FindById(string id);
 
-        void Delete(RoomPreview roomPreview);
-        
-        RoomPreview FindById(string id);
+    IEnumerable<RoomPreview> FindAllRooms();
 
-        IEnumerable<RoomPreview> FindAllRooms();
-    }
+    void Update(RoomPreview roomPreview);
+
+    void Delete(RoomPreview roomPreview);
 }

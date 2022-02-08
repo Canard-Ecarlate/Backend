@@ -1,13 +1,12 @@
 ﻿using DuckCity.Domain.Users;
 
-namespace DuckCity.Application.AuthenticationService
-{
-    public interface IAuthenticationService
-    {
-        User Login(string? name, string? password);
-    
-        void SignUp(string? name, string? email, string? password, string? passwordConfirmation);
+namespace DuckCity.Application.AuthenticationService;
 
-        string GenerateJsonWebToken(User user);
-    }
+public interface IAuthenticationService
+{
+    User Login(string? name, string? password);
+    
+    void SignUp(string? name, string? email, string? password, string? passwordConfirmation);
+
+    string GenerateJsonWebToken(User user);
 }
