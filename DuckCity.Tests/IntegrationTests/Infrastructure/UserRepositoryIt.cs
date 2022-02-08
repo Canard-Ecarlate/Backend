@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using DuckCity.Domain.Users;
-using DuckCity.Infrastructure.Repositories;
-using DuckCity.Infrastructure.Repositories.User;
+using DuckCity.Infrastructure.UserRepository;
 using DuckCity.Tests.Fake;
 using Xunit;
 

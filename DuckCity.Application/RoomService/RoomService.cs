@@ -1,8 +1,8 @@
-﻿using DuckCity.Domain.Users;
-using DuckCity.Infrastructure.Repositories;
-using DuckCity.Infrastructure.Repositories.Room;
+﻿using DuckCity.Domain.Rooms;
+using DuckCity.Domain.Users;
+using DuckCity.Infrastructure.RoomRepository;
 
-namespace DuckCity.Application.Services.Room;
+namespace DuckCity.Application.RoomService;
 
 public class RoomService : IRoomService
 {
@@ -13,9 +13,9 @@ public class RoomService : IRoomService
         _roomRepository = roomRepository;
     }
 
-    public Domain.Rooms.Room JoinRoomAndConnect(string connectionId, string userId, string userName, string roomId)
+    public Room JoinRoomAndConnect(string connectionId, string userId, string userName, string roomId)
     {
-        Domain.Rooms.Room? room = _roomRepository.FindRoomByRoomId(roomId);
+        Room? room = _roomRepository.FindRoomByRoomId(roomId);
         if (room == null)
         {
             return CreateRoom(connectionId, userId, userName, roomId);
@@ -34,16 +34,16 @@ public class RoomService : IRoomService
         return room;
     }
 
-    private Domain.Rooms.Room CreateRoom(string connectionId, string userId, string userName, string roomId)
+    private Room CreateRoom(string connectionId, string userId, string userName, string roomId)
     {
-        Domain.Rooms.Room newRoom = new(roomId, connectionId, userId, userName);
+        Room newRoom = new(roomId, connectionId, userId, userName);
         _roomRepository.Add(newRoom);
         return newRoom;
     }
     
-    public Domain.Rooms.Room? LeaveRoomAndDisconnect(string roomId, string connectionId)
+    public Room? LeaveRoomAndDisconnect(string roomId, string connectionId)
     {
-        Domain.Rooms.Room room = _roomRepository.FindRoomByRoomId(roomId)!;
+        Room room = _roomRepository.FindRoomByRoomId(roomId)!;
         Player player = room.Players.Single(p => p.ConnectionId == connectionId);
         room.Players.Remove(player);
 
@@ -55,12 +55,12 @@ public class RoomService : IRoomService
         return null;
     }
 
-    public Domain.Rooms.Room? DisconnectToRoom(string connectionId)
+    public Room? DisconnectFromRoom(string connectionId)
     {
         return _roomRepository.DisconnectPlayerFromRoom(connectionId);
     }
         
-    public Domain.Rooms.Room SetPlayerReady(string roomId, string connectionId)
+    public Room SetPlayerReady(string roomId, string connectionId)
     {
         return _roomRepository.SetPlayerReadyInRoom(roomId, connectionId);
     }

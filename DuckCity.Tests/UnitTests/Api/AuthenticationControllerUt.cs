@@ -2,7 +2,7 @@
 using AutoMapper;
 using DuckCity.Api.Controllers;
 using DuckCity.Api.DTO.Authentication;
-using DuckCity.Application.Services.Authentication;
+using DuckCity.Application.AuthenticationService;
 using DuckCity.Domain.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -1,9 +1,9 @@
 ﻿using DuckCity.Application.Validations;
-using DuckCity.Infrastructure.Repositories;
-using DuckCity.Infrastructure.Repositories.RoomPreview;
-using DuckCity.Infrastructure.Repositories.User;
+using DuckCity.Domain.Rooms;
+using DuckCity.Infrastructure.RoomPreviewRepository;
+using DuckCity.Infrastructure.UserRepository;
 
-namespace DuckCity.Application.Services.RoomPreview;
+namespace DuckCity.Application.RoomPreviewService;
 
 public class RoomPreviewService : IRoomPreviewService
 {
@@ -16,28 +16,28 @@ public class RoomPreviewService : IRoomPreviewService
         _userRepository = userRepository;
     }
     
-    public Domain.Rooms.RoomPreview CreateAndJoinRoomPreview(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers)
+    public RoomPreview CreateAndJoinRoomPreview(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers)
     {
         CheckValid.CreateRoom(_roomPreviewRepository, _userRepository, roomName, hostId);
         
-        Domain.Rooms.RoomPreview roomPreview = new(roomName, hostId, hostName, isPrivate, nbPlayers);
+        RoomPreview roomPreview = new(roomName, hostId, hostName, isPrivate, nbPlayers);
         _roomPreviewRepository.Create(roomPreview);
         
         return roomPreview;
     }
     
-    public Domain.Rooms.RoomPreview JoinRoomPreview(string roomId, string userId)
+    public RoomPreview JoinRoomPreview(string roomId, string userId)
     {
         CheckValid.JoinRoom(_roomPreviewRepository, _userRepository, userId);
-        Domain.Rooms.RoomPreview roomPreview = _roomPreviewRepository.FindById(roomId);
+        RoomPreview roomPreview = _roomPreviewRepository.FindById(roomId);
         roomPreview.PlayersId.Add(userId);
         _roomPreviewRepository.Replace(roomPreview);
         return roomPreview;
     }
 
-    public Domain.Rooms.RoomPreview? LeaveRoomPreview(string roomId, string userId)
+    public RoomPreview? LeaveRoomPreview(string roomId, string userId)
     {
-        Domain.Rooms.RoomPreview roomPreview = _roomPreviewRepository.FindById(roomId);
+        RoomPreview roomPreview = _roomPreviewRepository.FindById(roomId);
         CheckValid.LeaveRoom(_userRepository, userId, roomPreview);
 
         roomPreview.PlayersId.Remove(userId);
@@ -50,11 +50,11 @@ public class RoomPreviewService : IRoomPreviewService
         return roomPreview;
     }
     
-    public Domain.Rooms.RoomPreview FindRoom(string roomId)
+    public RoomPreview FindRoom(string roomId)
     {
         CheckValid.IsObjectId(roomId);
         return _roomPreviewRepository.FindById(roomId);
     }
     
-    public IEnumerable<Domain.Rooms.RoomPreview> FindAllRooms() => _roomPreviewRepository.FindAllRooms();
+    public IEnumerable<RoomPreview> FindAllRooms() => _roomPreviewRepository.FindAllRooms();
 }

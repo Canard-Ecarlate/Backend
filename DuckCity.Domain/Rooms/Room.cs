@@ -9,9 +9,9 @@ public class Room
     public HashSet<Player> Players { get; }
     public Game? Game { get; set; }
 
-    public Room(string roomRoomId, string connectionId, string hostId, string hostName)
+    public Room(string roomId, string connectionId, string hostId, string hostName)
     {
-        RoomId = roomRoomId;
+        RoomId = roomId;
         Players = new HashSet<Player> {new(connectionId, hostId, hostName)};
     }
 }

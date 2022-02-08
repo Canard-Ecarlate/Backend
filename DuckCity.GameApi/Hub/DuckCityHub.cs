@@ -1,6 +1,6 @@
 using AutoMapper;
-using DuckCity.Application.Services.Room;
-using DuckCity.Application.Services.RoomPreview;
+using DuckCity.Application.RoomPreviewService;
+using DuckCity.Application.RoomService;
 using DuckCity.Domain.Rooms;
 using DuckCity.GameApi.Dto;
 using Microsoft.AspNetCore.SignalR;
@@ -31,7 +31,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        Room? room = _roomService.DisconnectToRoom(Context.ConnectionId);
+        Room? room = _roomService.DisconnectFromRoom(Context.ConnectionId);
         if (room != null)
         {
             // Send

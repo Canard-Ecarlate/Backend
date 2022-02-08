@@ -2,7 +2,7 @@
 {
     public class RoomsContainer
     {
-        public string? GameContainerId { get; set; }
+        public string? Id { get; set; }
         public int NbRooms { get; set; }
     }
 }

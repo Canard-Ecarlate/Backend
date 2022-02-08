@@ -1,5 +1,5 @@
 using DuckCity.Api.DTO.Room;
-using DuckCity.Application.Services.RoomPreview;
+using DuckCity.Application.RoomPreviewService;
 using DuckCity.Domain.Rooms;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

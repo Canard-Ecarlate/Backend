@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using DuckCity.Application.Services;
-using DuckCity.Application.Services.RoomPreview;
+using DuckCity.Application.RoomPreviewService;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
-using DuckCity.Infrastructure.Repositories;
-using DuckCity.Infrastructure.Repositories.RoomPreview;
-using DuckCity.Infrastructure.Repositories.User;
+using DuckCity.Infrastructure.RoomPreviewRepository;
+using DuckCity.Infrastructure.UserRepository;
 using MongoDB.Bson;
 using Moq;
 using Xunit;

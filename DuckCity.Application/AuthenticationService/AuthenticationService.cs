@@ -4,11 +4,10 @@ using System.Security.Cryptography;
 using System.Text;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
-using DuckCity.Infrastructure.Repositories;
-using DuckCity.Infrastructure.Repositories.User;
+using DuckCity.Infrastructure.UserRepository;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DuckCity.Application.Services.Authentication;
+namespace DuckCity.Application.AuthenticationService;
 
 public class AuthenticationService : IAuthenticationService
 {

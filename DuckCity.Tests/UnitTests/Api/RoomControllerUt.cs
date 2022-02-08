@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DuckCity.Api.Controllers;
 using DuckCity.Api.DTO.Room;
-using DuckCity.Application.Services.RoomPreview;
+using DuckCity.Application.RoomPreviewService;
 using DuckCity.Domain.Rooms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
