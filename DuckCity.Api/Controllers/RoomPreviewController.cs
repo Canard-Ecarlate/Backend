@@ -1,4 +1,3 @@
-using DuckCity.Api.DTO.Room;
 using DuckCity.Application.RoomPreviewService;
 using DuckCity.Domain.Rooms;
 using Microsoft.AspNetCore.Authorization;
@@ -18,20 +17,7 @@ public class RoomPreviewController : ControllerBase
         _roomPreviewService = roomPreviewService;
     }
     
-    [HttpPost]
-    public ActionResult<RoomPreview> CreateAndJoinRoom(RoomCreationDto room)
-    {
-        RoomPreview roomPreviewCreated = _roomPreviewService.CreateAndJoinRoomPreview(room.Name, room.HostId, room.HostName, room.IsPrivate, room.NbPlayers);
-        return new OkObjectResult(roomPreviewCreated);
-    }
-        
-    [HttpPost]
-    public ActionResult<RoomPreview> JoinRoom(UserAndRoomDto userAndRoomDto)
-    {
-        RoomPreview roomPreviewJoined = _roomPreviewService.JoinRoomPreview(userAndRoomDto.RoomId, userAndRoomDto.UserId);
-        return new OkObjectResult(roomPreviewJoined);
-    }
-    
     [HttpGet]
-    public ActionResult<IEnumerable<RoomPreview>> FindAllRooms() => new OkObjectResult(_roomPreviewService.FindAllRooms());
+    public ActionResult<IEnumerable<RoomPreview>> FindAllRooms() =>
+        new OkObjectResult(_roomPreviewService.FindAllRooms());
 }

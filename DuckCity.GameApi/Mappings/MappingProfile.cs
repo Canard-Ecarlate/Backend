@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DuckCity.Domain.Rooms;
 using DuckCity.Domain.Users;
 using DuckCity.GameApi.Dto;
 

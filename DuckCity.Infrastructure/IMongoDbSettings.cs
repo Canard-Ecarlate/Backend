@@ -6,4 +6,5 @@ public interface IMongoDbSettings
     string? DatabaseName { get; set; }
     string? UsersCollectionName { get; set; }
     string? RoomsCollectionName { get; set; }
+    string? GameContainersCollectionName { get; set; }
 }

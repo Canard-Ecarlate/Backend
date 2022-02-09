@@ -1,8 +1,16 @@
-﻿namespace DuckCity.Domain
+﻿using System.Text.Json.Serialization;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace DuckCity.Domain
 {
     public class GameContainer
     {
-        public string? GameContainerId { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string Id { get; set; } = "";
+        public int Number { get; set; }
         public int NbRooms { get; set; }
     }
 }

@@ -3,11 +3,12 @@ using AutoMapper;
 using DuckCity.Api;
 using DuckCity.Api.Mappings;
 using DuckCity.Application.AuthenticationService;
+using DuckCity.Application.ContainerGameApiService;
 using DuckCity.Application.RoomPreviewService;
 using DuckCity.Application.RoomService;
-using DuckCity.Application.Services.Interfaces;
 using DuckCity.Application.UserService;
 using DuckCity.Infrastructure;
+using DuckCity.Infrastructure.GameContainerRepository;
 using DuckCity.Infrastructure.RoomPreviewRepository;
 using DuckCity.Infrastructure.RoomRepository;
 using DuckCity.Infrastructure.UserRepository;
@@ -70,12 +71,14 @@ void Singletons()
     services.AddSingleton<IUserRepository, UserMongoRepository>();
     services.AddSingleton<IRoomPreviewRepository, RoomPreviewMongoRepository>();
     services.AddSingleton<IRoomRepository, RoomCacheRepository>();
+    services.AddSingleton<IGameContainerRepository, GameContainerRepository>();
     
     // Services
     services.AddSingleton<IAuthenticationService, AuthenticationService>();
     services.AddSingleton<IRoomService, RoomService>();
     services.AddSingleton<IUserService, UserService>();
     services.AddSingleton<IRoomPreviewService, RoomPreviewService>();
+    services.AddSingleton<IGameContainerService, GameContainerService>();
     
     // Mongo
     services.Configure<MongoDbSettings>(configuration.GetSection(nameof(MongoDbSettings)));
