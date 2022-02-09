@@ -6,7 +6,7 @@ public interface IGameContainerRepository
 {
     void Create(GameContainer gameContainer);
     GameContainer FindById(string gameContainerId);
-    GameContainer FindLastOne();
+    GameContainer FindByNumber(int number);
     void Update(GameContainer gameContainer);
     void Delete(string gameContainerId);
 }

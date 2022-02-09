@@ -17,19 +17,18 @@ public class GameContainerController : ControllerBase
     {
         _gameContainerService = gameContainerService;
     }
-    
+
     [HttpPost]
-    public ActionResult<GameContainer> ContainerAccessToCreateRoom(RoomCreationDto room)
+    public ActionResult<GameContainer> ContainerAccessToCreateRoom(RoomCreationDto dto)
     {
-        GameContainer access = _gameContainerService.ContainerAccessToCreateRoom(room.Name, room.HostId);
+        GameContainer access = _gameContainerService.ContainerAccessToCreateRoom(dto.Name, dto.HostId);
         return new OkObjectResult(access);
     }
 
     [HttpPost]
-    public ActionResult<string> ContainerAccessToJoinRoom(UserAndRoomDto userAndRoomDto)
+    public ActionResult<string> ContainerAccessToJoinRoom(UserAndRoomDto dto)
     {
-        GameContainer access =
-            _gameContainerService.ContainerAccessToJoinRoom(userAndRoomDto.RoomId, userAndRoomDto.UserId);
+        GameContainer access = _gameContainerService.ContainerAccessToJoinRoom(dto.RoomId, dto.UserId);
         return new OkObjectResult(access);
     }
 }

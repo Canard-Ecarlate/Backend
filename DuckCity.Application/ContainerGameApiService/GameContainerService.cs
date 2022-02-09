@@ -23,7 +23,7 @@ public class GameContainerService : IGameContainerService
     public GameContainer ContainerAccessToCreateRoom(string roomName, string hostId)
     {
         CheckValid.CreateRoom(_roomPreviewRepository, _userRepository, roomName, hostId);
-        GameContainer gameContainer = _gameContainerRepository.FindLastOne();
+        GameContainer gameContainer = _gameContainerRepository.FindByNumber(0);
         return gameContainer;
     }
     

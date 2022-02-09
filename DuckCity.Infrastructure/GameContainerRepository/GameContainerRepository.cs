@@ -24,9 +24,9 @@ public class GameContainerRepository : IGameContainerRepository
         return _gameContainer.Find(g => g.Id == gameContainerId).First();
     }
 
-    public GameContainer FindLastOne()
+    public GameContainer FindByNumber(int number)
     {
-        return _gameContainer.Find(x => true).SortByDescending(d => d.Number).Limit(1).First();
+        return _gameContainer.Find(g => g.Number == number).First();
     }
 
     public void Update(GameContainer gameContainer)
