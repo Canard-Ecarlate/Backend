@@ -41,7 +41,7 @@ namespace DuckCity.Tests.UnitTests.Api
         {
             // Given
             IdentifierDto identifierDto = new() {Name = name, Password = password};
-            User user = new() {Name = name, Password = password};
+            User user = new(name, "", password);
             _mockAuthenticationService.Setup(mock => mock.Login(name, password)).Returns(user);
             _mockMapper.Setup(mock => mock.Map<UserWithTokenDto>(user)).Returns(new UserWithTokenDto {Name = name});
             _mockAuthenticationService.Setup(mock => mock.GenerateJsonWebToken(user)).Returns(token);
@@ -95,7 +95,7 @@ namespace DuckCity.Tests.UnitTests.Api
             RegisterDto registerDto = new()
                 {Name = name, Email = email, Password = password, PasswordConfirmation = password};
             //      Login
-            User user = new() {Name = name, Password = password};
+            User user = new(name, "", password);
             
             // Mock
             _mockAuthenticationService.Setup(mock => mock.SignUp(name, email, password, password));

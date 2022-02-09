@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using DuckCity.Application.Utils;
+using DuckCity.Application.Validations;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.UserRepository;
@@ -17,60 +18,40 @@ public class AuthenticationService : IAuthenticationService
     {
         _userRepository = userRepository;
     }
-        
+
     public User Login(string? name, string? password)
     {
-        IList<User> users = _userRepository.FindByName(name);
-
-        if (users.Count != 1)
+        try
+        {
+            User user = _userRepository.FindByName(name);
+            UserUtils.ComparePassword(user, password);
+            return user;
+        }
+        catch
         {
             throw new BadUserOrPasswordException();
         }
-            
-        User user = users[0];
-        UserUtils.ComparePassword(user,password);
-        return user;
     }
 
     public void SignUp(string? name, string? email, string? password, string? passwordConfirmation)
     {
-        if (_userRepository.CountUserByName(name) == 0)
-        {
-            if (_userRepository.CountUserByEmail(email) == 0)
-            {
-                if (password == passwordConfirmation)
-                {
-                    string encryptedPassword = UserUtils.HashPassword(password);
-                    User user = new User {Name = name, Email = email, Password = encryptedPassword};
-                    _userRepository.Create(user);
-                }
-                else
-                {
-                    throw new PasswordConfirmationException();
-                }
-            }
-            else
-            {
-                throw new MailAlreadyExistException(email);
-            }
-        }
-        else
-        {
-            throw new UsernameAlreadyExistException(name);
-        }
+        CheckValid.SignUp(_userRepository, name, email, password, passwordConfirmation);
+        string encryptedPassword = UserUtils.HashPassword(password);
+        User user = new(name, email, encryptedPassword);
+        _userRepository.Create(user);
     }
 
     public string GenerateJsonWebToken(User user)
     {
         List<Claim> claims = new()
         {
-            new Claim("userId",user.Id!),
+            new Claim("userId", user.Id!),
             new Claim("type", "player")
         };
 
         string strKey = Environment.GetEnvironmentVariable("SIGNATURE_KEY") ?? throw new InvalidOperationException();
         SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(strKey));
-        
+
         JwtSecurityToken token = new(
             "https://canardecarlate.fr",
             "https://canardecarlate.fr",
@@ -78,7 +59,7 @@ public class AuthenticationService : IAuthenticationService
             expires: DateTime.Now.AddDays(30.0),
             signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
         );
-            
+
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

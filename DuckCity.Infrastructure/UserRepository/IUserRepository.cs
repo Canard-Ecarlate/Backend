@@ -6,9 +6,9 @@ public interface IUserRepository
 {
     public void Create(User user);
         
-    public IList<User> FindByName(string? name);
+    public User FindByName(string? name);
     
-    public IList<User> FindById(string? id);
+    public User FindById(string? id);
 
     public long CountUserByName(string? name);
 

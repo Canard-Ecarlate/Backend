@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.UserRepository;
 using DuckCity.Tests.Fake;
@@ -23,9 +22,12 @@ namespace DuckCity.Tests.IntegrationTests.Infrastructure
         public void CreateTest()
         {
             UserMongoRepository userMongoRepository = new(_mongoDbFake.MongoSettings);
-            userMongoRepository.Create(new User {Name = "61e1c881254c966b1ecd9c86"});
-            IList<User> user = userMongoRepository.FindByName("61e1c881254c966b1ecd9c86");
-            Assert.NotEmpty(user);
+            userMongoRepository.Create(new User("", "", "")
+            {
+                Id = ConstantTest.UserId
+            });
+            User user = userMongoRepository.FindById(ConstantTest.UserId);
+            Assert.NotNull(user);
         }
     }
 }

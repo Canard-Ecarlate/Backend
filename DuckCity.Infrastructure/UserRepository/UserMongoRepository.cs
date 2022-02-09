@@ -19,11 +19,11 @@ public class UserMongoRepository : IUserRepository
         _users.InsertOne(user);
     }
 
-    public IList<User> FindByName(string? name) =>
-        _users.Find(user => user.Name == name).ToList();
+    public User FindByName(string? name) =>
+        _users.Find(user => user.Name == name).First();
     
-    public IList<User> FindById(string? id) =>
-        _users.Find(user => user.Id == id).ToList();
+    public User FindById(string? id) =>
+        _users.Find(user => user.Id == id).First();
         
     public long CountUserByName(string? name) =>
         _users.Find(user => user.Name == name).CountDocuments();
