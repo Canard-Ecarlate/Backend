@@ -29,7 +29,7 @@ public class UserService : IUserService
         {
             throw new PasswordConfirmationException();
         }
-
+        CheckValid.ExistUser(_userRepository, userId);
         User user = _userRepository.FindById(userId ?? throw new BadUserOrPasswordException());
         UserUtils.ComparePassword(user, actualPassword);
         string encryptedPassword = UserUtils.HashPassword(newPassword);

@@ -55,6 +55,7 @@ namespace DuckCity.Tests.UnitTests.Application
             {
                 Assert.True(!ObjectId.TryParse(roomId, out _));
                 Assert.NotNull(e);
+                _mockRoomRep.Verify(mock => mock.FindById(roomId), Times.Never);
             }
         }
 
