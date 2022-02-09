@@ -5,6 +5,8 @@ using DuckCity.Api.Mappings;
 using DuckCity.Application.AuthenticationService;
 using DuckCity.Application.RoomPreviewService;
 using DuckCity.Application.RoomService;
+using DuckCity.Application.Services.Interfaces;
+using DuckCity.Application.UserService;
 using DuckCity.Infrastructure;
 using DuckCity.Infrastructure.RoomPreviewRepository;
 using DuckCity.Infrastructure.RoomRepository;
@@ -72,6 +74,7 @@ void Singletons()
     // Services
     services.AddSingleton<IAuthenticationService, AuthenticationService>();
     services.AddSingleton<IRoomService, RoomService>();
+    services.AddSingleton<IUserService, UserService>();
     services.AddSingleton<IRoomPreviewService, RoomPreviewService>();
     
     // Mongo

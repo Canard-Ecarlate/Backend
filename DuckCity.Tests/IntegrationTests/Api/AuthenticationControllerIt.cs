@@ -31,7 +31,11 @@ namespace DuckCity.Tests.IntegrationTests.Api
                 Name = name, Email = email, Password = password, PasswordConfirmation = password
             };
             JsonContent jsonIn = JsonContent.Create(registerDto);
+            
+            // When
             HttpResponseMessage signUp = await _client.PostAsync("/api/Authentication/SignUp", jsonIn);
+            
+            // Then
             string contentSignUp = signUp.Content.ReadAsStringAsync().Result;
             UserWithTokenDto? userSignUp = JsonSerializer.Deserialize<UserWithTokenDto>(contentSignUp,
                 new JsonSerializerOptions {PropertyNameCaseInsensitive = true});

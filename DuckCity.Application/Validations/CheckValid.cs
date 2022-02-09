@@ -67,5 +67,35 @@ namespace DuckCity.Application.Validations
                 throw new UserNotInRoomException(userId);
             }
         }
+
+        public static void ExistUser(IUserRepository userRepository, string? userId)
+        {
+            if (userId == null)
+            {
+                throw new IdNotValidException(userId);
+            }
+            IsObjectId(userId);
+
+            if (userRepository.CountUserById(userId) == 0)
+            {
+                throw new UserIdNoExistException();
+            }
+        }
+
+        public static void SignUp(IUserRepository userRepository, string? name, string? email, string? password, string? passwordConfirmation)
+        {
+            if (password != passwordConfirmation)
+            {
+                throw new PasswordConfirmationException();
+            }
+            if (userRepository.CountUserByName(name) != 0)
+            {
+                throw new UsernameAlreadyExistException(name);
+            }
+            if (userRepository.CountUserByEmail(email) != 0)
+            {
+                throw new MailAlreadyExistException(email);
+            }
+        }
     }
 }

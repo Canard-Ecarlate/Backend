@@ -19,8 +19,11 @@ public class UserMongoRepository : IUserRepository
         _users.InsertOne(user);
     }
 
-    public IList<User> FindByName(string? name) =>
-        _users.Find(user => user.Name == name).ToList();
+    public User FindByName(string? name) =>
+        _users.Find(user => user.Name == name).First();
+    
+    public User FindById(string? id) =>
+        _users.Find(user => user.Id == id).First();
         
     public long CountUserByName(string? name) =>
         _users.Find(user => user.Name == name).CountDocuments();
@@ -30,4 +33,9 @@ public class UserMongoRepository : IUserRepository
 
     public long CountUserByEmail(string? email) =>
         _users.Find(user => user.Email == email).CountDocuments();
+    
+    public void DeleteUserById(string? id) =>
+        _users.DeleteOne(user => user.Id == id);
+        
+    public void Replace(User user) => _users.ReplaceOne(Builders<User>.Filter.Eq(u => u.Id, user.Id), user);
 }
