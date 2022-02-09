@@ -23,20 +23,10 @@ public class AuthenticationController : ControllerBase
     [Route("")]
     public ActionResult<UserWithTokenDto> Login(IdentifierDto identifierDto)
     {
-        try
-        {
-            User user = _authenticationService.Login(identifierDto.Name, identifierDto.Password);
-            UserWithTokenDto userWithTokenDto = _mapper.Map<UserWithTokenDto>(user);
-            userWithTokenDto.Token = _authenticationService.GenerateJsonWebToken(user);
-            return new OkObjectResult(userWithTokenDto);
-        }
-        catch (UnauthorizedAccessException e)
-        {
-            User user = _authenticationService.Login(identifierDto.Name, identifierDto.Password);
-            UserWithTokenDto userWithTokenDto = _mapper.Map<UserWithTokenDto>(user);
-            userWithTokenDto.Token = _authenticationService.GenerateJsonWebToken(user);
-            return new OkObjectResult(userWithTokenDto);
-        }
+        User user = _authenticationService.Login(identifierDto.Name, identifierDto.Password);
+        UserWithTokenDto userWithTokenDto = _mapper.Map<UserWithTokenDto>(user);
+        userWithTokenDto.Token = _authenticationService.GenerateJsonWebToken(user);
+        return new OkObjectResult(userWithTokenDto);
     }
 
     [HttpPost]

@@ -3,6 +3,7 @@ using AutoMapper;
 using DuckCity.Api.Controllers;
 using DuckCity.Api.DTO.Authentication;
 using DuckCity.Application.AuthenticationService;
+using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -64,17 +65,24 @@ namespace DuckCity.Tests.UnitTests.Api
         [Fact]
         public void LoginUnauthorizedTest()
         {
-            // Given
+            // Mock
             _mockAuthenticationService.Setup(mock => mock.Login(It.IsAny<string?>(), It.IsAny<string?>()))
-                .Throws(new UnauthorizedAccessException());
+                .Throws(new BadUserOrPasswordException());
 
-            // When
-            ActionResult<UserWithTokenDto> actionResult = _authenticationController.Login(new IdentifierDto());
-            UnauthorizedObjectResult? result = actionResult.Result as UnauthorizedObjectResult;
-            Assert.NotNull(result);
-            const int unauthorizedStatus = 401;
-            Assert.Equal(unauthorizedStatus, result?.StatusCode);
-            Assert.True(result?.Value is UnauthorizedAccessException);
+            try
+            { 
+                // When
+                _authenticationController.Login(new IdentifierDto());
+                throw new Exception();
+            }
+            catch (BadUserOrPasswordException e)
+            {
+                // Then
+                Assert.NotNull(e);
+            }
+
+            // Verify
+            _mockAuthenticationService.Verify(mock => mock.Login(It.IsAny<string?>(), It.IsAny<string?>()), Times.Once);
         }
 
         [Theory]
@@ -88,6 +96,8 @@ namespace DuckCity.Tests.UnitTests.Api
                 {Name = name, Email = email, Password = password, PasswordConfirmation = password};
             //      Login
             User user = new() {Name = name, Password = password};
+            
+            // Mock
             _mockAuthenticationService.Setup(mock => mock.SignUp(name, email, password, password));
             _mockAuthenticationService.Setup(mock => mock.Login(name, password)).Returns(user);
             _mockAuthenticationService.Setup(mock => mock.GenerateJsonWebToken(user)).Returns(token);
