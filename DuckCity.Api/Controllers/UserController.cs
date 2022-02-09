@@ -26,7 +26,7 @@ public class UserController : ControllerBase
     [HttpPost]
     public ActionResult<string> ChangePassword(UserChangePassword user)
     {
-        _userService.ChangePasswordUser(user.UserId,user.ActualPassword,user.NewPassword,user.NewPasswordVerif);
+        _userService.ChangePasswordUser(user.UserId,user.ActualPassword,user.NewPassword,user.PasswordConfirmation);
         return new OkObjectResult("The password has been changed");
     }
     
