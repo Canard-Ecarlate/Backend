@@ -11,5 +11,5 @@ public class UserChangePassword
     [Required]
     public string NewPassword { get; init; } = "";
     [Required]
-    public string NewPasswordVerif { get; init; } = "";
+    public string PasswordConfirmation { get; init; } = "";
 }
