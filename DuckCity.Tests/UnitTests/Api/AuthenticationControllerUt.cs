@@ -73,7 +73,7 @@ namespace DuckCity.Tests.UnitTests.Api
             { 
                 // When
                 _authenticationController.Login(new IdentifierDto());
-                throw new Exception();
+                throw new TestMustBeFailedException();
             }
             catch (BadUserOrPasswordException e)
             {
