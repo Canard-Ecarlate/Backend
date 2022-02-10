@@ -3,11 +3,11 @@ using MongoDB.Driver;
 
 namespace DuckCity.Infrastructure.GameContainerRepository;
 
-public class GameContainerRepository : IGameContainerRepository
+public class GameContainerMongoRepository : IGameContainerRepository
 {
     private readonly IMongoCollection<GameContainer> _gameContainer;
 
-    public GameContainerRepository(IMongoDbSettings settings)
+    public GameContainerMongoRepository(IMongoDbSettings settings)
     {
         MongoClient client = new(settings.ConnectionString);
         IMongoDatabase database = client.GetDatabase(settings.DatabaseName);

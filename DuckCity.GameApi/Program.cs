@@ -75,7 +75,7 @@ void Singletons()
     services.AddSingleton<IUserRepository, UserMongoRepository>();
     services.AddSingleton<IRoomPreviewRepository, RoomPreviewMongoRepository>();
     services.AddSingleton<IRoomRepository, RoomCacheRepository>();
-    services.AddSingleton<IGameContainerRepository, GameContainerRepository>();
+    services.AddSingleton<IGameContainerRepository, GameContainerMongoRepository>();
     
     // Services
     services.AddSingleton<IAuthenticationService, AuthenticationService>();
