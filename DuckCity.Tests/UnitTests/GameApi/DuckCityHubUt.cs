@@ -170,7 +170,7 @@ public class DuckCityHubUt : HubUnitTestsBase
         //Given
         const Exception? exception = null;
         
-        //When
+        //When 
         await _duckCityHub.OnDisconnectedAsync(exception);
         
         //Verify
