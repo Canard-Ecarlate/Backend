@@ -168,7 +168,7 @@ public class DuckCityHubUt : HubUnitTestsBase
     public async Task OnDisconnectedAsyncWithoutResponseTest(string connectionId)
     {
         //Given
-        Exception? exception = null;
+        const Exception? exception = null;
         
         //When
         await _duckCityHub.OnDisconnectedAsync(exception);
