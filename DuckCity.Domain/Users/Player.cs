@@ -1,4 +1,5 @@
 using DuckCity.Domain.Cards;
+using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Roles;
 
 namespace DuckCity.Domain.Users;
@@ -20,13 +21,13 @@ public class Player
         Name = userName;
     }
 
-    public Type? DrawCard()
+    public Type DrawCard()
     {
         Random random = new Random();
         int nbCardsInHand = CardsInHand.Count;
         if (nbCardsInHand == 0)
         {
-            return null;
+            throw new CardsInHandEmptyException();
         }
         Type typeDrawnCard = CardsInHand.ElementAt(random.Next(nbCardsInHand)).GetType();
         CardsInHand.RemoveAt(nbCardsInHand);

@@ -1,4 +1,5 @@
 ﻿using DuckCity.Domain.Cards;
+using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Games;
 using DuckCity.Domain.Roles;
 using DuckCity.Domain.Rooms;
@@ -22,29 +23,30 @@ namespace DuckCity.Application.GameService
          * Assign cards to player
          * Designate first player
          */
-        public Room? StartGame(string roomId, RoomConfiguration roomConfiguration)
+        public Room StartGame(string roomId)
         {
             Room? room = _roomRepository.FindById(roomId);
-            if(room != null)
+            if (room == null)
             {
-                // Todo Checkvalid assez de joueurs et tous prêts
-                HashSet<Player> players = room.Players;
-
-                // Designate first player
-                Random random = new();
-                HashSet<Player> playerToShuffle = new(players.OrderBy(player => random.Next()));
-                Player firstPlayer = playerToShuffle.First();
-                room.Game = new Game(firstPlayer.Id, roomConfiguration);
-                firstPlayer.IsCardsDrawable = false;
-
-                // Init the first round and assign cards to players
-                NewRound(players, room.Game);
-
-                // Assign roles to players
-                AssignRole(playerToShuffle, roomConfiguration.Roles);
-                return room;
+                throw new RoomNotFoundException();
             }
-            return null;
+
+            // Todo Checkvalid assez de joueurs et tous prêts
+            HashSet<Player> players = room.Players;
+
+            // Designate first player
+            Random random = new();
+            HashSet<Player> playerToShuffle = new(players.OrderBy(player => random.Next()));
+            Player firstPlayer = playerToShuffle.First();
+            room.Game = new Game(firstPlayer.Id, room.RoomConfiguration);
+            firstPlayer.IsCardsDrawable = false;
+
+            // Init the first round and assign cards to players
+            NewRound(players, room.Game);
+
+            // Assign roles to players
+            AssignRole(playerToShuffle, room.RoomConfiguration.Roles);
+            return room;
 
         }
 
@@ -57,21 +59,23 @@ namespace DuckCity.Application.GameService
             foreach (NbEachRole nbEachRole in roles)
             {
                 Type? roleType = Type.GetType(nbEachRole.RoleName + "Role");
-                if (roleType != null)
+                if (roleType == null)
                 {
-                    for (int i = 0; i < nbEachRole.Number; i++)
+                    throw new RoleNotExistException();
+                }
+                for (int i = 0; i < nbEachRole.Number; i++)
+                {
+                    IRole? role = Activator.CreateInstance(roleType) as IRole;
+                    if (role == null)
                     {
-                        IRole? role = Activator.CreateInstance(roleType) as IRole;
-                        if (role != null)
-                        {
-                            rolesInGame.Add(role);
-                        }
+                        throw new RoleNotExistException();
                     }
+                    rolesInGame.Add(role);
                 }
             }
             Random random = new();
             rolesInGame = new(rolesInGame.OrderBy(role => random.Next()));
-            foreach(Player player in players)
+            foreach (Player player in players)
             {
                 player.Role = rolesInGame.First();
                 rolesInGame.Remove(player.Role);
@@ -81,35 +85,37 @@ namespace DuckCity.Application.GameService
         /*
          * Stop the game without winners
          */
-        public void QuitMidGame(string roomId, string playerWhoQuitsId) // Todo
+        public void QuitMidGame(string roomId, string playerWhoQuitsId)
         {
             Room? room = _roomRepository.FindById(roomId);
-            if (room != null)
+            if (room == null)
             {
-                Game? game = room.Game;
-                if (game != null)
-                {
-                    game.IsGameEnded = true;
-                }
+                throw new RoomIdNoExistException();
             }
+            Game? game = room.Game;
+            if (game == null)
+            {
+                throw new GameNotBeginException();
+            }
+            game.IsGameEnded = true;
         }
 
         /*
          * Draw randomly a card in player hands
          */
-        public Room? DrawCard(string playerWhoDrawId, string playerWhereCardIsDrawingId, string roomId)
+        public Room DrawCard(string playerWhoDrawId, string playerWhereCardIsDrawingId, string roomId)
         {
             Room? room = _roomRepository.FindById(roomId);
-            if(room == null)
+            if (room == null)
             {
-                return null;
+                throw new RoomIdNoExistException();
             }
 
             Game? game = room.Game;
             HashSet<Player> players = room.Players;
             if (game == null)
             {
-                return null;
+                throw new GameNotBeginException();
             }
 
             // get player who is drawing and from whom
@@ -117,17 +123,13 @@ namespace DuckCity.Application.GameService
             Player playerWhoDraw = players.First(player => player.Id == playerWhoDrawId);
             if (playerWhereCardIsDrawing == null || playerWhoDraw == null)
             {
-                return null;
+                throw new PlayerNotFoundException();
             }
 
             // randomly draw a card in CardsInHand from playerWhereCardIsDrawing
             Type typeDrawnCard = playerWhereCardIsDrawing.DrawCard();
 
-            ICard? drawnCard = game.DrawCard(typeDrawnCard);
-            if (drawnCard == null)
-            {
-                return null;
-            }
+            ICard drawnCard = game.DrawCard(typeDrawnCard);
 
             // Card action
             drawnCard.DrawAction(playerWhereCardIsDrawing, playerWhoDraw, game, players);
@@ -162,21 +164,26 @@ namespace DuckCity.Application.GameService
          */
         private static void NewRound(HashSet<Player> players, Game game)
         {
-            if (game.CardsInGame != null && game.CardsInGame.Count % players.Count == 0)
+            if (game.CardsInGame == null)
             {
-                game.ShuffleCardsInGame();
-                int nbCardsInHand = game.CardsInGame.Count / players.Count;
-                Random random = new Random();
-                HashSet<Player> playerToShuffle = new(players.OrderBy(player => random.Next()));
-                int start = 0;
-                int end = start + nbCardsInHand;
-                foreach (Player shufflePlayer in playerToShuffle)
-                {
-                    Player player = players.First(player => player.Id == shufflePlayer.Id);
-                    player.CardsInHand = new(game.CardsInGame.Take(new Range(start, end)));
-                    start = end;
-                    end += nbCardsInHand;
-                }
+                throw new CardsInGameEmptyException();
+            }
+            if (game.CardsInGame.Count % players.Count != 0)
+            {
+                throw new CardsInGameNumberNotMatchPlayersNumber();
+            }
+            game.ShuffleCardsInGame();
+            int nbCardsInHand = game.CardsInGame.Count / players.Count;
+            Random random = new Random();
+            HashSet<Player> playerToShuffle = new(players.OrderBy(player => random.Next()));
+            int start = 0;
+            int end = start + nbCardsInHand;
+            foreach (Player shufflePlayer in playerToShuffle)
+            {
+                Player player = players.First(player => player.Id == shufflePlayer.Id);
+                player.CardsInHand = new(game.CardsInGame.Take(new Range(start, end)));
+                start = end;
+                end += nbCardsInHand;
             }
         }
     }

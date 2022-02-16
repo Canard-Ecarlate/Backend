@@ -1,4 +1,5 @@
 using AutoMapper;
+using DuckCity.Application.GameService;
 using DuckCity.Application.RoomPreviewService;
 using DuckCity.Application.RoomService;
 using DuckCity.Domain.Rooms;
@@ -10,13 +11,15 @@ namespace DuckCity.GameApi.Hub;
 public class DuckCityHub : Hub<IDuckCityClient>
 {
     private readonly IRoomService _roomService;
+    private readonly IGameService _gameService;
     private readonly IRoomPreviewService _roomPreviewService;
     private readonly IMapper _mapper;
 
     // Constructor
-    public DuckCityHub(IRoomService roomService, IMapper mapper, IRoomPreviewService roomPreviewService)
+    public DuckCityHub(IRoomService roomService, IGameService gameService, IMapper mapper, IRoomPreviewService roomPreviewService)
     {
         _roomService = roomService;
+        _gameService = gameService;
         _mapper = mapper;
         _roomPreviewService = roomPreviewService;
     }
@@ -108,5 +111,14 @@ public class DuckCityHub : Hub<IDuckCityClient>
 
         // Send
         await Clients.Group(roomCode).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
+    }
+
+    [HubMethodName("StartGame")]
+    public async Task StartGame(string roomId)
+    {
+        Room room = _gameService.StartGame(roomId);
+
+        // Send Todo
+        await Clients.Group(roomId).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
     }
 }

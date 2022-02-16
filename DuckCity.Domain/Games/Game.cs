@@ -1,4 +1,5 @@
 ﻿using DuckCity.Domain.Cards;
+using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Roles;
 using DuckCity.Domain.Rooms;
 
@@ -50,12 +51,12 @@ namespace DuckCity.Domain.Games
         /*
          * Draw a card in cardsInGame
          */
-        public ICard? DrawCard(Type typeDrawnCard)
+        public ICard DrawCard(Type typeDrawnCard)
         {
             ICard drawnCard = CardsInGame.First(card => card.GetType() == typeDrawnCard);
             if(drawnCard == null)
             {
-                return null;
+                throw new CardNotFoundException();
             }
 
             return drawnCard;
