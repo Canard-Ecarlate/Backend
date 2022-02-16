@@ -57,7 +57,7 @@ namespace DuckCity.Tests.UnitTests.Application
             string newPasswordConfirmation)
         {
             //Given
-            string password = "password";
+            const string password = "password";
             string hashedPassword = UserUtils.HashPassword(password);
             User user = new User("aName", "aMail", UserUtils.HashPassword(newPassword)) {Id = userId};
             _mockUserRep.Setup(mock => mock.CountUserById(userId)).Returns(1);
