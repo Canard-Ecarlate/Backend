@@ -146,7 +146,7 @@ public class DuckCityHubUt : HubUnitTestsBase
     public async Task OnDisconnectedAsyncTest(string connectionId, string roomId)
     {
         //Given
-        Exception? exception = null;
+        const Exception? exception = null;
         Room room = new("", "", "", "", ConstantTest.True, ConstantTest.Five, connectionId)
         {
             Id = roomId
