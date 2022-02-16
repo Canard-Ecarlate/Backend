@@ -1,5 +1,6 @@
 ﻿using DuckCity.Application.Validations;
 using DuckCity.Domain.Rooms;
+using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.RoomPreviewRepository;
 
 namespace DuckCity.Application.RoomPreviewService;
