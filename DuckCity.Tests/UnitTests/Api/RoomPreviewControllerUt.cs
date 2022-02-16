@@ -9,7 +9,7 @@ using Xunit;
 
 namespace DuckCity.Tests.UnitTests.Api;
 
-public class RoomControllerUt
+public class RoomPreviewControllerUt
 {
     // Class to test
     private readonly RoomPreviewController _roomPreviewController;
@@ -18,7 +18,7 @@ public class RoomControllerUt
     private readonly Mock<IRoomPreviewService> _mockRoomPreviewService = new();
 
     // Constructor
-    public RoomControllerUt()
+    public RoomPreviewControllerUt()
     {
         _roomPreviewController = new RoomPreviewController(_mockRoomPreviewService.Object)
         {
