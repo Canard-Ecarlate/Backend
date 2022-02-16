@@ -12,6 +12,7 @@
         public const string ConnectionId2 = "connectionId2";
         public const string String = "a string";
         public const string Email = "email@email.fr";
+        public const int Two = 2;
         public const int Five = 5;
         public const bool True = true;
         public const bool False = false;
