@@ -19,4 +19,17 @@ public class Player
         Id = userId;
         Name = userName;
     }
+
+    public Type? DrawCard()
+    {
+        Random random = new Random();
+        int nbCardsInHand = CardsInHand.Count;
+        if (nbCardsInHand == 0)
+        {
+            return null;
+        }
+        Type typeDrawnCard = CardsInHand.ElementAt(random.Next(nbCardsInHand)).GetType();
+        CardsInHand.RemoveAt(nbCardsInHand);
+        return typeDrawnCard;
+    }
 }

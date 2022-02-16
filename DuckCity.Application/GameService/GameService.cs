@@ -121,14 +121,7 @@ namespace DuckCity.Application.GameService
             }
 
             // randomly draw a card in CardsInHand from playerWhereCardIsDrawing
-            Random random = new Random();
-            int nbCardsInHand = playerWhereCardIsDrawing.CardsInHand.Count;
-            if(nbCardsInHand == 0)
-            {
-                return null;
-            }
-            Type typeDrawnCard = playerWhereCardIsDrawing.CardsInHand.ElementAt(random.Next(nbCardsInHand)).GetType();
-            playerWhereCardIsDrawing.CardsInHand.RemoveAt(nbCardsInHand);
+            Type typeDrawnCard = playerWhereCardIsDrawing.DrawCard();
 
             ICard? drawnCard = game.DrawCard(typeDrawnCard);
             if (drawnCard == null)
