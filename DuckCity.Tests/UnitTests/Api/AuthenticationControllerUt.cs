@@ -1,5 +1,4 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using DuckCity.Api.Controllers;
 using DuckCity.Api.DTO.Authentication;
 using DuckCity.Application.AuthenticationService;
