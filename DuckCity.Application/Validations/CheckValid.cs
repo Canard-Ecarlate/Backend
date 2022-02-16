@@ -45,12 +45,6 @@ namespace DuckCity.Application.Validations
             {
                 throw new UserIdNoExistException();
             }
-
-            if (roomPreviewRepository.FindAllRooms()
-                .Any(r => r.PlayersId.Contains(userId)))
-            {
-                throw new UserAlreadyInRoomException(userId);
-            }
         }
 
         public static void LeaveRoom(IUserRepository userRepository, string userId, RoomPreview roomPreview)

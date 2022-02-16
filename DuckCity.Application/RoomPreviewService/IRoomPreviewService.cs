@@ -4,11 +4,11 @@ namespace DuckCity.Application.RoomPreviewService;
 
 public interface IRoomPreviewService
 {
-    RoomPreview CreateAndJoinRoomPreview(string roomName, string hostId, string hostName, bool isPrivate, int nbPlayers);
+    IEnumerable<RoomPreview> FindAllRooms();
     
-    RoomPreview JoinRoomPreview(string roomId, string userId);
+    void CreateRoomPreview(RoomPreview newRoomPreview);
+
+    void UpdateRoomPreview(RoomPreview roomPreview);
     
-    RoomPreview? LeaveRoomPreview(string roomId, string userId);
-    
-    IEnumerable<Domain.Rooms.RoomPreview> FindAllRooms();
+    void DeleteRoomPreview(string roomId);
 }

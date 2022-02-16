@@ -13,7 +13,7 @@ public class RoomCacheRepository : IRoomRepository
 
     public Room? FindById(string roomId)
     {
-        return Rooms.SingleOrDefault(g => g.RoomId == roomId);
+        return Rooms.SingleOrDefault(r => r.Id == roomId);
     }
 
     public Room? FindByConnectionId(string connectionId)

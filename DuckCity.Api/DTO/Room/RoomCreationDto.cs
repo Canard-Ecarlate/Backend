@@ -8,11 +8,5 @@ namespace DuckCity.Api.DTO.Room
         public string Name { get; init; } = "";
         [Required]
         public string HostId { get; init; } = "";
-        [Required]
-        public string HostName { get; init; } = "";
-        [Required]
-        public bool IsPrivate { get; init; }
-        [Required]
-        public int NbPlayers { get; init; }
     }
 }

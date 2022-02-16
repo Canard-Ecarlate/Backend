@@ -1,5 +1,5 @@
 ﻿using DuckCity.Api.DTO.User;
-using DuckCity.Application.Services.Interfaces;
+using DuckCity.Application.UserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

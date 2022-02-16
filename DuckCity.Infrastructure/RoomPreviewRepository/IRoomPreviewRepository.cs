@@ -12,5 +12,5 @@ public interface IRoomPreviewRepository
 
     void Update(RoomPreview roomPreview);
 
-    void Delete(RoomPreview roomPreview);
+    void Delete(string roomId);
 }

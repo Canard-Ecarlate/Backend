@@ -1,5 +1,4 @@
-﻿using DuckCity.Application.Services.Interfaces;
-using DuckCity.Application.Utils;
+﻿using DuckCity.Application.Utils;
 using DuckCity.Application.Validations;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;

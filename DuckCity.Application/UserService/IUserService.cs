@@ -1,6 +1,4 @@
-﻿using DuckCity.Domain.Users;
-
-namespace DuckCity.Application.Services.Interfaces;
+﻿namespace DuckCity.Application.UserService;
 
 public interface IUserService
 {

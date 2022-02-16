@@ -6,5 +6,6 @@
         public string? DatabaseName { get; set; }
         public string? UsersCollectionName { get; set; }
         public string? RoomsCollectionName { get; set; }
+        public string? GameContainersCollectionName { get; set; }
     }
 }

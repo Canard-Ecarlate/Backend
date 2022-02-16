@@ -13,13 +13,14 @@ public class RoomService : IRoomService
         _roomRepository = roomRepository;
     }
 
-    public Room JoinRoomAndConnect(string connectionId, string userId, string userName, string roomId)
+    public void CreateRoom(Room newRoom)
     {
-        Room? room = _roomRepository.FindById(roomId);
-        if (room == null)
-        {
-            return CreateRoom(connectionId, userId, userName, roomId);
-        }
+        _roomRepository.Create(newRoom);
+    }
+
+    public Room JoinRoom(string connectionId, string userId, string userName, string roomId)
+    {
+        Room room = _roomRepository.FindById(roomId)!;
         Player? player = room.Players.SingleOrDefault(p => p.Id == userId);
         if (player == null)
         {
@@ -29,18 +30,12 @@ public class RoomService : IRoomService
         {
             player.ConnectionId = connectionId;
         }
+
         _roomRepository.Update(room);
         return room;
     }
 
-    private Room CreateRoom(string connectionId, string userId, string userName, string roomId)
-    {
-        Room newRoom = new(roomId, connectionId, userId, userName);
-        _roomRepository.Create(newRoom);
-        return newRoom;
-    }
-    
-    public Room? LeaveRoomAndDisconnect(string roomId, string connectionId)
+    public Room? LeaveRoom(string roomId, string connectionId)
     {
         Room room = _roomRepository.FindById(roomId)!;
         Player player = room.Players.Single(p => p.ConnectionId == connectionId);
@@ -50,10 +45,14 @@ public class RoomService : IRoomService
             _roomRepository.Update(room);
             return room;
         }
+
         _roomRepository.Delete(room);
         return null;
     }
 
+    /**
+     * Update player info (connectionId) when he's disconnected
+     */
     public Room? DisconnectFromRoom(string connectionId)
     {
         Room? room = _roomRepository.FindByConnectionId(connectionId);
@@ -61,12 +60,13 @@ public class RoomService : IRoomService
         {
             return room;
         }
+
         Player player = room.Players.Single(p => p.ConnectionId == connectionId);
         player.ConnectionId = null;
         _roomRepository.Update(room);
         return room;
     }
-        
+
     public Room SetPlayerReady(string roomId, string connectionId)
     {
         Room room = _roomRepository.FindById(roomId)!;
