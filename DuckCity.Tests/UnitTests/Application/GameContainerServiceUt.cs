@@ -1,13 +1,7 @@
-﻿using DuckCity.Application.ContainerGameApiService;
-using DuckCity.Infrastructure.GameContainerRepository;
-using DuckCity.Infrastructure.RoomPreviewRepository;
-using DuckCity.Infrastructure.UserRepository;
-using Moq;
-
-namespace DuckCity.Tests.UnitTests.Application;
+﻿namespace DuckCity.Tests.UnitTests.Application;
 
 public class GameContainerServiceUt
-{
+{/*
     // Class to test
     private readonly GameContainerService _gameContainerService;
 
@@ -20,5 +14,5 @@ public class GameContainerServiceUt
     public GameContainerServiceUt()
     {
         _gameContainerService = new GameContainerService(_mockUserRep.Object, _mockRoomPreviewRep.Object, _mockGameContainerRep.Object);
-    }
+    }*/
 }

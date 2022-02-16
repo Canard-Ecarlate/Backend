@@ -42,7 +42,7 @@ namespace DuckCity.Tests.UnitTests.Application
         public void FindRoomTest(string roomId)
         {
             _mockRoomRep.Setup(mock => mock.FindById(roomId))
-                .Returns(new RoomPreview(new Room("", "", "", "", true, 5, "")));
+                .Returns(new RoomPreview(new Room("", "", "", "", ConstantTest.True, ConstantTest.Five, "")));
 
             try
             {
