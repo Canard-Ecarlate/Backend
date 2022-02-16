@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -6,6 +6,20 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["DuckCity.GameApi/DuckCity.GameApi.csproj", "DuckCity.GameApi/"]
+RUN dotnet restore "DuckCity.GameApi/DuckCity.GameApi.csproj"
+COPY . .
+WORKDIR "/src/DuckCity.GameApi"
+RUN dotnet build "DuckCity.GameApi.csproj" -c Release -o /app/build
+
+FROM build AS publishone
+RUN dotnet publish "DuckCity.GameApi.csproj" -c Release -o /app/publish
+
+FROM base AS finalone
+WORKDIR /app
+COPY --from=publishone /app/publish .
+ENTRYPOINT ["dotnet", "DuckCity.GameApi.dll"]
+COPY ["DuckCity.Domain/DuckCity.Domain.csproj", "DuckCity.Domain/"]
+COPY ["DuckCity.Application/DuckCity.Application.csproj", "DuckCity.Application/"]
 RUN dotnet restore "DuckCity.GameApi/DuckCity.GameApi.csproj"
 COPY . .
 WORKDIR "/src/DuckCity.GameApi"
