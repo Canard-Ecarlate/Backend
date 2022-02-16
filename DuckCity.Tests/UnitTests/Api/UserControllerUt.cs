@@ -14,8 +14,6 @@ namespace DuckCity.Tests.UnitTests.Api
         private readonly UserController _userController;
         // Mock
         private readonly Mock<IUserService> _mockUserService = new();
-
-
         // Constructor
         public UserControllerUt()
         {

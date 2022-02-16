@@ -89,6 +89,5 @@ namespace DuckCity.Tests.UnitTests.Application
                 _mockUserRep.Verify(mock => mock.Replace(user), Times.Never);
             }
         }
-        
     }
 }
