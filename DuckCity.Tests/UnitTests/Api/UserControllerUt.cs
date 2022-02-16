@@ -1,6 +1,6 @@
 ﻿using DuckCity.Api.Controllers;
 using DuckCity.Api.DTO.User;
-using DuckCity.Application.Services.Interfaces;
+using DuckCity.Application.UserService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
