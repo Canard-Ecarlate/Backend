@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using DuckCity.Application.ContainerGameApiService;
 using DuckCity.Application.RoomPreviewService;
 using DuckCity.Application.RoomService;
 using DuckCity.Domain.Rooms;
@@ -24,6 +25,7 @@ public class DuckCityHubUt : HubUnitTestsBase
     private readonly Mock<IRoomService> _mockRoomService = new();
     private readonly Mock<IMapper> _mockMapper = new();
     private readonly Mock<IRoomPreviewService> _mockRoomPreviewService = new();
+    private readonly Mock<IGameContainerService> _mockGameContainerService = new();
 
     private readonly Mock<HubCallerContext> _mockHubContext = new();
     private readonly Mock<IHubCallerClients<IDuckCityClient>> _mockClients = new();
@@ -33,7 +35,7 @@ public class DuckCityHubUt : HubUnitTestsBase
     // Constructor
     public DuckCityHubUt()
     {
-        _duckCityHub = new DuckCityHub(_mockRoomService.Object, _mockMapper.Object, _mockRoomPreviewService.Object)
+        _duckCityHub = new DuckCityHub(_mockRoomService.Object, _mockMapper.Object, _mockRoomPreviewService.Object, _mockGameContainerService.Object)
         {
             Context = _mockHubContext.Object,
             Clients = _mockClients.Object,
@@ -49,37 +51,40 @@ public class DuckCityHubUt : HubUnitTestsBase
     */
     [Theory]
     [InlineData(ConstantTest.UserId, ConstantTest.UserName, ConstantTest.RoomId, ConstantTest.ConnectionId)]
-    public async Task JoinRoomAndConnectAsyncTest(string userId, string userName, string roomId, string connectionId)
+    public async Task JoinRoomAsyncTest(string userId, string userName, string roomId, string connectionId)
     {
         // Given
-        Room room = new(roomId, connectionId, userId, userName);
-        
+        Room room = new("", userId, userName, "",
+            ConstantTest.True, ConstantTest.Five, connectionId)
+        {
+            Id = roomId
+        };
+
         //Mock
-        _mockRoomService.Setup(service => service.JoinRoomAndConnect(ConstantTest.ConnectionId, userId, userName, roomId)).Returns(room);
+        _mockRoomService.Setup(service => service.JoinRoom(ConstantTest.ConnectionId, userId, userName, roomId)).Returns(room);
 
         //When
-        await _duckCityHub.JoinRoomAndConnectAsync(roomId, userId, userName);
+        await _duckCityHub.JoinRoomAsync(roomId, userId, userName);
         
         //Verify
-        _mockRoomService.Verify(service => service.JoinRoomAndConnect(ConstantTest.ConnectionId, userId, userName, roomId), Times.Once);
+        _mockRoomService.Verify(service => service.JoinRoom(ConstantTest.ConnectionId, userId, userName, roomId), Times.Once);
         _mockGroups.Verify(groups => groups.AddToGroupAsync(ConstantTest.ConnectionId, roomId, CancellationToken.None), Times.Once);
         _mockDuckCityClient.Verify(clients => clients.PushPlayers(It.IsAny<IEnumerable<PlayerInWaitingRoomDto>>()), Times.Once);
     }
 
     [Theory]
     [InlineData(ConstantTest.RoomId, ConstantTest.UserId, ConstantTest.ConnectionId)]
-    public async Task LeaveRoomAndDisconnectAsyncWithoutResponseTest(string roomId, string userId, string connectionId)
+    public async Task LeaveRoomAsyncWithoutResponseTest(string roomId, string userId, string connectionId)
     {
         //When
-        await _duckCityHub.LeaveRoomAndDisconnectAsync(roomId, userId);
+        await _duckCityHub.LeaveRoomAsync(roomId, userId);
         
         //Verify
-        _mockRoomPreviewService.Verify(service => service.LeaveRoomPreview(roomId, userId), Times.Once());
-        _mockRoomService.Verify(service => service.LeaveRoomAndDisconnect(roomId, connectionId), Times.Once);
-        _mockGroups.Verify(groups => groups.RemoveFromGroupAsync(ConstantTest.ConnectionId, roomId, CancellationToken.None), Times.Never);
+        _mockRoomService.Verify(service => service.LeaveRoom(roomId, connectionId), Times.Once);
+        _mockGroups.Verify(groups => groups.RemoveFromGroupAsync(ConstantTest.ConnectionId, roomId, CancellationToken.None), Times.Once);
         _mockDuckCityClient.Verify(clients => clients.PushPlayers(It.IsAny<IEnumerable<PlayerInWaitingRoomDto>>()), Times.Never);
     }
-    
+    /*
     [Theory]
     [InlineData(ConstantTest.RoomId, ConstantTest.UserId, ConstantTest.ConnectionId)]
     public async Task LeaveRoomAndDisconnectAsyncWithResponseTest(string roomId, string userId, string connectionId)
@@ -93,14 +98,14 @@ public class DuckCityHubUt : HubUnitTestsBase
         
         // Mock
         _mockRoomPreviewService.Setup(service => service.LeaveRoomPreview(roomId, userId)).Returns(roomPreview);
-        _mockRoomService.Setup(service => service.LeaveRoomAndDisconnect(roomId, connectionId)).Returns(room);
+        _mockRoomService.Setup(service => service.LeaveRoom(roomId, connectionId)).Returns(room);
 
         //When
-        await _duckCityHub.LeaveRoomAndDisconnectAsync(roomId, userId);
+        await _duckCityHub.LeaveRoomAsync(roomId, userId);
         
         //Verify
         _mockRoomPreviewService.Verify(service => service.LeaveRoomPreview(roomId, userId), Times.Once());
-        _mockRoomService.Verify(service => service.LeaveRoomAndDisconnect(roomId, connectionId), Times.Once);
+        _mockRoomService.Verify(service => service.LeaveRoom(roomId, connectionId), Times.Once);
         _mockGroups.Verify(groups => groups.RemoveFromGroupAsync(ConstantTest.ConnectionId, roomId, CancellationToken.None), Times.Once);
         _mockDuckCityClient.Verify(clients => clients.PushPlayers(It.IsAny<IEnumerable<PlayerInWaitingRoomDto>>()), Times.Once);
     }
@@ -162,5 +167,5 @@ public class DuckCityHubUt : HubUnitTestsBase
         //Verify
         _mockRoomService.Verify(service => service.DisconnectFromRoom(connectionId), Times.Once);
         _mockDuckCityClient.Verify(clients => clients.PushPlayers(It.IsAny<IEnumerable<PlayerInWaitingRoomDto>>()), Times.Never);
-    }
+    }*/
 }
