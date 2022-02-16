@@ -13,12 +13,12 @@ public class RoomService : IRoomService
         _roomRepository = roomRepository;
     }
 
-    public void CreateRoomAndConnect(Room newRoom)
+    public void CreateRoom(Room newRoom)
     {
         _roomRepository.Create(newRoom);
     }
 
-    public Room JoinRoomAndConnect(string connectionId, string userId, string userName, string roomId)
+    public Room JoinRoom(string connectionId, string userId, string userName, string roomId)
     {
         Room room = _roomRepository.FindById(roomId)!;
         Player? player = room.Players.SingleOrDefault(p => p.Id == userId);
@@ -35,7 +35,7 @@ public class RoomService : IRoomService
         return room;
     }
 
-    public Room? LeaveRoomAndDisconnect(string roomId, string connectionId)
+    public Room? LeaveRoom(string roomId, string connectionId)
     {
         Room room = _roomRepository.FindById(roomId)!;
         Player player = room.Players.Single(p => p.ConnectionId == connectionId);
@@ -50,6 +50,9 @@ public class RoomService : IRoomService
         return null;
     }
 
+    /**
+     * Update player info (connectionId) when he's disconnected
+     */
     public Room? DisconnectFromRoom(string connectionId)
     {
         Room? room = _roomRepository.FindByConnectionId(connectionId);

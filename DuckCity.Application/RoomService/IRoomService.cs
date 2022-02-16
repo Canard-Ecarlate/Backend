@@ -4,11 +4,11 @@ namespace DuckCity.Application.RoomService;
 
 public interface IRoomService
 {
-    void CreateRoomAndConnect(Room newRoom);
+    void CreateRoom(Room newRoom);
     
-    Room JoinRoomAndConnect(string connectionId, string userId, string userName,string roomId);
+    Room JoinRoom(string connectionId, string userId, string userName,string roomId);
 
-    Room? LeaveRoomAndDisconnect(string roomId, string connectionId);
+    Room? LeaveRoom(string roomId, string connectionId);
 
     Room? DisconnectFromRoom(string connectionId);
 

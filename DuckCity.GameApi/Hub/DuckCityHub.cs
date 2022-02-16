@@ -44,14 +44,14 @@ public class DuckCityHub : Hub<IDuckCityClient>
         await base.OnDisconnectedAsync(exception);
     }
 
-    [HubMethodName("CreateRoomAndConnect")]
-    public async Task CreateRoomAndConnectAsync(RoomCreationDto roomDto)
+    [HubMethodName("CreateRoom")]
+    public async Task CreateRoomAsync(RoomCreationDto roomDto)
     {
         Room newRoom = new(roomDto.RoomName, roomDto.HostId, roomDto.HostName, roomDto.ContainerId, roomDto.IsPrivate,
             roomDto.NbPlayers, Context.ConnectionId);
         
         // Create Room
-        _roomService.CreateRoomAndConnect(newRoom);
+        _roomService.CreateRoom(newRoom);
         
         // Create RoomPreview from Room
         _roomPreviewService.CreateRoomPreview(new RoomPreview(newRoom));
@@ -67,11 +67,11 @@ public class DuckCityHub : Hub<IDuckCityClient>
     }
 
 
-    [HubMethodName("JoinRoomAndConnect")]
-    public async Task JoinRoomAndConnectAsync(string roomId, string userId, string userName)
+    [HubMethodName("JoinRoom")]
+    public async Task JoinRoomAsync(string roomId, string userId, string userName)
     {
         // Join Room
-        Room room = _roomService.JoinRoomAndConnect(Context.ConnectionId, userId, userName, roomId);
+        Room room = _roomService.JoinRoom(Context.ConnectionId, userId, userName, roomId);
        
         // Update RoomPreview from Room
         _roomPreviewService.UpdateRoomPreview(new RoomPreview(room));
@@ -83,11 +83,11 @@ public class DuckCityHub : Hub<IDuckCityClient>
         await Clients.Group(roomId).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
     }
 
-    [HubMethodName("LeaveRoomAndDisconnect")]
-    public async Task LeaveRoomAndDisconnectAsync(string roomId, string userId)
+    [HubMethodName("LeaveRoom")]
+    public async Task LeaveRoomAsync(string roomId, string userId)
     {
         // Leave Room
-        Room? room = _roomService.LeaveRoomAndDisconnect(roomId, Context.ConnectionId);
+        Room? room = _roomService.LeaveRoom(roomId, Context.ConnectionId);
 
         // Leave SignalR
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
