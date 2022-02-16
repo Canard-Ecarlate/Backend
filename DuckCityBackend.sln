@@ -1,14 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckCity.Api", "DuckCity.Api\DuckCity.Api.csproj", "{A5851F6C-82CE-4C41-A437-4C750C22CF55}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DuckCity.Api", "DuckCity.Api\DuckCity.Api.csproj", "{A5851F6C-82CE-4C41-A437-4C750C22CF55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckCity.Application", "DuckCity.Application\DuckCity.Application.csproj", "{A2BEB50B-DE75-4586-B998-014BF2032167}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DuckCity.Application", "DuckCity.Application\DuckCity.Application.csproj", "{A2BEB50B-DE75-4586-B998-014BF2032167}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckCity.Domain", "DuckCity.Domain\DuckCity.Domain.csproj", "{80ED5F69-96E6-47D9-935D-6EF1B4BF97E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DuckCity.Domain", "DuckCity.Domain\DuckCity.Domain.csproj", "{80ED5F69-96E6-47D9-935D-6EF1B4BF97E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckCity.Infrastructure", "DuckCity.Infrastructure\DuckCity.Infrastructure.csproj", "{3CF34DB7-D10B-45CD-BB38-14B060C3E6A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DuckCity.Infrastructure", "DuckCity.Infrastructure\DuckCity.Infrastructure.csproj", "{3CF34DB7-D10B-45CD-BB38-14B060C3E6A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckCity.GameApi", "DuckCity.GameApi\DuckCity.GameApi.csproj", "{CCED80BA-D6FC-4266-AF42-8D33A01909FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DuckCity.GameApi", "DuckCity.GameApi\DuckCity.GameApi.csproj", "{CCED80BA-D6FC-4266-AF42-8D33A01909FE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{80ED5F69-96E6-47D9-935D-6EF1B4BF97E6} = {80ED5F69-96E6-47D9-935D-6EF1B4BF97E6}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckCity.Tests", "DuckCity.Tests\DuckCity.Tests.csproj", "{7BA55B04-87FC-4B2E-8860-377A1EE69941}"
 EndProject
@@ -42,5 +48,11 @@ Global
 		{7BA55B04-87FC-4B2E-8860-377A1EE69941}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BA55B04-87FC-4B2E-8860-377A1EE69941}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BA55B04-87FC-4B2E-8860-377A1EE69941}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CD3ECD27-F7D0-447F-B03C-2D209582ADB0}
 	EndGlobalSection
 EndGlobal

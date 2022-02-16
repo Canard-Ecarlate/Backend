@@ -9,9 +9,10 @@ public class Player
     public string Name { get; set; }
     public string? ConnectionId { get; set; }
     public bool Ready { get; set; }
-    public IRole Role { get; set; } = new BlueRole();
+    public IRole? Role { get; set; }
     public List<ICard> CardsInHand { get; set; } = new();
-    
+    public bool IsCardsDrawable { get; set; } = true;
+
     public Player(string connectionId, string userId, string userName)
     {
         ConnectionId = connectionId;
