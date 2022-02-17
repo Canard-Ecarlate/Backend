@@ -1,4 +1,5 @@
-﻿using DuckCity.Domain.Cards;
+﻿using DuckCity.Application.Validations;
+using DuckCity.Domain.Cards;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Games;
 using DuckCity.Domain.Roles;
@@ -30,8 +31,7 @@ namespace DuckCity.Application.GameService
             {
                 throw new RoomNotFoundException();
             }
-
-            // Todo Checkvalid assez de joueurs et tous prêts
+            CheckValid.StartGame(_roomRepository, room);
             HashSet<Player> players = room.Players;
 
             // Designate first player
@@ -46,6 +46,7 @@ namespace DuckCity.Application.GameService
 
             // Assign roles to players
             AssignRole(playerToShuffle, room.RoomConfiguration.Roles);
+            _roomRepository.Update(room);
             return room;
         }
 
@@ -135,6 +136,7 @@ namespace DuckCity.Application.GameService
             game.CardsInGame.Remove(drawnCard);
             UpdateGameInfos(playerWhoDrawId, drawnCard, players, game);
 
+            _roomRepository.Update(room);
             return room;
         }
 
