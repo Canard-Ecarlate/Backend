@@ -7,7 +7,7 @@ using DuckCity.GameApi.Dto;
 using Microsoft.AspNetCore.SignalR;
 
 namespace DuckCity.GameApi.Hub;
-
+// {"arguments":[{"RoomName":"x","HostId":"61f7fedbc713fb2d5b74f459","HostName":"evi","IsPrivate":true,"NbPlayers":5}],"invocationId":"0","target":"CreateRoom","type":1}
 public class DuckCityHub : Hub<IDuckCityClient>
 {
     private readonly IRoomService _roomService;
