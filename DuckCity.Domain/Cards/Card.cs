@@ -13,8 +13,11 @@ namespace DuckCity.Domain.Cards
         public void DrawAction(Player playerWhoDraw, Player playerWhereCardIsDrawing, Game game, HashSet<Player> players)
         {
             game.CurrentPlayerId = playerWhereCardIsDrawing.Id;
-            playerWhoDraw.IsCardsDrawable = true;
-            playerWhoDraw.IsCardsDrawable = false;
+            if (playerWhoDraw.CardsInHand.Count != 0)
+            {
+                playerWhoDraw.IsCardsDrawable = true; 
+            }
+            playerWhereCardIsDrawing.IsCardsDrawable = false;
         }
     }
 }
