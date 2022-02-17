@@ -24,9 +24,9 @@ public class GameContainerMongoRepository : IGameContainerRepository
         return _gameContainer.Find(g => g.Id == gameContainerId).First();
     }
 
-    public GameContainer FindByNumber(int number)
+    public IEnumerable<GameContainer> FindAll()
     {
-        return _gameContainer.Find(g => g.Number == number).First();
+        return _gameContainer.Find(_ => true).ToList();
     }
 
     public void Update(GameContainer gameContainer)

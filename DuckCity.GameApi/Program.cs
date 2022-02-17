@@ -55,7 +55,7 @@ app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHub<DuckCityHub>("/62027037376c84d6914f9344");
+app.MapHub<DuckCityHub>("");
 app.Run();
 
 
