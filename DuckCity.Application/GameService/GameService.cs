@@ -47,7 +47,6 @@ namespace DuckCity.Application.GameService
             // Assign roles to players
             AssignRole(playerToShuffle, room.RoomConfiguration.Roles);
             return room;
-
         }
 
         /*
