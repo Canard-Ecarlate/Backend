@@ -2,6 +2,7 @@
 using DuckCity.Api.DTO.Authentication;
 using DuckCity.Application.AuthenticationService;
 using DuckCity.Domain.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DuckCity.Api.Controllers;
@@ -35,5 +36,13 @@ public class AuthenticationController : ControllerBase
     {
         _authenticationService.SignUp(registerDto.Name, registerDto.Email, registerDto.Password, registerDto.PasswordConfirmation);
         return Login(new IdentifierDto {Name = registerDto.Name, Password = registerDto.Password});
+    }
+
+    [HttpPost]
+    [Route("")]
+    [Authorize]
+    public ActionResult<bool> CheckToken()
+    {
+        return true;
     }
 }
