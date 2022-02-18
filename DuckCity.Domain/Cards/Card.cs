@@ -5,7 +5,7 @@ namespace DuckCity.Domain.Cards
 {
     public class Card : ICard
     {
-        private Card()
+        protected Card()
         {
         }
 
