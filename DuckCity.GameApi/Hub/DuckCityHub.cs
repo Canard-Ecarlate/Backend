@@ -45,7 +45,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
     public async Task CreateRoomAsync(RoomCreationDto roomDto)
     {
         Room newRoom = new(roomDto.RoomName, roomDto.HostId, roomDto.HostName, roomDto.ContainerId, roomDto.IsPrivate,
-            roomDto.NbPlayers, Context.ConnectionId);
+            roomDto.NbPlayers, Context.ConnectionId, _roomPreviewService.GenerateCode());
         
         // Create Room
         _roomService.CreateRoom(newRoom);
@@ -62,19 +62,19 @@ public class DuckCityHub : Hub<IDuckCityClient>
 
 
     [HubMethodName("JoinRoom")]
-    public async Task JoinRoomAsync(string roomId, string userId, string userName)
+    public async Task JoinRoomAsync(string roomCode, string userId, string userName)
     {
         // Join Room
-        Room room = _roomService.JoinRoom(Context.ConnectionId, userId, userName, roomId);
+        Room room = _roomService.JoinRoom(Context.ConnectionId, userId, userName, roomCode);
        
         // Update RoomPreview from Room
         _roomPreviewService.UpdateRoomPreview(new RoomPreview(room));
         
         // Join SignalR
-        await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+        await Groups.AddToGroupAsync(Context.ConnectionId, roomCode);
 
         // Send
-        await Clients.Group(roomId).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
+        await Clients.Group(roomCode).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
     }
 
     [HubMethodName("LeaveRoom")]

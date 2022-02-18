@@ -7,7 +7,6 @@ namespace DuckCity.Application.RoomService;
 public class RoomService : IRoomService
 {
     private readonly IRoomRepository _roomRepository;
-
     public RoomService(IRoomRepository roomRepository)
     {
         _roomRepository = roomRepository;
@@ -18,9 +17,9 @@ public class RoomService : IRoomService
         _roomRepository.Create(newRoom);
     }
 
-    public Room JoinRoom(string connectionId, string userId, string userName, string roomId)
+    public Room JoinRoom(string connectionId, string userId, string userName, string roomCode)
     {
-        Room room = _roomRepository.FindById(roomId)!;
+        Room room = _roomRepository.FindByCode(roomCode)!;
         Player? player = room.Players.SingleOrDefault(p => p.Id == userId);
         if (player == null)
         {
@@ -34,7 +33,6 @@ public class RoomService : IRoomService
         _roomRepository.Update(room);
         return room;
     }
-
     public Room? LeaveRoom(string roomId, string connectionId)
     {
         Room room = _roomRepository.FindById(roomId)!;

@@ -18,15 +18,15 @@ public class Room
     public bool IsPlaying { get; set; }
 
     public Room(string name, string hostId, string hostName, string containerId, bool isPrivate,
-        int nbPlayers, string connectionId)
+        int nbPlayers, string connectionId,string code)
     {
         Id = ObjectId.GenerateNewId().ToString();
         Name = name;
         HostId = hostId;
         HostName = hostName;
-        Code = "generated code";
         ContainerId = containerId;
         RoomConfiguration = new RoomConfiguration(isPrivate, nbPlayers);
         Players = new HashSet<Player> {new(connectionId, hostId, hostName)};
+        Code = code;
     }
 }

@@ -42,4 +42,22 @@ public class RoomPreviewMongoRepository : IRoomPreviewRepository
     {
         return _rooms.CountDocuments(Builders<RoomPreview>.Filter.Eq(r => r.ContainerId, containerId));
     }
+    
+    public RoomPreview FindByCode(string code)
+    {
+        try
+        {
+            return _rooms.Find(room => room.Code == code).First();
+        }
+        catch
+        {
+            throw new CodeRoomNotExistException();
+        }
+    }
+
+    public bool CodeIsExist(string code)
+    {
+        return _rooms.Find(room => room.Code == code).CountDocuments() > 0;
+    }
+
 }

@@ -31,7 +31,7 @@ public class RoomServiceUt
     {
         // Given
         Room room = new("", userId, userName, "",
-            ConstantTest.True, ConstantTest.Five, connectionId)
+            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
         {
             Id = roomId
         };
@@ -44,20 +44,20 @@ public class RoomServiceUt
     }
     [Theory]
     [InlineData(ConstantTest.ConnectionId, ConstantTest.UserId, ConstantTest.UserName, ConstantTest.RoomId)]
-    public void JoinRoomAndReConnectTest(string connectionId, string userId, string userName, string roomId)
+    public void JoinRoomAndReConnectTest(string connectionId, string userId, string userName, string roomCode)
     {
         // Given
         Room room = new("", ConstantTest.UserId, ConstantTest.UserName, "",
-            ConstantTest.True, ConstantTest.Five, connectionId)
+            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
         {
-            Id = roomId
+            Id = roomCode
         };
 
         // Mock
-        _mockRoomRep.Setup(r => r.FindById(roomId)).Returns(room);
+        _mockRoomRep.Setup(r => r.FindByCode(roomCode)).Returns(room);
 
         // When
-        Room roomResult = _roomService.JoinRoom(connectionId, userId, userName, roomId);
+        Room roomResult = _roomService.JoinRoom(connectionId, userId, userName, roomCode);
         
         // Then
         Assert.NotNull(roomResult);
@@ -66,25 +66,25 @@ public class RoomServiceUt
         Assert.Equal(connectionId, player.ConnectionId);
         
         // Verify
-        _mockRoomRep.Verify(r => r.FindById(roomId), Times.Once);
+        _mockRoomRep.Verify(r => r.FindByCode(roomCode), Times.Once);
         _mockRoomRep.Verify(r => r.Update(roomResult), Times.Once);
     }
 
     [Theory]
-    [InlineData(ConstantTest.ConnectionId, ConstantTest.UserId, ConstantTest.UserName, ConstantTest.RoomId)]
-    public void JoinRoomNewPlayerTest(string connectionId, string userId, string userName, string roomId)
+    [InlineData(ConstantTest.ConnectionId, ConstantTest.UserId, ConstantTest.UserName, ConstantTest.Code)]
+    public void JoinRoomNewPlayerTest(string connectionId, string userId, string userName, string roomCode)
     {
         // Given
         Room room = new("", ConstantTest.UserId2, ConstantTest.UserName2, "",
-            ConstantTest.True, ConstantTest.Five, connectionId)
+            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
         {
-            Id = roomId
+            Id = roomCode
         };
         // Mock
-        _mockRoomRep.Setup(r => r.FindById(roomId)).Returns(room);
+        _mockRoomRep.Setup(r => r.FindByCode(roomCode)).Returns(room);
 
         // When
-        Room roomResult = _roomService.JoinRoom(connectionId, userId, userName, roomId);
+        Room roomResult = _roomService.JoinRoom(connectionId, userId, userName, roomCode);
 
         // Then
         Assert.NotNull(roomResult);
@@ -93,7 +93,7 @@ public class RoomServiceUt
         Assert.Equal(connectionId, player.ConnectionId);
         
         // Verify
-        _mockRoomRep.Verify(r => r.FindById(roomId), Times.Once);
+        _mockRoomRep.Verify(r => r.FindByCode(roomCode), Times.Once);
         _mockRoomRep.Verify(r => r.Update(roomResult), Times.Once);
     }
 
@@ -103,7 +103,7 @@ public class RoomServiceUt
     {
         // Given
         Room room = new("", ConstantTest.UserId, ConstantTest.UserName, "",
-            ConstantTest.True, ConstantTest.Five, connectionId)
+            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
         {
             Id = roomId
         };
@@ -128,7 +128,7 @@ public class RoomServiceUt
     {
         // Given
         Room room = new("", ConstantTest.UserId, ConstantTest.UserName, "",
-            ConstantTest.True, ConstantTest.Five, connectionId)
+            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
         {
             Id = roomId
         };
@@ -173,7 +173,7 @@ public class RoomServiceUt
     {
         // Given
         Room room = new("", ConstantTest.UserId, ConstantTest.UserName, "",
-            ConstantTest.True, ConstantTest.Five, connectionId)
+            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
         {
             Id = ConstantTest.RoomId
         };
@@ -198,7 +198,7 @@ public class RoomServiceUt
     {
         // Given
         Room room = new("", ConstantTest.UserId, ConstantTest.UserName, "",
-            ConstantTest.True, ConstantTest.Five, connectionId)
+            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
         {
             Id = roomId
         };

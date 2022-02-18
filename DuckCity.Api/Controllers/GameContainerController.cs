@@ -28,7 +28,7 @@ public class GameContainerController : ControllerBase
     [HttpPost]
     public ActionResult<string> ContainerAccessToJoinRoom(UserAndRoomDto dto)
     {
-        GameContainer access = _gameContainerService.ContainerAccessToJoinRoom(dto.RoomId, dto.UserId);
+        GameContainer access = _gameContainerService.ContainerAccessToJoinRoom(dto.RoomCode, dto.UserId);
         return new OkObjectResult(access);
     }
 }
