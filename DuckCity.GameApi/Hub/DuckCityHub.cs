@@ -1,5 +1,4 @@
 using AutoMapper;
-using DuckCity.Application.ContainerGameApiService;
 using DuckCity.Application.RoomPreviewService;
 using DuckCity.Application.RoomService;
 using DuckCity.Domain.Rooms;
@@ -12,16 +11,14 @@ public class DuckCityHub : Hub<IDuckCityClient>
 {
     private readonly IRoomService _roomService;
     private readonly IRoomPreviewService _roomPreviewService;
-    private readonly IGameContainerService _gameContainerService;
     private readonly IMapper _mapper;
 
     // Constructor
-    public DuckCityHub(IRoomService roomService, IMapper mapper, IRoomPreviewService roomPreviewService, IGameContainerService gameContainerService)
+    public DuckCityHub(IRoomService roomService, IMapper mapper, IRoomPreviewService roomPreviewService)
     {
         _roomService = roomService;
         _mapper = mapper;
         _roomPreviewService = roomPreviewService;
-        _gameContainerService = gameContainerService;
     }
 
     /**
@@ -55,9 +52,6 @@ public class DuckCityHub : Hub<IDuckCityClient>
         
         // Create RoomPreview from Room
         _roomPreviewService.CreateRoomPreview(new RoomPreview(newRoom));
-        
-        // +1 room in game container
-        _gameContainerService.IncrementContainerNbRooms();
         
         // Join SignalR
         await Groups.AddToGroupAsync(Context.ConnectionId, newRoom.Id);
@@ -104,9 +98,6 @@ public class DuckCityHub : Hub<IDuckCityClient>
         {
             // Delete RoomPreview
             _roomPreviewService.DeleteRoomPreview(roomId);
-            
-            // -1 room in game container
-            _gameContainerService.DecrementContainerNbRooms();
         }
     }
 

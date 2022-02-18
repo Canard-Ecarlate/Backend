@@ -9,8 +9,11 @@ namespace DuckCity.Domain
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string Id { get; set; } = "";
-        public int Number { get; set; }
-        public int NbRooms { get; set; }
+        public string Id { get; set; }
+
+        public GameContainer()
+        {
+            Id = ObjectId.GenerateNewId().ToString();
+        }
     }
 }

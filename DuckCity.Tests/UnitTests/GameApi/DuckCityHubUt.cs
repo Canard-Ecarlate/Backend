@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using DuckCity.Application.ContainerGameApiService;
 using DuckCity.Application.RoomPreviewService;
 using DuckCity.Application.RoomService;
 using DuckCity.Domain.Rooms;
@@ -25,7 +24,6 @@ public class DuckCityHubUt : HubUnitTestsBase
     private readonly Mock<IRoomService> _mockRoomService = new();
     private readonly Mock<IMapper> _mockMapper = new();
     private readonly Mock<IRoomPreviewService> _mockRoomPreviewService = new();
-    private readonly Mock<IGameContainerService> _mockGameContainerService = new();
 
     private readonly Mock<HubCallerContext> _mockHubContext = new();
     private readonly Mock<IHubCallerClients<IDuckCityClient>> _mockClients = new();
@@ -35,7 +33,7 @@ public class DuckCityHubUt : HubUnitTestsBase
     // Constructor
     public DuckCityHubUt()
     {
-        _duckCityHub = new DuckCityHub(_mockRoomService.Object, _mockMapper.Object, _mockRoomPreviewService.Object, _mockGameContainerService.Object)
+        _duckCityHub = new DuckCityHub(_mockRoomService.Object, _mockMapper.Object, _mockRoomPreviewService.Object)
         {
             Context = _mockHubContext.Object,
             Clients = _mockClients.Object,
@@ -110,7 +108,6 @@ public class DuckCityHubUt : HubUnitTestsBase
         _mockDuckCityClient.Verify(clients => clients.PushPlayers(It.IsAny<IEnumerable<PlayerInWaitingRoomDto>>()), Times.Once);
 
         _mockRoomPreviewService.Verify(r => r.DeleteRoomPreview(roomId), Times.Never);
-        _mockGameContainerService.Verify(g => g.DecrementContainerNbRooms(), Times.Never);
     }
     
     [Theory]
