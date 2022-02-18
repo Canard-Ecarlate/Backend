@@ -33,16 +33,18 @@ namespace DuckCity.Domain.Games
             foreach (NbEachCard nbEachCard in roomConfiguration.Cards)
             {
                 Type? cardType = Type.GetType("DuckCity.Domain.Cards." + nbEachCard.CardName + "Card");
-                if (cardType != null)
+                if (cardType == null)
                 {
-                    for (int i = 0; i < nbEachCard.Number; i++)
+                    throw new CardTypeNotFoundException();
+                }
+                for (int i = 0; i < nbEachCard.Number; i++)
+                {
+                    ICard? card = Activator.CreateInstance(cardType) as ICard;
+                    if (card == null)
                     {
-                        ICard? card = Activator.CreateInstance(cardType) as ICard;
-                        if(card != null)
-                        {
-                            CardsInGame.Add(card);
-                        }
+                        throw new CardNotFoundException();
                     }
+                    CardsInGame.Add(card);
                 }
             }
             ShuffleCardsInGame();
@@ -54,7 +56,7 @@ namespace DuckCity.Domain.Games
         public ICard DrawCard(Type typeDrawnCard)
         {
             ICard drawnCard = CardsInGame.First(card => card.GetType() == typeDrawnCard);
-            if(drawnCard == null)
+            if (drawnCard == null)
             {
                 throw new CardNotFoundException();
             }
