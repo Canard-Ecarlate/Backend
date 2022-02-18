@@ -13,6 +13,8 @@ public class GameContainerService : IGameContainerService
     private readonly IRoomPreviewRepository _roomPreviewRepository;
     private readonly IGameContainerRepository _gameContainerRepository;
 
+    private const int MaxNbRooms = 10000;
+
     public GameContainerService(IUserRepository userRepository, IRoomPreviewRepository roomPreviewRepository,
         IGameContainerRepository gameContainerRepository)
     {
@@ -25,11 +27,12 @@ public class GameContainerService : IGameContainerService
     {
         CheckValid.CreateRoom(_roomPreviewRepository, _userRepository, roomName, hostId);
 
-        IEnumerable<GameContainer> gameContainers = _gameContainerRepository.FindAll();
-        foreach (GameContainer gameContainer in gameContainers.Where(gameContainer =>
-                     _roomPreviewRepository.CountByGameContainerId(gameContainer.Id) < 10000))
+        List<GameContainer> gameContainersNotFull = _gameContainerRepository.FindAll().Where(gameContainer =>
+            _roomPreviewRepository.CountByGameContainerId(gameContainer.Id) < MaxNbRooms).ToList();
+
+        if (gameContainersNotFull.Count >= 1)
         {
-            return gameContainer;
+            return gameContainersNotFull[0];
         }
 
         GameContainer newGameContainer = new();
