@@ -19,7 +19,7 @@ namespace DuckCity.Domain.Rooms
             {
                 new("Bomb",1),
                 new("Green",NbPlayers),
-                new("Yellow", (NbPlayers * NumberOfCardsFirstRound) - NbPlayers + 1)
+                new("Yellow", (NbPlayers * NumberOfCardsFirstRound) - NbPlayers - 1)
             };
             int redPlayerNumber = NbPlayers / 2;
             if (NbPlayers % 2 == 0)
@@ -33,8 +33,8 @@ namespace DuckCity.Domain.Rooms
             }
             Roles = new List<NbEachRole>
             {
+                new("Blue", NbPlayers - redPlayerNumber),
                 new("Red", redPlayerNumber),
-                new("Blue", NbPlayers - redPlayerNumber)
             };
         }
     }

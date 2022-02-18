@@ -32,7 +32,7 @@ namespace DuckCity.Domain.Games
             Winners = null;
             foreach (NbEachCard nbEachCard in roomConfiguration.Cards)
             {
-                Type? cardType = Type.GetType(nbEachCard.CardName + "Card");
+                Type? cardType = Type.GetType("DuckCity.Domain.Cards." + nbEachCard.CardName + "Card");
                 if (cardType != null)
                 {
                     for (int i = 0; i < nbEachCard.Number; i++)

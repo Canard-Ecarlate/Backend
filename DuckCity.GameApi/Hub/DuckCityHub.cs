@@ -146,7 +146,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
             throw new GameNotBeginException();
         }
         Game game = room.Game;
-        HashSet<string> playersWithCardsDrawable = room.Players.Where(p => p.IsCardsDrawable).Select(p => p.Id).ToHashSet();
+        HashSet<string> playersWithCardsDrawable = new(room.Players.Where(p => p.IsCardsDrawable).Select(p => p.Id));
         foreach (Player player in room.Players)
         {
             if (player.ConnectionId != null)
@@ -161,7 +161,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
                 {
                     otherPlayers.Add(new OtherPlayerDto(otherPlayer.Id, otherPlayer.CardsInHand.Count));
                 }
-                await Clients.User(player.ConnectionId).PushGame(new GameDto(me, game, playersWithCardsDrawable, otherPlayers));
+                await Clients.Client(player.ConnectionId).PushGame(new GameDto(me, game, playersWithCardsDrawable, otherPlayers));
             }
         }
     }

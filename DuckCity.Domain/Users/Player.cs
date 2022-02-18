@@ -33,4 +33,19 @@ public class Player
         CardsInHand.RemoveAt(nbCardsInHand);
         return typeDrawnCard;
     }
+
+    public void AssignRole(string roleName)
+    {
+        Type? roleType = Type.GetType("DuckCity.Domain.Roles." + roleName + "Role");
+        if (roleType == null)
+        {
+            throw new RoleNotExistException();
+        }
+        IRole? role = Activator.CreateInstance(roleType) as IRole;
+        if (role == null)
+        {
+            throw new RoleNotExistException();
+        }
+        Role = role;
+    }
 }

@@ -55,30 +55,21 @@ namespace DuckCity.Application.GameService
          */
         private static void AssignRole(HashSet<Player> players, List<NbEachRole> roles)
         {
-            List<IRole> rolesInGame = new();
+            List<string> rolesInGame = new();
             foreach (NbEachRole nbEachRole in roles)
             {
-                Type? roleType = Type.GetType(nbEachRole.RoleName + "Role");
-                if (roleType == null)
-                {
-                    throw new RoleNotExistException();
-                }
                 for (int i = 0; i < nbEachRole.Number; i++)
                 {
-                    IRole? role = Activator.CreateInstance(roleType) as IRole;
-                    if (role == null)
-                    {
-                        throw new RoleNotExistException();
-                    }
-                    rolesInGame.Add(role);
+                    rolesInGame.Add(nbEachRole.RoleName);
                 }
             }
             Random random = new();
             rolesInGame = new(rolesInGame.OrderBy(role => random.Next()));
             foreach (Player player in players)
             {
-                player.Role = rolesInGame.First();
-                rolesInGame.Remove(player.Role);
+                string roleName = rolesInGame.First();
+                player.AssignRole(roleName);
+                rolesInGame.Remove(roleName);
             }
         }
 
