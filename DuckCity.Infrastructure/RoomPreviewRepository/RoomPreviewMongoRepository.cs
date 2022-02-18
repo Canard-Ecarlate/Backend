@@ -36,7 +36,7 @@ public class RoomPreviewMongoRepository : IRoomPreviewRepository
 
     public IEnumerable<RoomPreview> FindAllRooms() => _rooms.Find(_ => true).ToList();
 
-    public void Delete(string roomId) => _rooms.DeleteOne(Builders<RoomPreview>.Filter.Eq(r => r.Id, roomId));
+    public void Delete(string roomCode) => _rooms.DeleteOne(Builders<RoomPreview>.Filter.Eq(r => r.Code, roomCode));
    
     public long CountByGameContainerId(string containerId)
     {

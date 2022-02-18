@@ -8,9 +8,9 @@ public interface IRoomService
     
     Room JoinRoom(string connectionId, string userId, string userName,string roomCode);
 
-    Room? LeaveRoom(string roomId, string connectionId);
+    Room? LeaveRoom(string roomCode, string connectionId);
 
     Room? DisconnectFromRoom(string connectionId);
 
-    Room SetPlayerReady(string roomId, string connectionId);
+    Room SetPlayerReady(string roomCode, string connectionId);
 }
