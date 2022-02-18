@@ -33,9 +33,9 @@ public class RoomService : IRoomService
         _roomRepository.Update(room);
         return room;
     }
-    public Room? LeaveRoom(string roomId, string connectionId)
+    public Room? LeaveRoom(string roomCode, string connectionId)
     {
-        Room room = _roomRepository.FindById(roomId)!;
+        Room room = _roomRepository.FindByCode(roomCode)!;
         Player player = room.Players.Single(p => p.ConnectionId == connectionId);
         room.Players.Remove(player);
         if (room.Players is not {Count: 0})
@@ -65,9 +65,9 @@ public class RoomService : IRoomService
         return room;
     }
 
-    public Room SetPlayerReady(string roomId, string connectionId)
+    public Room SetPlayerReady(string roomCode, string connectionId)
     {
-        Room room = _roomRepository.FindById(roomId)!;
+        Room room = _roomRepository.FindByCode(roomCode)!;
         Player player = room.Players.Single(p => p.ConnectionId == connectionId);
         player.Ready = !player.Ready;
         _roomRepository.Update(room);

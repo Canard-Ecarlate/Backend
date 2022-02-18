@@ -33,9 +33,9 @@ public class RoomPreviewService : IRoomPreviewService
         _roomPreviewRepository.Update(roomPreview);
     }
 
-    public void DeleteRoomPreview(string roomId)
+    public void DeleteRoomPreview(string roomCode)
     {
-        _roomPreviewRepository.Delete(roomId);
+        _roomPreviewRepository.Delete(roomCode);
     }
     
     public string GenerateCode()

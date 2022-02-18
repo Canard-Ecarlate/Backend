@@ -12,7 +12,7 @@ public interface IRoomPreviewRepository
 
     void Update(RoomPreview roomPreview);
 
-    void Delete(string roomId);
+    void Delete(string roomCode);
     
     long CountByGameContainerId(string containerId);
 
