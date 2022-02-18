@@ -7,8 +7,8 @@ namespace DuckCity.Application.RoomPreviewService;
 public class RoomPreviewService : IRoomPreviewService
 {
     private readonly IRoomPreviewRepository _roomPreviewRepository;
-    private static readonly Random Random = new Random();
-    private readonly string[] _forbidenWord = new string[] {"nazi", "nazy", "pute", "slut"};
+    private static readonly Random Random = new();
+    private readonly string[] _forbiddenWords = {"nazi", "nazy", "pute", "slut"};
 
     public RoomPreviewService(IRoomPreviewRepository roomPreviewRepository)
     {
@@ -52,7 +52,7 @@ public class RoomPreviewService : IRoomPreviewService
 
     private bool CodeIsValid(string code)
     {
-        if (_forbidenWord.Contains(code))
+        if (_forbiddenWords.Contains(code))
         {
             return false;
         }
