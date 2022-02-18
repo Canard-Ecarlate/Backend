@@ -85,19 +85,18 @@ namespace DuckCity.Application.GameService
         /*
          * Stop the game without winners
          */
-        public void QuitMidGame(string roomId, string playerWhoQuitsId)
+        public void QuitMidGame(string roomId)
         {
             Room? room = _roomRepository.FindById(roomId);
             if (room == null)
             {
-                throw new RoomIdNoExistException();
+                throw new RoomNotFoundException();
             }
-            Game? game = room.Game;
-            if (game == null)
+            if (room.Game == null)
             {
                 throw new GameNotBeginException();
             }
-            game.IsGameEnded = true;
+            room.Game.IsGameEnded = true;
         }
 
         /*
@@ -108,7 +107,7 @@ namespace DuckCity.Application.GameService
             Room? room = _roomRepository.FindById(roomId);
             if (room == null)
             {
-                throw new RoomIdNoExistException();
+                throw new RoomNotFoundException();
             }
 
             Game? game = room.Game;
@@ -175,7 +174,7 @@ namespace DuckCity.Application.GameService
             }
             game.ShuffleCardsInGame();
             int nbCardsInHand = game.CardsInGame.Count / players.Count;
-            Random random = new Random();
+            Random random = new();
             HashSet<Player> playerToShuffle = new(players.OrderBy(player => random.Next()));
             int start = 0;
             int end = start + nbCardsInHand;
