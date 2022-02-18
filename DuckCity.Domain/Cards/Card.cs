@@ -3,8 +3,12 @@ using DuckCity.Domain.Users;
 
 namespace DuckCity.Domain.Cards
 {
-    public abstract class Card : ICard
+    public class Card : ICard
     {
+        private Card()
+        {
+        }
+
         public string Name => "Default";
 
         /*
