@@ -7,6 +7,6 @@ public interface IRoomPreviewService
     IEnumerable<RoomPreview> FindAllRooms();
     void CreateRoomPreview(RoomPreview newRoomPreview);
     void UpdateRoomPreview(RoomPreview roomPreview);
-    void DeleteRoomPreview(string roomId);
+    void DeleteRoomPreview(string roomCode);
     string GenerateCode();
 }

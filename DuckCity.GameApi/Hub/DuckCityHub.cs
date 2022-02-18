@@ -35,7 +35,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
         if (room != null)
         {
             // Send
-            await Clients.Group(room.Id).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
+            await Clients.Group(room.Code).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
         }
 
         await base.OnDisconnectedAsync(exception);
@@ -54,10 +54,10 @@ public class DuckCityHub : Hub<IDuckCityClient>
         _roomPreviewService.CreateRoomPreview(new RoomPreview(newRoom));
         
         // Join SignalR
-        await Groups.AddToGroupAsync(Context.ConnectionId, newRoom.Id);
+        await Groups.AddToGroupAsync(Context.ConnectionId, newRoom.Code);
 
         // Send
-        await Clients.Group(newRoom.Id).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(newRoom.Players));
+        await Clients.Group(newRoom.Code).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(newRoom.Players));
     }
 
 
@@ -78,13 +78,13 @@ public class DuckCityHub : Hub<IDuckCityClient>
     }
 
     [HubMethodName("LeaveRoom")]
-    public async Task LeaveRoomAsync(string roomId, string userId)
+    public async Task LeaveRoomAsync(string roomCode, string userId)
     {
         // Leave Room
-        Room? room = _roomService.LeaveRoom(roomId, Context.ConnectionId);
+        Room? room = _roomService.LeaveRoom(roomCode, Context.ConnectionId);
 
         // Leave SignalR
-        await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomCode);
 
         if (room != null)
         {
@@ -92,21 +92,21 @@ public class DuckCityHub : Hub<IDuckCityClient>
             _roomPreviewService.UpdateRoomPreview(new RoomPreview(room));
             
             // Send
-            await Clients.Group(roomId).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
+            await Clients.Group(roomCode).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
         }
         else
         {
             // Delete RoomPreview
-            _roomPreviewService.DeleteRoomPreview(roomId);
+            _roomPreviewService.DeleteRoomPreview(roomCode);
         }
     }
 
     [HubMethodName("PlayerReady")]
-    public async Task PlayerReadyAsync(string roomId)
+    public async Task PlayerReadyAsync(string roomCode)
     {
-        Room room = _roomService.SetPlayerReady(roomId, Context.ConnectionId);
+        Room room = _roomService.SetPlayerReady(roomCode, Context.ConnectionId);
 
         // Send
-        await Clients.Group(roomId).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
+        await Clients.Group(roomCode).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
     }
 }
