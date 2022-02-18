@@ -41,8 +41,8 @@ public class AuthenticationController : ControllerBase
     [HttpPost]
     [Route("")]
     [Authorize]
-    public ActionResult<bool> CheckToken()
+    public ActionResult<string> CheckToken()
     {
-        return new OkResult();
+        return new OkObjectResult("success");
     }
 }
