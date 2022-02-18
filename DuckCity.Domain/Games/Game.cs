@@ -30,24 +30,7 @@ namespace DuckCity.Domain.Games
             IsGameEnded = false;
             NbCardsToDrawByRound = roomConfiguration.NbPlayers;
             Winners = null;
-            foreach (NbEachCard nbEachCard in roomConfiguration.Cards)
-            {
-                Type? cardType = Type.GetType("DuckCity.Domain.Cards." + nbEachCard.CardName + "Card");
-                if (cardType == null)
-                {
-                    throw new CardTypeNotFoundException();
-                }
-                for (int i = 0; i < nbEachCard.Number; i++)
-                {
-                    ICard? card = Activator.CreateInstance(cardType) as ICard;
-                    if (card == null)
-                    {
-                        throw new CardNotFoundException();
-                    }
-                    CardsInGame.Add(card);
-                }
-            }
-            ShuffleCardsInGame();
+            InitCardsInGame(roomConfiguration.Cards);
         }
 
         /*
@@ -102,6 +85,28 @@ namespace DuckCity.Domain.Games
                 IOrderedEnumerable<ICard> shuffleCards = CardsInGame.OrderBy(card => rnd.Next());
                 CardsInGame = new(shuffleCards);
             }
+        }
+
+        private void InitCardsInGame(List<NbEachCard> nbEachCards)
+        {
+            foreach (NbEachCard nbEachCard in nbEachCards)
+            {
+                Type? cardType = Type.GetType("DuckCity.Domain.Cards." + nbEachCard.CardName + "Card");
+                if (cardType == null)
+                {
+                    throw new CardTypeNotFoundException();
+                }
+                for (int i = 0; i < nbEachCard.Number; i++)
+                {
+                    ICard? card = Activator.CreateInstance(cardType) as ICard;
+                    if (card == null)
+                    {
+                        throw new CardNotFoundException();
+                    }
+                    CardsInGame.Add(card);
+                }
+            }
+            ShuffleCardsInGame();
         }
     }
 }
