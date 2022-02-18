@@ -98,49 +98,42 @@ public class RoomServiceUt
     }
 
     [Theory]
-    [InlineData(ConstantTest.RoomId, ConstantTest.ConnectionId)]
-    public void LeaveRoomAndDestroyRoomTest(string roomId, string connectionId)
+    [InlineData(ConstantTest.Code, ConstantTest.ConnectionId)]
+    public void LeaveRoomAndDestroyRoomTest(string roomCode, string connectionId)
     {
         // Given
         Room room = new("", ConstantTest.UserId, ConstantTest.UserName, "",
-            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
-        {
-            Id = roomId
-        };
-
+            ConstantTest.True, ConstantTest.Five, connectionId, ConstantTest.Code);
         // Mock
-        _mockRoomRep.Setup(r => r.FindById(roomId)).Returns(room);
+        _mockRoomRep.Setup(r => r.FindByCode(roomCode)).Returns(room);
 
         // When
-        Room? roomResult = _roomService.LeaveRoom(roomId, connectionId);
+        Room? roomResult = _roomService.LeaveRoom(roomCode, connectionId);
         
         // Then
         Assert.Null(roomResult);
         
         // Verify
-        _mockRoomRep.Verify(r => r.FindById(roomId), Times.Once);
+        _mockRoomRep.Verify(r => r.FindByCode(roomCode), Times.Once);
         _mockRoomRep.Verify(r => r.Delete(room), Times.Once);
     }
 
     [Theory]
-    [InlineData(ConstantTest.RoomId, ConstantTest.ConnectionId)]
-    public void LeaveRoomAndKeepRoomTest(string roomId, string connectionId)
+    [InlineData(ConstantTest.Code, ConstantTest.ConnectionId)]
+    public void LeaveRoomAndKeepRoomTest(string roomCode, string connectionId)
     {
         // Given
         Room room = new("", ConstantTest.UserId, ConstantTest.UserName, "",
-            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
-        {
-            Id = roomId
-        };
+            ConstantTest.True, ConstantTest.Five, connectionId, ConstantTest.Code);
 
         Player player = new(ConstantTest.ConnectionId2, ConstantTest.UserId2, ConstantTest.UserName2);
         room.Players.Add(player);
         
         // Mock
-        _mockRoomRep.Setup(r => r.FindById(roomId)).Returns(room);
+        _mockRoomRep.Setup(r => r.FindByCode(roomCode)).Returns(room);
 
         // When
-        Room? roomResult = _roomService.LeaveRoom(roomId, connectionId);
+        Room? roomResult = _roomService.LeaveRoom(roomCode, connectionId);
         
         // Then
         Assert.NotNull(roomResult);
@@ -148,7 +141,7 @@ public class RoomServiceUt
         Assert.Null(roomResult.Players.SingleOrDefault(p => p.ConnectionId == connectionId));
         
         // Verify
-        _mockRoomRep.Verify(r => r.FindById(roomId), Times.Once);
+        _mockRoomRep.Verify(r => r.FindByCode(roomCode), Times.Once);
         _mockRoomRep.Verify(r => r.Update(room), Times.Once);
     }
 
@@ -193,21 +186,18 @@ public class RoomServiceUt
     }
 
     [Theory]
-    [InlineData(ConstantTest.RoomId, ConstantTest.ConnectionId)]
-    public void SetPlayerReadyTest(string roomId, string connectionId)
+    [InlineData(ConstantTest.Code, ConstantTest.ConnectionId)]
+    public void SetPlayerReadyTest(string roomCode, string connectionId)
     {
         // Given
         Room room = new("", ConstantTest.UserId, ConstantTest.UserName, "",
-            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
-        {
-            Id = roomId
-        };
+            ConstantTest.True, ConstantTest.Five, connectionId, ConstantTest.Code);
         
         // Mock
-        _mockRoomRep.Setup(r => r.FindById(roomId)).Returns(room);
+        _mockRoomRep.Setup(r => r.FindByCode(roomCode)).Returns(room);
 
         // When
-        Room roomResult = _roomService.SetPlayerReady(roomId, connectionId);
+        Room roomResult = _roomService.SetPlayerReady(roomCode, connectionId);
         
         // Then
         Assert.NotNull(roomResult);
