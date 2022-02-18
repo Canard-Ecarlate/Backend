@@ -1,6 +1,8 @@
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
+using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.RoomPreviewRepository;
+using DuckCity.Infrastructure.RoomRepository;
 using DuckCity.Infrastructure.UserRepository;
 using MongoDB.Bson;
 
@@ -89,6 +91,21 @@ namespace DuckCity.Application.Validations
             if (userRepository.CountUserByEmail(email) != 0)
             {
                 throw new MailAlreadyExistException(email);
+            }
+        }
+
+        public static void StartGame(IRoomRepository roomRepository, Room room)
+        {
+            if (room.Players.Count != room.RoomConfiguration.NbPlayers)
+            {
+                throw new NotEnoughPlayersException();
+            }
+            foreach(Player player in room.Players)
+            {
+                if (!player.Ready)
+                {
+                    throw new PlayerNotReadyException(player.Name);
+                }
             }
         }
     }

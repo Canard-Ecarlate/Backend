@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using DuckCity.Application.GameService;
 using DuckCity.Application.RoomPreviewService;
 using DuckCity.Application.RoomService;
 using DuckCity.Domain.Rooms;
@@ -22,6 +23,7 @@ public class DuckCityHubUt : HubUnitTestsBase
 
     // Mock
     private readonly Mock<IRoomService> _mockRoomService = new();
+    private readonly Mock<IGameService> _mockGameService = new();
     private readonly Mock<IMapper> _mockMapper = new();
     private readonly Mock<IRoomPreviewService> _mockRoomPreviewService = new();
 
@@ -33,7 +35,7 @@ public class DuckCityHubUt : HubUnitTestsBase
     // Constructor
     public DuckCityHubUt()
     {
-        _duckCityHub = new DuckCityHub(_mockRoomService.Object, _mockMapper.Object, _mockRoomPreviewService.Object)
+        _duckCityHub = new DuckCityHub(_mockRoomService.Object, _mockGameService.Object, _mockMapper.Object, _mockRoomPreviewService.Object)
         {
             Context = _mockHubContext.Object,
             Clients = _mockClients.Object,

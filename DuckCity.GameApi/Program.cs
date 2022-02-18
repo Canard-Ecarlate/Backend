@@ -2,6 +2,7 @@ using System.Text;
 using AutoMapper;
 using DuckCity.Application.AuthenticationService;
 using DuckCity.Application.ContainerGameApiService;
+using DuckCity.Application.GameService;
 using DuckCity.Application.RoomPreviewService;
 using DuckCity.Application.RoomService;
 using DuckCity.Application.UserService;
@@ -83,6 +84,7 @@ void Singletons()
     services.AddSingleton<IUserService, UserService>();
     services.AddSingleton<IRoomPreviewService, RoomPreviewService>();
     services.AddSingleton<IGameContainerService, GameContainerService>();
+    services.AddSingleton<IGameService, GameService>();
   
     // Mongo
     services.Configure<MongoDbSettings>(configuration.GetSection(nameof(MongoDbSettings)));

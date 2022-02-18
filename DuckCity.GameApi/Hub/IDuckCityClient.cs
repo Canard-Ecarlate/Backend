@@ -7,4 +7,6 @@ public interface IDuckCityClient
     Task PushMessage(string message);
     
     Task PushPlayers(IEnumerable<PlayerInWaitingRoomDto> players);
+
+    Task PushGame(GameDto game);
 }
