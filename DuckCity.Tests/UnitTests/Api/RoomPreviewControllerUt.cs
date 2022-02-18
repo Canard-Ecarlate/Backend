@@ -34,7 +34,7 @@ public class RoomPreviewControllerUt
     public void FindAllRoomsTest(string roomName)
     {
         // Given
-        IEnumerable<RoomPreview> rooms = new List<RoomPreview> {new(new Room(roomName,"","","", true, 5, ""))};
+        IEnumerable<RoomPreview> rooms = new List<RoomPreview> {new(new Room(roomName,"","","", true, 5, "",ConstantTest.Code))};
 
         // Mock
         _mockRoomPreviewService.Setup(mock => mock.FindAllRooms()).Returns(rooms);

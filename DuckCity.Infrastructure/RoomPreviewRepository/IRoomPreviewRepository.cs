@@ -15,4 +15,10 @@ public interface IRoomPreviewRepository
     void Delete(string roomId);
     
     long CountByGameContainerId(string containerId);
+
+    RoomPreview FindByCode(string code);
+
+    bool CodeIsExist(string code);
+
+
 }

@@ -53,7 +53,7 @@ public class DuckCityHubUt : HubUnitTestsBase
     {
         // Given
         Room room = new("", userId, userName, "",
-            ConstantTest.True, ConstantTest.Five, connectionId)
+            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
         {
             Id = roomId
         };
@@ -89,7 +89,7 @@ public class DuckCityHubUt : HubUnitTestsBase
     {
         // Given
         Room room = new("", userId, "", "",
-            ConstantTest.True, ConstantTest.Five, connectionId)
+            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
         {
             Id = roomId
         };
@@ -115,7 +115,7 @@ public class DuckCityHubUt : HubUnitTestsBase
     public async Task PlayerReadyAsyncTest(string roomId, string userId, string connectionId)
     {
         //Given
-        Room room = new("", userId, "", "", ConstantTest.True, ConstantTest.Five, connectionId)
+        Room room = new("", userId, "", "", ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
         {
             Id = roomId
         };
@@ -144,7 +144,7 @@ public class DuckCityHubUt : HubUnitTestsBase
     {
         //Given
         const Exception? exception = null;
-        Room room = new("", "", "", "", ConstantTest.True, ConstantTest.Five, connectionId)
+        Room room = new("", "", "", "", ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
         {
             Id = roomId
         };

@@ -16,6 +16,11 @@ public class RoomCacheRepository : IRoomRepository
         return Rooms.SingleOrDefault(r => r.Id == roomId);
     }
 
+    public Room? FindByCode(string roomCode)
+    {
+        return Rooms.SingleOrDefault(r => r.Code == roomCode);
+    }
+
     public Room? FindByConnectionId(string connectionId)
     {
         return Rooms.SingleOrDefault(g => g.Players.SingleOrDefault(p => p.ConnectionId == connectionId) != null);

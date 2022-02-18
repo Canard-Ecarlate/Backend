@@ -7,6 +7,8 @@ public interface IRoomRepository
     void Create(Room newRoom);
 
     Room? FindById(string roomId);
+
+    Room? FindByCode(string code);
     
     Room? FindByConnectionId(string connectionId);
 

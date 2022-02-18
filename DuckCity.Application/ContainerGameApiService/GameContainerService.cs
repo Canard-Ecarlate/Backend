@@ -41,10 +41,10 @@ public class GameContainerService : IGameContainerService
         return newGameContainer;
     }
 
-    public GameContainer ContainerAccessToJoinRoom(string roomId, string userId)
+    public GameContainer ContainerAccessToJoinRoom(string roomCode, string userId)
     {
         CheckValid.JoinRoom(_roomPreviewRepository, _userRepository, userId);
-        RoomPreview roomPreview = _roomPreviewRepository.FindById(roomId);
+        RoomPreview roomPreview = _roomPreviewRepository.FindByCode(roomCode);
         GameContainer gameContainer = _gameContainerRepository.FindById(roomPreview.ContainerId);
         return gameContainer;
     }

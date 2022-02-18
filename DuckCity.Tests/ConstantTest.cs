@@ -16,5 +16,6 @@
         public const int Five = 5;
         public const bool True = true;
         public const bool False = false;
+        public const string Code = "CODE";
     }
 }

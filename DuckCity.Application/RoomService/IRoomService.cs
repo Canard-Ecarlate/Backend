@@ -6,7 +6,7 @@ public interface IRoomService
 {
     void CreateRoom(Room newRoom);
     
-    Room JoinRoom(string connectionId, string userId, string userName,string roomId);
+    Room JoinRoom(string connectionId, string userId, string userName,string roomCode);
 
     Room? LeaveRoom(string roomId, string connectionId);
 

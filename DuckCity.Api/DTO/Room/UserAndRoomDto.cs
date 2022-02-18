@@ -7,6 +7,6 @@ namespace DuckCity.Api.DTO.Room
         [Required]
         public string UserId { get; init; } = "";
         [Required]
-        public string RoomId { get; init; } = "";
+        public string RoomCode { get; init; } = "";
     }
 }
