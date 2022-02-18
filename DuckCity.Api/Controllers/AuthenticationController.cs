@@ -43,6 +43,6 @@ public class AuthenticationController : ControllerBase
     [Authorize]
     public ActionResult<bool> CheckToken()
     {
-        return true;
+        return new OkResult();
     }
 }
