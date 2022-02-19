@@ -9,6 +9,8 @@ public interface IRoomPreviewRepository
     RoomPreview FindById(string id);
 
     IEnumerable<RoomPreview> FindAllRooms();
+    
+    RoomPreview? FindByUserId(string userId);
 
     void Update(RoomPreview roomPreview);
 
@@ -19,6 +21,4 @@ public interface IRoomPreviewRepository
     RoomPreview FindByCode(string code);
 
     bool CodeIsExist(string code);
-
-
 }

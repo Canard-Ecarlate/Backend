@@ -6,27 +6,32 @@ namespace DuckCity.Infrastructure.RoomPreviewRepository;
 
 public class RoomPreviewMongoRepository : IRoomPreviewRepository
 {
-    private readonly IMongoCollection<RoomPreview> _rooms;
+    private readonly IMongoCollection<RoomPreview> _roomsPreview;
 
     public RoomPreviewMongoRepository(IMongoDbSettings settings)
     {
         MongoClient client = new(settings.ConnectionString);
         IMongoDatabase database = client.GetDatabase(settings.DatabaseName);
-        _rooms = database.GetCollection<RoomPreview>(settings.RoomsCollectionName);
+        _roomsPreview = database.GetCollection<RoomPreview>(settings.RoomsCollectionName);
     }
 
     public void Create(RoomPreview roomPreview)
     {
-        _rooms.InsertOne(roomPreview);
+        _roomsPreview.InsertOne(roomPreview);
+    }
+    
+    public RoomPreview? FindByUserId(string userId)
+    {
+        return _roomsPreview.Find(r => r.PlayersId.Contains(userId)).FirstOrDefault();
     }
 
-    public void Update(RoomPreview roomPreview) => _rooms.ReplaceOne(Builders<RoomPreview>.Filter.Eq(r => r.Id, roomPreview.Id), roomPreview);
+    public void Update(RoomPreview roomPreview) => _roomsPreview.ReplaceOne(Builders<RoomPreview>.Filter.Eq(r => r.Id, roomPreview.Id), roomPreview);
 
     public RoomPreview FindById(string id)
     {
         try
         {
-            return _rooms.Find(room => room.Id == id).First();
+            return _roomsPreview.Find(room => room.Id == id).First();
         }
         catch
         {
@@ -34,20 +39,20 @@ public class RoomPreviewMongoRepository : IRoomPreviewRepository
         }
     }
 
-    public IEnumerable<RoomPreview> FindAllRooms() => _rooms.Find(_ => true).ToList();
+    public IEnumerable<RoomPreview> FindAllRooms() => _roomsPreview.Find(_ => true).ToList();
 
-    public void Delete(string roomCode) => _rooms.DeleteOne(Builders<RoomPreview>.Filter.Eq(r => r.Code, roomCode));
+    public void Delete(string roomCode) => _roomsPreview.DeleteOne(Builders<RoomPreview>.Filter.Eq(r => r.Code, roomCode));
    
     public long CountByGameContainerId(string containerId)
     {
-        return _rooms.CountDocuments(Builders<RoomPreview>.Filter.Eq(r => r.ContainerId, containerId));
+        return _roomsPreview.CountDocuments(Builders<RoomPreview>.Filter.Eq(r => r.ContainerId, containerId));
     }
     
     public RoomPreview FindByCode(string code)
     {
         try
         {
-            return _rooms.Find(room => room.Code == code).First();
+            return _roomsPreview.Find(room => room.Code == code).First();
         }
         catch
         {
@@ -57,7 +62,7 @@ public class RoomPreviewMongoRepository : IRoomPreviewRepository
 
     public bool CodeIsExist(string code)
     {
-        return _rooms.Find(room => room.Code == code).CountDocuments() > 0;
+        return _roomsPreview.Find(room => room.Code == code).CountDocuments() > 0;
     }
 
 }

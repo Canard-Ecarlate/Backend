@@ -50,31 +50,11 @@ public class DuckCityHubUt : HubUnitTestsBase
     * Tests
     */
     [Theory]
-    [InlineData(ConstantTest.UserId, ConstantTest.UserName, ConstantTest.Code, ConstantTest.ConnectionId)]
-    public async Task JoinRoomAsyncTest(string userId, string userName, string roomCode, string connectionId)
-    {
-        // Given
-        Room room = new("", userId, userName, "",
-            ConstantTest.True, ConstantTest.Five, connectionId, ConstantTest.Code);
-
-        //Mock
-        _mockRoomService.Setup(service => service.JoinRoom(ConstantTest.ConnectionId, userId, userName, roomCode)).Returns(room);
-
-        //When
-        await _duckCityHub.JoinRoomAsync(roomCode, userId, userName);
-        
-        //Verify
-        _mockRoomService.Verify(service => service.JoinRoom(ConstantTest.ConnectionId, userId, userName, roomCode), Times.Once);
-        _mockGroups.Verify(groups => groups.AddToGroupAsync(ConstantTest.ConnectionId, roomCode, CancellationToken.None), Times.Once);
-        _mockDuckCityClient.Verify(clients => clients.PushPlayers(It.IsAny<IEnumerable<PlayerInWaitingRoomDto>>()), Times.Once);
-    }
-
-    [Theory]
-    [InlineData(ConstantTest.Code, ConstantTest.UserId, ConstantTest.ConnectionId)]
-    public async Task LeaveRoomAsyncWithoutResponseTest(string roomCode, string userId, string connectionId)
+    [InlineData(ConstantTest.Code, ConstantTest.ConnectionId)]
+    public async Task LeaveRoomAsyncWithoutResponseTest(string roomCode, string connectionId)
     {
         //When
-        await _duckCityHub.LeaveRoomAsync(roomCode, userId);
+        await _duckCityHub.LeaveRoomAsync(roomCode);
         
         //Verify
         _mockRoomService.Verify(service => service.LeaveRoom(roomCode, connectionId), Times.Once);
@@ -94,7 +74,7 @@ public class DuckCityHubUt : HubUnitTestsBase
         _mockRoomService.Setup(service => service.LeaveRoom(roomCode, connectionId)).Returns(room);
 
         //When
-        await _duckCityHub.LeaveRoomAsync(roomCode, userId);
+        await _duckCityHub.LeaveRoomAsync(roomCode);
         
         //Verify
         _mockRoomService.Verify(service => service.LeaveRoom(roomCode, connectionId), Times.Once);
@@ -123,14 +103,7 @@ public class DuckCityHubUt : HubUnitTestsBase
         _mockRoomService.Verify(service => service.SetPlayerReady(roomCode, connectionId), Times.Once);
         _mockDuckCityClient.Verify(clients => clients.PushPlayers(It.IsAny<IEnumerable<PlayerInWaitingRoomDto>>()), Times.Once);
     }
-    
-    [Fact]
-    public async Task OnConnectedAsyncTest()
-    {
-        //When
-        await _duckCityHub.OnConnectedAsync();
-    }
-    
+
     [Theory]
     [InlineData(ConstantTest.ConnectionId)]
     public async Task OnDisconnectedAsyncTest(string connectionId)

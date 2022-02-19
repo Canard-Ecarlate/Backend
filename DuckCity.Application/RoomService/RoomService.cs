@@ -20,17 +20,23 @@ public class RoomService : IRoomService
     public Room JoinRoom(string connectionId, string userId, string userName, string roomCode)
     {
         Room room = _roomRepository.FindByCode(roomCode)!;
-        Player? player = room.Players.SingleOrDefault(p => p.Id == userId);
-        if (player == null)
+        room.Players.Add(new Player(connectionId, userId, userName));
+        _roomRepository.Update(room);
+        return room;
+    }
+
+    public Room? ReconnectRoom(string connectionId, string userId)
+    {
+        Room? room = _roomRepository.FindByUserId(userId);
+        Player? player = room?.Players.SingleOrDefault(p => p.Id == userId);
+        if (room == null || player == null)
         {
-            room.Players.Add(new Player(connectionId, userId, userName));
-        }
-        else
-        {
-            player.ConnectionId = connectionId;
+            return null;
         }
 
+        player.ConnectionId = connectionId;
         _roomRepository.Update(room);
+
         return room;
     }
     public Room? LeaveRoom(string roomCode, string connectionId)

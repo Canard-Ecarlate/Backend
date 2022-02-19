@@ -9,6 +9,8 @@ namespace DuckCity.GameApi.Mappings
         public MappingProfile() {
             CreateMap<Player, PlayerInWaitingRoomDto>();
             CreateMap<PlayerInWaitingRoomDto, Player>();
+            CreateMap<Room, RoomDto>();
+            CreateMap<RoomDto, Room>();
         }
     }
 }

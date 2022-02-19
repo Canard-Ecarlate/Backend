@@ -1,5 +1,4 @@
-﻿using DuckCity.Application.Validations;
-using DuckCity.Domain.Rooms;
+﻿using DuckCity.Domain.Rooms;
 using DuckCity.Infrastructure.RoomPreviewRepository;
 
 namespace DuckCity.Application.RoomPreviewService;
@@ -19,13 +18,29 @@ public class RoomPreviewService : IRoomPreviewService
     {
         _roomPreviewRepository.Create(newRoomPreview);
     }
+    
+    public string GenerateCode()
+    {
+        const int lenghtCode = 4;
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        string code = new(Enumerable.Repeat(chars, lenghtCode).Select(s => s[Random.Next(s.Length)]).ToArray());
+        return !CodeIsValid(code) ? GenerateCode() : code;
+    }
+
+    private bool CodeIsValid(string code)
+    {
+        if (_forbiddenWords.Contains(code))
+        {
+            return false;
+        }
+        return !_roomPreviewRepository.CodeIsExist(code);
+    }
 
     public IEnumerable<RoomPreview> FindAllRooms() => _roomPreviewRepository.FindAllRooms();
 
-    public RoomPreview FindRoom(string roomId)
+    public RoomPreview? FindByUserId(string userId)
     {
-        CheckValid.IsObjectId(roomId);
-        return _roomPreviewRepository.FindById(roomId);
+        return _roomPreviewRepository.FindByUserId(userId);
     }
 
     public void UpdateRoomPreview(RoomPreview roomPreview)
@@ -37,25 +52,14 @@ public class RoomPreviewService : IRoomPreviewService
     {
         _roomPreviewRepository.Delete(roomCode);
     }
-    
-    public string GenerateCode()
-    {
-        const int lenghtCode = 4;
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        string code = new string(Enumerable.Repeat(chars, lenghtCode).Select(s => s[Random.Next(s.Length)]).ToArray());
-        if (!CodeIsValid(code))
-        {
-            return GenerateCode();
-        }
-        return code;
-    }
 
-    private bool CodeIsValid(string code)
+    public void DeleteRoomPreviewByUserId(string userId)
     {
-        if (_forbiddenWords.Contains(code))
+        RoomPreview? roomPreviewNoExists = _roomPreviewRepository.FindByUserId(userId);
+        if (roomPreviewNoExists != null)
         {
-            return false;
+            _roomPreviewRepository.Delete(roomPreviewNoExists.Code);
         }
-        return !_roomPreviewRepository.CodeIsExist(code);
+
     }
 }

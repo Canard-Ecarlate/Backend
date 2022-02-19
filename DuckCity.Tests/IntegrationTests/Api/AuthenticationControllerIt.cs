@@ -37,12 +37,9 @@ namespace DuckCity.Tests.IntegrationTests.Api
             
             // Then
             string contentSignUp = signUp.Content.ReadAsStringAsync().Result;
-            UserWithTokenDto? userSignUp = JsonSerializer.Deserialize<UserWithTokenDto>(contentSignUp,
+            TokenAndCurrentContainerIdDto? userSignUp = JsonSerializer.Deserialize<TokenAndCurrentContainerIdDto>(contentSignUp,
                 new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
 
-            Assert.Equal(name, userSignUp?.Name);
-            Assert.Equal(email, userSignUp?.Email);
-            Assert.NotNull(userSignUp?.Id);
             Assert.NotNull(userSignUp?.Token);
         }
 
@@ -61,12 +58,9 @@ namespace DuckCity.Tests.IntegrationTests.Api
             JsonContent json = JsonContent.Create(identifierDto);
             HttpResponseMessage login = await _client.PostAsync("/api/Authentication/Login", json);
             string contentLogin = login.Content.ReadAsStringAsync().Result;
-            UserWithTokenDto? userLogin = JsonSerializer.Deserialize<UserWithTokenDto>(contentLogin,
+            TokenAndCurrentContainerIdDto? userLogin = JsonSerializer.Deserialize<TokenAndCurrentContainerIdDto>(contentLogin,
                 new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
 
-            Assert.Equal(name, userLogin?.Name);
-            Assert.Equal(email, userLogin?.Email);
-            Assert.NotNull(userLogin?.Id);
             Assert.NotNull(userLogin?.Token);
         }
     }

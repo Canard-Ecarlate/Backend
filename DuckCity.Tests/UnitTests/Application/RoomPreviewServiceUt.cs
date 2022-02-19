@@ -35,26 +35,5 @@ namespace DuckCity.Tests.UnitTests.Application
             Assert.Empty(result);
             _mockRoomRep.Verify(mock => mock.FindAllRooms(), Times.Once);
         }
-
-        [Theory]
-        [InlineData("something not ObjectId")]
-        [InlineData(ConstantTest.UserId)]
-        public void FindRoomTest(string roomId)
-        {
-            _mockRoomRep.Setup(mock => mock.FindById(roomId))
-                .Returns(new RoomPreview(new Room("", "", "", "", ConstantTest.True, ConstantTest.Five, "",ConstantTest.Code)));
-
-            try
-            {
-                RoomPreview result = _roomPreviewService.FindRoom(roomId);
-                Assert.NotNull(result);
-                _mockRoomRep.Verify(mock => mock.FindById(roomId), Times.Once);
-            }
-            catch (IdNotValidException e)
-            {
-                Assert.True(!ObjectId.TryParse(roomId, out _));
-                Assert.NotNull(e);
-            }
-        }
     }
 }

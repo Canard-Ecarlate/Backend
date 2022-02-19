@@ -19,7 +19,7 @@ public class AuthenticationService : IAuthenticationService
         _userRepository = userRepository;
     }
 
-    public User Login(string? name, string? password)
+    public User Login(string name, string password)
     {
         try
         {
@@ -33,7 +33,7 @@ public class AuthenticationService : IAuthenticationService
         }
     }
 
-    public void SignUp(string? name, string? email, string? password, string? passwordConfirmation)
+    public void SignUp(string name, string email, string password, string passwordConfirmation)
     {
         CheckValid.SignUp(_userRepository, name, email, password, passwordConfirmation);
         string encryptedPassword = UserUtils.HashPassword(password);
@@ -45,7 +45,8 @@ public class AuthenticationService : IAuthenticationService
     {
         List<Claim> claims = new()
         {
-            new Claim("userId", user.Id!),
+            new Claim("userId", user.Id),
+            new Claim("userName", user.Name),
             new Claim("type", "player")
         };
 

@@ -8,6 +8,8 @@ public interface IRoomService
     
     Room JoinRoom(string connectionId, string userId, string userName,string roomCode);
 
+    Room? ReconnectRoom(string connectionId, string userId);
+
     Room? LeaveRoom(string roomCode, string connectionId);
 
     Room? DisconnectFromRoom(string connectionId);
