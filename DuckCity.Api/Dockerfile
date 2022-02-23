@@ -16,8 +16,7 @@ WORKDIR "/src/DuckCity.Api"
 RUN dotnet build "DuckCity.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN apt-get update && apt-get install -y --no-install-recommends openssh-server && apt-get install -y --no-install-recommends sshpass && apt-get clean \ && rm -rf /var/lib/apt/lists/*
-RUN dotnet publish "DuckCity.Api.csproj" -c Release -o /app/publish
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-server && apt-get install -y --no-install-recommends sshpass && apt-get clean \ && rm -rf /var/lib/apt/lists/* && dotnet publish "DuckCity.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
