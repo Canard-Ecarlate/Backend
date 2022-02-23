@@ -1,16 +1,18 @@
-using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
 using DuckCity.Application.GameService;
 using DuckCity.Application.RoomPreviewService;
 using DuckCity.Application.RoomService;
+using DuckCity.Application.Utils;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Rooms;
 using DuckCity.Domain.Users;
 using DuckCity.GameApi.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace DuckCity.GameApi.Hub;
 
+[Authorize]
 public class DuckCityHub : Hub<IDuckCityClient>
 {
     // symbole � mettre � la fin des requ�te sur websocket king : 
@@ -35,7 +37,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
     public override async Task OnConnectedAsync()
     {
         await base.OnConnectedAsync();
-        string userId = GetUserIdFromToken();
+        string userId = UserUtils.GetPayloadFromToken(GetToken(), "userId");
         bool userAlreadyInRoom = _roomService.UserIsInRoom(userId);
 
         if (userAlreadyInRoom)
@@ -81,8 +83,8 @@ public class DuckCityHub : Hub<IDuckCityClient>
     [HubMethodName("CreateRoom")]
     public async Task CreateRoomAsync(RoomCreationDto roomDto)
     {
-        string userId = GetUserIdFromToken();
-        string userName = GetUserNameFromToken();
+        string userId = UserUtils.GetPayloadFromToken(GetToken(), "userId");
+        string userName = UserUtils.GetPayloadFromToken(GetToken(), "userName");
 
         Room newRoom = new(roomDto.RoomName, userId, userName, roomDto.ContainerId, roomDto.IsPrivate,
             roomDto.NbPlayers, Context.ConnectionId, _roomPreviewService.GenerateCode());
@@ -106,8 +108,8 @@ public class DuckCityHub : Hub<IDuckCityClient>
     [HubMethodName("JoinRoom")]
     public async Task JoinRoomAsync(string roomCode)
     {
-        string userId = GetUserIdFromToken();
-        string userName = GetUserNameFromToken();
+        string userId = UserUtils.GetPayloadFromToken(GetToken(), "userId");
+        string userName = UserUtils.GetPayloadFromToken(GetToken(), "userName");
 
         // Join Room
         Room room = _roomService.JoinRoom(Context.ConnectionId, userId, userName, roomCode);
@@ -214,17 +216,8 @@ public class DuckCityHub : Hub<IDuckCityClient>
         }
     }
 
-    private string GetUserIdFromToken()
+    private string GetToken()
     {
-        return new JwtSecurityTokenHandler()
-            .ReadJwtToken(Context.GetHttpContext()?.Request.Headers["access_token"].ToString()).Payload["userId"]
-            .ToString()!;
-    }
-
-    private string GetUserNameFromToken()
-    {
-        return new JwtSecurityTokenHandler()
-            .ReadJwtToken(Context.GetHttpContext()?.Request.Headers["access_token"].ToString()).Payload["userName"]
-            .ToString()!;
+        return Context.GetHttpContext()?.Request.Headers["Authorization"].ToString().Split(" ")[1]!;
     }
 }
