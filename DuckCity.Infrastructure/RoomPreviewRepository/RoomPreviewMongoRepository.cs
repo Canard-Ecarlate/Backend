@@ -60,7 +60,7 @@ public class RoomPreviewMongoRepository : IRoomPreviewRepository
         }
     }
 
-    public bool CodeIsExist(string code)
+    public bool CodeExists(string code)
     {
         return _roomsPreview.Find(room => room.Code == code).CountDocuments() > 0;
     }

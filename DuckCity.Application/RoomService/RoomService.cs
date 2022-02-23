@@ -1,4 +1,5 @@
-﻿using DuckCity.Domain.Rooms;
+﻿using DuckCity.Domain.Exceptions;
+using DuckCity.Domain.Rooms;
 using DuckCity.Domain.Users;
 using DuckCity.Infrastructure.RoomRepository;
 
@@ -25,15 +26,14 @@ public class RoomService : IRoomService
         return room;
     }
 
-    public Room? ReconnectRoom(string connectionId, string userId)
+    public Room ReconnectRoom(string connectionId, string userId)
     {
         Room? room = _roomRepository.FindByUserId(userId);
         Player? player = room?.Players.SingleOrDefault(p => p.Id == userId);
         if (room == null || player == null)
         {
-            return null;
+            throw new PlayerNotFoundException(userId + " not found");
         }
-
         player.ConnectionId = connectionId;
         _roomRepository.Update(room);
 
@@ -78,5 +78,10 @@ public class RoomService : IRoomService
         player.Ready = !player.Ready;
         _roomRepository.Update(room);
         return room;
+    }
+
+    public bool UserIsInRoom(string userId)
+    {
+        return _roomRepository.FindByUserId(userId) != null;
     }
 }

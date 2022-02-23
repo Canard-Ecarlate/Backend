@@ -33,7 +33,7 @@ public class RoomPreviewService : IRoomPreviewService
         {
             return false;
         }
-        return !_roomPreviewRepository.CodeIsExist(code);
+        return !_roomPreviewRepository.CodeExists(code);
     }
 
     public IEnumerable<RoomPreview> FindAllRooms() => _roomPreviewRepository.FindAllRooms();

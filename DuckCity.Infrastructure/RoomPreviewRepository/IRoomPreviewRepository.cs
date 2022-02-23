@@ -20,5 +20,5 @@ public interface IRoomPreviewRepository
 
     RoomPreview FindByCode(string code);
 
-    bool CodeIsExist(string code);
+    bool CodeExists(string code);
 }

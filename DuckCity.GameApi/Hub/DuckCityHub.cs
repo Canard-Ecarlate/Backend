@@ -36,10 +36,13 @@ public class DuckCityHub : Hub<IDuckCityClient>
     {
         await base.OnConnectedAsync();
         string userId = GetUserIdFromToken();
-        Room? room = _roomService.ReconnectRoom(Context.ConnectionId, userId);
+        bool userAlreadyInRoom = _roomService.UserIsInRoom(userId);
 
-        if (room != null)
+        if (userAlreadyInRoom)
         {
+            // Set ConnectionId
+            Room room = _roomService.ReconnectRoom(Context.ConnectionId, userId);
+
             // Join SignalR
             await Groups.AddToGroupAsync(Context.ConnectionId, room.Code);
 
