@@ -1,6 +1,7 @@
 ﻿using DuckCity.Api.DTO.Authentication;
 using DuckCity.Application.AuthenticationService;
 using DuckCity.Application.RoomPreviewService;
+using DuckCity.Application.Utils;
 using DuckCity.Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,9 @@ public class AuthenticationController : ControllerBase
     [Authorize]
     public ActionResult<string> CheckToken()
     {
-        return new OkObjectResult("success");
+        string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
+        string userId = UserUtils.GetPayloadFromToken(token, "userId");
+        string? containerId = _roomPreviewService.FindByUserId(userId)?.ContainerId;
+        return new OkObjectResult(containerId);
     }
 }

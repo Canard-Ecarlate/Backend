@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
 
@@ -42,5 +43,10 @@ public static class UserUtils
                 throw new BadUserOrPasswordException();
             }
         }
+    }
+    
+    public static string GetPayloadFromToken(string token, string payload)
+    {
+        return new JwtSecurityTokenHandler().ReadJwtToken(token).Payload[payload].ToString()!;
     }
 }
