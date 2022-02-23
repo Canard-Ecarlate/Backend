@@ -42,33 +42,6 @@ public class RoomServiceUt
         // Verify
         _mockRoomRep.Verify(r => r.Create(room), Times.Once);
     }
-    [Theory]
-    [InlineData(ConstantTest.ConnectionId, ConstantTest.UserId, ConstantTest.UserName, ConstantTest.RoomId)]
-    public void JoinRoomAndReConnectTest(string connectionId, string userId, string userName, string roomCode)
-    {
-        // Given
-        Room room = new("", ConstantTest.UserId, ConstantTest.UserName, "",
-            ConstantTest.True, ConstantTest.Five, connectionId,ConstantTest.Code)
-        {
-            Id = roomCode
-        };
-
-        // Mock
-        _mockRoomRep.Setup(r => r.FindByCode(roomCode)).Returns(room);
-
-        // When
-        Room roomResult = _roomService.JoinRoom(connectionId, userId, userName, roomCode);
-        
-        // Then
-        Assert.NotNull(roomResult);
-        Assert.Single(roomResult.Players);
-        Player player = roomResult.Players.Single();
-        Assert.Equal(connectionId, player.ConnectionId);
-        
-        // Verify
-        _mockRoomRep.Verify(r => r.FindByCode(roomCode), Times.Once);
-        _mockRoomRep.Verify(r => r.Update(roomResult), Times.Once);
-    }
 
     [Theory]
     [InlineData(ConstantTest.ConnectionId, ConstantTest.UserId, ConstantTest.UserName, ConstantTest.Code)]

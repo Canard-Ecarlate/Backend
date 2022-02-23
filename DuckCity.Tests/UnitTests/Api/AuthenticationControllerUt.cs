@@ -1,12 +1,11 @@
-﻿using AutoMapper;
-using DuckCity.Api.Controllers;
+﻿using DuckCity.Api.Controllers;
 using DuckCity.Api.DTO.Authentication;
 using DuckCity.Application.AuthenticationService;
+using DuckCity.Application.RoomPreviewService;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using Moq;
 using Xunit;
 
@@ -19,13 +18,13 @@ namespace DuckCity.Tests.UnitTests.Api
 
         // Mock
         private readonly Mock<IAuthenticationService> _mockAuthenticationService = new();
-        private readonly Mock<IMapper> _mockMapper = new();
+        private readonly Mock<IRoomPreviewService> _mockRoomPreviewService = new();
 
         // Constructor
         public AuthenticationControllerUt()
         {
             _authenticationController =
-                new AuthenticationController(_mockAuthenticationService.Object, _mockMapper.Object)
+                new AuthenticationController(_mockAuthenticationService.Object, _mockRoomPreviewService.Object)
                 {
                     ControllerContext = {HttpContext = new Mock<HttpContext>().Object}
                 };
@@ -42,30 +41,27 @@ namespace DuckCity.Tests.UnitTests.Api
             IdentifierDto identifierDto = new() {Name = name, Password = password};
             User user = new(name, "", password);
             _mockAuthenticationService.Setup(mock => mock.Login(name, password)).Returns(user);
-            _mockMapper.Setup(mock => mock.Map<UserWithTokenDto>(user)).Returns(new UserWithTokenDto {Name = name});
             _mockAuthenticationService.Setup(mock => mock.GenerateJsonWebToken(user)).Returns(token);
 
             // When
-            ActionResult<UserWithTokenDto> actionResult = _authenticationController.Login(identifierDto);
+            ActionResult<TokenAndCurrentContainerIdDto> actionResult = _authenticationController.Login(identifierDto);
             OkObjectResult? result = actionResult.Result as OkObjectResult;
 
             // Then
             Assert.NotNull(result);
-            UserWithTokenDto res = (UserWithTokenDto) result?.Value!;
-            Assert.Equal(name, res.Name);
+            TokenAndCurrentContainerIdDto res = (TokenAndCurrentContainerIdDto) result?.Value!;
             Assert.Equal(token, res.Token);
 
             // Verify
             _mockAuthenticationService.Verify(mock => mock.Login(name, password), Times.Once);
             _mockAuthenticationService.Verify(mock => mock.GenerateJsonWebToken(user), Times.Once);
-            _mockMapper.Verify(mock => mock.Map<UserWithTokenDto>(user), Times.Once);
         }
 
         [Fact]
         public void LoginUnauthorizedTest()
         {
             // Mock
-            _mockAuthenticationService.Setup(mock => mock.Login(It.IsAny<string?>(), It.IsAny<string?>()))
+            _mockAuthenticationService.Setup(mock => mock.Login(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new BadUserOrPasswordException());
 
             try
@@ -81,13 +77,12 @@ namespace DuckCity.Tests.UnitTests.Api
             }
 
             // Verify
-            _mockAuthenticationService.Verify(mock => mock.Login(It.IsAny<string?>(), It.IsAny<string?>()), Times.Once);
+            _mockAuthenticationService.Verify(mock => mock.Login(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
         [Theory]
-        [InlineData(ConstantTest.String, ConstantTest.Email, ConstantTest.String, ConstantTest.UserId,
-            ConstantTest.String)]
-        public void SignUpTest(string name, string email, string password, string id, string token)
+        [InlineData(ConstantTest.String, ConstantTest.Email, ConstantTest.String, ConstantTest.String)]
+        public void SignUpTest(string name, string email, string password, string token)
         {
             // Given
             //      SignUp
@@ -100,26 +95,20 @@ namespace DuckCity.Tests.UnitTests.Api
             _mockAuthenticationService.Setup(mock => mock.SignUp(name, email, password, password));
             _mockAuthenticationService.Setup(mock => mock.Login(name, password)).Returns(user);
             _mockAuthenticationService.Setup(mock => mock.GenerateJsonWebToken(user)).Returns(token);
-            _mockMapper.Setup(mock => mock.Map<UserWithTokenDto>(user))
-                .Returns(new UserWithTokenDto {Name = name, Email = email, Id = id});
 
             // When
-            ActionResult<UserWithTokenDto> actionResult = _authenticationController.SignUp(registerDto);
+            ActionResult<TokenAndCurrentContainerIdDto> actionResult = _authenticationController.SignUp(registerDto);
             OkObjectResult? result = actionResult.Result as OkObjectResult;
 
             // Then
             Assert.NotNull(result);
-            UserWithTokenDto res = (UserWithTokenDto) result?.Value!;
-            Assert.Equal(name, res.Name);
-            Assert.Equal(email, res.Email);
-            Assert.True(ObjectId.TryParse(res.Id, out _));
+            TokenAndCurrentContainerIdDto res = (TokenAndCurrentContainerIdDto) result?.Value!;
             Assert.NotEmpty(res.Token!);
 
             // Verify
             _mockAuthenticationService.Verify(mock => mock.SignUp(name, email, password, password), Times.Once);
             _mockAuthenticationService.Verify(mock => mock.Login(name, password), Times.Once);
             _mockAuthenticationService.Verify(mock => mock.GenerateJsonWebToken(user), Times.Once);
-            _mockMapper.Verify(mock => mock.Map<UserWithTokenDto>(user), Times.Once);
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using DuckCity.Api.DTO.Authentication;
+﻿using DuckCity.Api.DTO.Authentication;
 using DuckCity.Application.AuthenticationService;
+using DuckCity.Application.RoomPreviewService;
 using DuckCity.Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,29 +12,33 @@ namespace DuckCity.Api.Controllers;
 public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService;
-    private readonly IMapper _mapper;
+    private readonly IRoomPreviewService _roomPreviewService;
 
-    public AuthenticationController(IAuthenticationService authenticationService, IMapper mapper)
+    public AuthenticationController(IAuthenticationService authenticationService,
+        IRoomPreviewService roomPreviewService)
     {
         _authenticationService = authenticationService;
-        _mapper = mapper;
+        _roomPreviewService = roomPreviewService;
     }
 
     [HttpPost]
     [Route("")]
-    public ActionResult<UserWithTokenDto> Login(IdentifierDto identifierDto)
+    public ActionResult<TokenAndCurrentContainerIdDto> Login(IdentifierDto identifierDto)
     {
         User user = _authenticationService.Login(identifierDto.Name, identifierDto.Password);
-        UserWithTokenDto userWithTokenDto = _mapper.Map<UserWithTokenDto>(user);
-        userWithTokenDto.Token = _authenticationService.GenerateJsonWebToken(user);
-        return new OkObjectResult(userWithTokenDto);
+
+        TokenAndCurrentContainerIdDto tokenAndCurrentContainerIdDto =
+            new(_authenticationService.GenerateJsonWebToken(user),
+                _roomPreviewService.FindByUserId(user.Id)?.ContainerId);
+        return new OkObjectResult(tokenAndCurrentContainerIdDto);
     }
 
     [HttpPost]
     [Route("")]
-    public ActionResult<UserWithTokenDto> SignUp(RegisterDto registerDto)
+    public ActionResult<TokenAndCurrentContainerIdDto> SignUp(RegisterDto registerDto)
     {
-        _authenticationService.SignUp(registerDto.Name, registerDto.Email, registerDto.Password, registerDto.PasswordConfirmation);
+        _authenticationService.SignUp(registerDto.Name, registerDto.Email, registerDto.Password,
+            registerDto.PasswordConfirmation);
         return Login(new IdentifierDto {Name = registerDto.Name, Password = registerDto.Password});
     }
 

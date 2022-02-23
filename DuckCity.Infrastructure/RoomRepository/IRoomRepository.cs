@@ -12,6 +12,8 @@ public interface IRoomRepository
     
     Room? FindByConnectionId(string connectionId);
 
+    Room? FindByUserId(string userId);
+    
     void Update(Room roomUpdated);
 
     void Delete(Room room);
