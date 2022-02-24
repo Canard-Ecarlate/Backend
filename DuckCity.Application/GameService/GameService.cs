@@ -24,9 +24,9 @@ namespace DuckCity.Application.GameService
          * Assign cards to player
          * Designate first player
          */
-        public Room StartGame(string roomId)
+        public Room StartGame(string roomCode)
         {
-            Room? room = _roomRepository.FindById(roomId);
+            Room? room = _roomRepository.FindByCode(roomCode);
             if (room == null)
             {
                 throw new RoomNotFoundException();
@@ -76,9 +76,9 @@ namespace DuckCity.Application.GameService
         /*
          * Stop the game without winners
          */
-        public void QuitMidGame(string roomId)
+        public void QuitMidGame(string roomCode)
         {
-            Room? room = _roomRepository.FindById(roomId);
+            Room? room = _roomRepository.FindByCode(roomCode);
             if (room == null)
             {
                 throw new RoomNotFoundException();
@@ -93,9 +93,9 @@ namespace DuckCity.Application.GameService
         /*
          * Draw randomly a card in player hands
          */
-        public Room DrawCard(string playerWhoDrawId, string playerWhereCardIsDrawingId, string roomId)
+        public Room DrawCard(string playerWhoDrawId, string playerWhereCardIsDrawingId, string roomCode)
         {
-            Room? room = _roomRepository.FindById(roomId);
+            Room? room = _roomRepository.FindByCode(roomCode);
             if (room == null)
             {
                 throw new RoomNotFoundException();
