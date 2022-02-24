@@ -159,16 +159,16 @@ public class DuckCityHub : Hub<IDuckCityClient>
     }
 
     [HubMethodName("StartGame")]
-    public async Task StartGameAsync(string roomId)
+    public async Task StartGameAsync(string roomCode)
     {
-        Room room = _gameService.StartGame(roomId);
+        Room room = _gameService.StartGame(roomCode);
         await SendGameInfoAllPlayers(room);
     }
 
     [HubMethodName("DrawCard")]
-    public async Task DrawCardAsync(string roomId, string playerWhereCardIsDrawingId)
+    public async Task DrawCardAsync(string roomCode, string playerWhereCardIsDrawingId)
     {
-        Room room = _gameService.DrawCard(Context.ConnectionId, playerWhereCardIsDrawingId, roomId);
+        Room room = _gameService.DrawCard(Context.ConnectionId, playerWhereCardIsDrawingId, roomCode);
         await SendGameInfoAllPlayers(room);
     }
 
