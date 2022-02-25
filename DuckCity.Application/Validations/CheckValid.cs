@@ -80,8 +80,7 @@ namespace DuckCity.Application.Validations
 
         public static void SignUp(IUserRepository userRepository, string? name, string? email, string? password, string? passwordConfirmation)
         {
-
-            if (password == null || password == "")
+            if (string.IsNullOrEmpty(password))
             {
                 throw new PasswordIsNullException();
             }
