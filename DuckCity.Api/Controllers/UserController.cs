@@ -1,5 +1,6 @@
 ﻿using DuckCity.Api.DTO.User;
 using DuckCity.Application.UserService;
+using DuckCity.Application.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,16 +18,18 @@ public class UserController : ControllerBase
     }
     
     [HttpPost]
-    public ActionResult<string> DeleteUser(UserDto user)
+    public ActionResult<string> DeleteUser()
     {
-        _userService.DeleteAccountUser(user.UserId);
+        string userId = UserUtils.GetPayloadFromToken(HttpContext, "userId");
+        _userService.DeleteAccountUser(userId);
         return new OkObjectResult("The account is deleted");
     }
     
     [HttpPost]
     public ActionResult<string> ChangePassword(UserChangePassword user)
     {
-        _userService.ChangePasswordUser(user.UserId,user.ActualPassword,user.NewPassword,user.PasswordConfirmation);
+        string userId = UserUtils.GetPayloadFromToken(HttpContext, "userId");
+        _userService.ChangePasswordUser(userId,user.ActualPassword,user.NewPassword,user.PasswordConfirmation);
         return new OkObjectResult("The password has been changed");
     }
     

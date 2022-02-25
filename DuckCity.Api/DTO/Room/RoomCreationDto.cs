@@ -6,7 +6,5 @@ namespace DuckCity.Api.DTO.Room
     {
         [Required]
         public string Name { get; init; } = "";
-        [Required]
-        public string HostId { get; init; } = "";
     }
 }

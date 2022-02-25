@@ -14,29 +14,43 @@ namespace DuckCity.Tests.UnitTests.Api
         private readonly UserController _userController;
         // Mock
         private readonly Mock<IUserService> _mockUserService = new();
+
+        private readonly Mock<HttpContext> _mockHttpContext = new();
+        
+        private readonly Mock<HttpRequest> _mockHttpRequest = new();
+        
+        private readonly Mock<IHeaderDictionary> _mockHeaderDictionaryMock = new()
+        {
+            
+        };
+        
+        
         // Constructor
         public UserControllerUt()
         {
             _userController =
                 new UserController(_mockUserService.Object)
                 {
-                    ControllerContext = {HttpContext = new Mock<HttpContext>().Object}
+                    ControllerContext = {HttpContext = _mockHttpContext.Object}
                 };
+            _mockHttpContext.Setup(context => context.Request).Returns(_mockHttpRequest.Object);
+            _mockHttpRequest.Setup(request => request.Headers).Returns(_mockHeaderDictionaryMock.Object);
         }
 
         /**
      * Tests
      */
         [Theory]
-        [InlineData(ConstantTest.UserId, ConstantTest.String, ConstantTest.Email)]
-        public void DeleteUserTest(string id, string name, string mail)
+        [InlineData(ConstantTest.UserId3,ConstantTest.Token3)]
+        public void DeleteUserTest(string id, string token)
         {
             //Given
-            UserDto userDto = new() { UserId = id,UserName = name,UserMail = mail};
             _mockUserService.Setup(mock => mock.DeleteAccountUser(id));
+            _mockHttpContext.Setup(a => a.Request.Headers["Authorization"])
+                .Returns(token);
             
             //When
-            ActionResult<string> actionResult = _userController.DeleteUser(userDto);
+            ActionResult<string> actionResult = _userController.DeleteUser();
             OkObjectResult? result = actionResult.Result as OkObjectResult;
             
             //Then
@@ -49,12 +63,14 @@ namespace DuckCity.Tests.UnitTests.Api
         }
         
         [Theory]
-        [InlineData(ConstantTest.UserId, ConstantTest.String, ConstantTest.String,ConstantTest.String)]
-        public void ChangePasswordTest(string id, string actualPassword, string newPassword, string passwordConfirmation)
+        [InlineData(ConstantTest.UserId3, ConstantTest.String, ConstantTest.String,ConstantTest.String,ConstantTest.Token3)]
+        public void ChangePasswordTest(string id, string actualPassword, string newPassword, string passwordConfirmation,string token)
         {
             //Given
-            UserChangePassword userChangePassword = new() {UserId = id,ActualPassword = actualPassword,NewPassword = newPassword,PasswordConfirmation = passwordConfirmation};
+            UserChangePassword userChangePassword = new() {ActualPassword = actualPassword,NewPassword = newPassword,PasswordConfirmation = passwordConfirmation};
             _mockUserService.Setup(mock => mock.ChangePasswordUser(id,actualPassword,newPassword,passwordConfirmation));
+            _mockHttpContext.Setup(a => a.Request.Headers["Authorization"])
+                .Returns(token);
             
             //When
             ActionResult<string> actionResult = _userController.ChangePassword(userChangePassword);

@@ -1,5 +1,6 @@
 ﻿using DuckCity.Api.DTO.Room;
 using DuckCity.Application.ContainerGameApiService;
+using DuckCity.Application.Utils;
 using DuckCity.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,14 +22,16 @@ public class GameContainerController : ControllerBase
     [HttpPost]
     public ActionResult<GameContainer> ContainerAccessToCreateRoom(RoomCreationDto dto)
     {
-        GameContainer access = _gameContainerService.ContainerAccessToCreateRoom(dto.Name, dto.HostId);
+        string userId = UserUtils.GetPayloadFromToken(HttpContext, "userId");
+        GameContainer access = _gameContainerService.ContainerAccessToCreateRoom(dto.Name, userId);
         return new OkObjectResult(access);
     }
 
     [HttpPost]
     public ActionResult<string> ContainerAccessToJoinRoom(UserAndRoomDto dto)
     {
-        GameContainer access = _gameContainerService.ContainerAccessToJoinRoom(dto.RoomCode, dto.UserId);
+        string userId = UserUtils.GetPayloadFromToken(HttpContext, "userId");
+        GameContainer access = _gameContainerService.ContainerAccessToJoinRoom(dto.RoomCode, userId);
         return new OkObjectResult(access);
     }
 }
