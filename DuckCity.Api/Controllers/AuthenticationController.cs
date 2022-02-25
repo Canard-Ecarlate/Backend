@@ -48,8 +48,7 @@ public class AuthenticationController : ControllerBase
     [Authorize]
     public ActionResult<string> CheckToken()
     {
-        string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
-        string userId = UserUtils.GetPayloadFromToken(token, "userId");
+        string userId = UserUtils.GetPayloadFromToken(HttpContext, "userId");
         string? containerId = _roomPreviewService.FindByUserId(userId)?.ContainerId;
         return new OkObjectResult(containerId);
     }

@@ -37,7 +37,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
     public override async Task OnConnectedAsync()
     {
         await base.OnConnectedAsync();
-        string userId = UserUtils.GetPayloadFromToken(GetToken(), "userId");
+        string userId = UserUtils.GetPayloadFromToken(Context.GetHttpContext(), "userId");
         bool userAlreadyInRoom = _roomService.UserIsInRoom(userId);
 
         if (userAlreadyInRoom)
@@ -83,8 +83,8 @@ public class DuckCityHub : Hub<IDuckCityClient>
     [HubMethodName("CreateRoom")]
     public async Task CreateRoomAsync(RoomCreationDto roomDto)
     {
-        string userId = UserUtils.GetPayloadFromToken(GetToken(), "userId");
-        string userName = UserUtils.GetPayloadFromToken(GetToken(), "userName");
+        string userId = UserUtils.GetPayloadFromToken(Context.GetHttpContext(), "userId");
+        string userName = UserUtils.GetPayloadFromToken(Context.GetHttpContext(), "userName");
 
         Room newRoom = new(roomDto.RoomName, userId, userName, roomDto.ContainerId, roomDto.IsPrivate,
             roomDto.NbPlayers, Context.ConnectionId, _roomPreviewService.GenerateCode());
@@ -108,8 +108,8 @@ public class DuckCityHub : Hub<IDuckCityClient>
     [HubMethodName("JoinRoom")]
     public async Task JoinRoomAsync(string roomCode)
     {
-        string userId = UserUtils.GetPayloadFromToken(GetToken(), "userId");
-        string userName = UserUtils.GetPayloadFromToken(GetToken(), "userName");
+        string userId = UserUtils.GetPayloadFromToken(Context.GetHttpContext(), "userId");
+        string userName = UserUtils.GetPayloadFromToken(Context.GetHttpContext(), "userName");
 
         // Join Room
         Room room = _roomService.JoinRoom(Context.ConnectionId, userId, userName, roomCode);
@@ -214,10 +214,5 @@ public class DuckCityHub : Hub<IDuckCityClient>
             await Clients.Client(player.ConnectionId)
                 .PushGame(new GameDto(me, room.Game!, playersWithCardsDrawable, otherPlayers));
         }
-    }
-
-    private string GetToken()
-    {
-        return Context.GetHttpContext()?.Request.Headers["Authorization"].ToString().Split(" ")[1]!;
     }
 }
