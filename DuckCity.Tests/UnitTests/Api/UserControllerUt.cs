@@ -18,13 +18,9 @@ namespace DuckCity.Tests.UnitTests.Api
         private readonly Mock<HttpContext> _mockHttpContext = new();
         
         private readonly Mock<HttpRequest> _mockHttpRequest = new();
-        
-        private readonly Mock<IHeaderDictionary> _mockHeaderDictionaryMock = new()
-        {
-            
-        };
-        
-        
+
+        private readonly Mock<IHeaderDictionary> _mockHeaderDictionaryMock = new();
+
         // Constructor
         public UserControllerUt()
         {

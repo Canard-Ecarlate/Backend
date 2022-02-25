@@ -18,11 +18,7 @@
         public const bool True = true;
         public const bool False = false;
         public const string Code = "CODE";
-
         public const string Token3 =
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjAyOWJiNmE4MmFkODI0ZTdmNjBiN2EiLCJ1c2VyTmFtZSI6InN0cmluZyIsInR5cGUiOiJwbGF5ZXIiLCJleHAiOjE2NDgzOTIzMTAsImlzcyI6Imh0dHBzOi8vY2FuYXJkZWNhcmxhdGUuZnIiLCJhdWQiOiJodHRwczovL2NhbmFyZGVjYXJsYXRlLmZyIn0.1msOEsOIml28oHr0LfUfIdgfcoa-sQFb87ItolU5Xzg";
-        
-        
-        
     }
 }
