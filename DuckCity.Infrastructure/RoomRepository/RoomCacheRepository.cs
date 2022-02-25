@@ -28,7 +28,7 @@ public class RoomCacheRepository : IRoomRepository
     
     public Room? FindByUserId(string userId)
     {
-        return Rooms.SingleOrDefault(g => g.Players.SingleOrDefault(p => p.Id == userId) != null);
+        return Rooms.SingleOrDefault(g => g.Players.FirstOrDefault(p => p.Id == userId) != null);
     }
 
     public void Update(Room roomUpdated)

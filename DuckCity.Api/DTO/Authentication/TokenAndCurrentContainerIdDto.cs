@@ -4,12 +4,12 @@
     {
         public string Token { get; set; }
 
-        public string? CurrentContainerId { get; set; }
+        public string? ContainerId { get; set; }
 
-        public TokenAndCurrentContainerIdDto(string token, string? currentContainerId)
+        public TokenAndCurrentContainerIdDto(string token, string? containerId)
         {
             Token = token;
-            CurrentContainerId = currentContainerId;
+            ContainerId = containerId;
         }
     }
 }
