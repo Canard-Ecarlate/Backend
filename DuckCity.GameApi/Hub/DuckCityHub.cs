@@ -50,7 +50,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
 
             // Send
             await Clients.Caller.PushRoom(_mapper.Map<RoomDto>(room));
-            if (room.IsPlaying)
+            if (room.Game != null)
             {
                 await SendGameInfo(room,
                     room.Players.Single(p => p.Id == userId && p.ConnectionId == Context.ConnectionId));

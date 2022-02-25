@@ -15,6 +15,9 @@ namespace DuckCity.Tests.IntegrationTests.GameApi;
  *
  * PlayerReady
  * {"arguments":["your roomCode"],"invocationId":"1","target":"PlayerReady","type":1}
+ * 
+ * StartGame
+ * {"arguments":["your roomCode"],"invocationId":"1","target":"StartGame","type":1}
  */
 public class DuckCityHubIt
 {
