@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using DuckCity.Domain.Exceptions;
 using DuckCity.Domain.Users;
+using Microsoft.AspNetCore.Http;
 
 namespace DuckCity.Application.Utils;
 
@@ -45,8 +46,9 @@ public static class UserUtils
         }
     }
     
-    public static string GetPayloadFromToken(string token, string payload)
+    public static string GetPayloadFromToken(HttpContext? context, string payload)
     {
+        string? token = context?.Request.Headers["Authorization"].ToString().Split(" ")[1];
         return new JwtSecurityTokenHandler().ReadJwtToken(token).Payload[payload].ToString()!;
     }
 }
