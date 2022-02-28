@@ -31,7 +31,7 @@ public class GameContainerController : ControllerBase
     public ActionResult<string> FindContainerIdForJoinRoom(UserAndRoomDto dto)
     {
         string userId = UserUtils.GetPayloadFromToken(HttpContext, "userId");
-        GameContainer access = _gameContainerService.ContainerAccessToJoinRoom(dto.RoomCode, userId);
+        GameContainer? access = _gameContainerService.ContainerAccessToJoinRoom(dto.RoomCode, userId);
         return new OkObjectResult(access);
     }
 }

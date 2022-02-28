@@ -48,16 +48,9 @@ public class RoomPreviewMongoRepository : IRoomPreviewRepository
         return _roomsPreview.CountDocuments(Builders<RoomPreview>.Filter.Eq(r => r.ContainerId, containerId));
     }
     
-    public RoomPreview FindByCode(string code)
+    public RoomPreview? FindByCode(string code)
     {
-        try
-        {
-            return _roomsPreview.Find(room => room.Code == code).First();
-        }
-        catch
-        {
-            throw new CodeRoomNotExistException();
-        }
+        return _roomsPreview.Find(room => room.Code == code).FirstOrDefault();
     }
 
     public bool CodeExists(string code)

@@ -18,7 +18,7 @@ public interface IRoomPreviewRepository
     
     long CountByGameContainerId(string containerId);
 
-    RoomPreview FindByCode(string code);
+    RoomPreview? FindByCode(string code);
 
     bool CodeExists(string code);
 }
