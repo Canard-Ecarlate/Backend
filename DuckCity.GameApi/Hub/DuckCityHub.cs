@@ -104,7 +104,6 @@ public class DuckCityHub : Hub<IDuckCityClient>
             .PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(newRoom.Players));
     }
 
-
     [HubMethodName("JoinRoom")]
     public async Task JoinRoomAsync(string roomCode)
     {
