@@ -99,7 +99,7 @@ public class RoomServiceUt
         Room room = new("", ConstantTest.UserId, ConstantTest.UserName, "",
             ConstantTest.True, ConstantTest.Five, connectionId, ConstantTest.Code);
 
-        Player player = new(ConstantTest.ConnectionId2, ConstantTest.UserId2, ConstantTest.UserName2);
+        Player player = new(ConstantTest.ConnectionId2, ConstantTest.UserId2, ConstantTest.UserName2, ConstantTest.False);
         room.Players.Add(player);
         
         // Mock

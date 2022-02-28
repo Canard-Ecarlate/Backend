@@ -21,7 +21,7 @@ public class RoomService : IRoomService
     public Room JoinRoom(string connectionId, string userId, string userName, string roomCode)
     {
         Room room = _roomRepository.FindByCode(roomCode)!;
-        room.Players.Add(new Player(connectionId, userId, userName));
+        room.Players.Add(new Player(connectionId, userId, userName, false));
         _roomRepository.Update(room);
         return room;
     }

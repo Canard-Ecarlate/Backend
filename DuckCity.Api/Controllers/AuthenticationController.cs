@@ -29,7 +29,7 @@ public class AuthenticationController : ControllerBase
         User user = _authenticationService.Login(identifierDto.Name, identifierDto.Password);
 
         TokenAndCurrentContainerIdDto tokenAndCurrentContainerIdDto =
-            new(_authenticationService.GenerateJsonWebToken(user),
+            new(user.Id, user.Name, _authenticationService.GenerateJsonWebToken(user),
                 _roomPreviewService.FindByUserId(user.Id)?.ContainerId);
         return new OkObjectResult(tokenAndCurrentContainerIdDto);
     }
@@ -46,10 +46,12 @@ public class AuthenticationController : ControllerBase
     [HttpPost]
     [Route("")]
     [Authorize]
-    public ActionResult<string> CheckToken()
+    public ActionResult<TokenAndCurrentContainerIdDto> CheckToken()
     {
         string userId = UserUtils.GetPayloadFromToken(HttpContext, "userId");
+        string userName = UserUtils.GetPayloadFromToken(HttpContext, "userName");
         string? containerId = _roomPreviewService.FindByUserId(userId)?.ContainerId;
-        return new OkObjectResult(containerId);
+        TokenAndCurrentContainerIdDto dto = new(userId, userName, "", containerId);
+        return new OkObjectResult(dto);
     }
 }

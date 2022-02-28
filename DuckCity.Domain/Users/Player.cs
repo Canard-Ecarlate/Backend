@@ -14,11 +14,12 @@ public class Player
     public List<ICard> CardsInHand { get; set; } = new();
     public bool IsCardsDrawable { get; set; } = true;
 
-    public Player(string connectionId, string userId, string userName)
+    public Player(string connectionId, string userId, string userName, bool ready)
     {
         ConnectionId = connectionId;
         Id = userId;
         Name = userName;
+        Ready = ready;
     }
 
     public Type DrawCard()
