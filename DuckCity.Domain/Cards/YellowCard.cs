@@ -2,5 +2,6 @@
 
 public class YellowCard : Card
 {
-    public new string Name => "Yellow";
+    override
+    public string Name => "Yellow";
 }

@@ -5,10 +5,12 @@ namespace DuckCity.Domain.Cards
 {
     public class BombCard : Card
     {
-        public new string Name => "Bomb";
+        override
+        public string Name => "Bomb";
 
         // Reds Win
-        public new void DrawAction(Player playerWhoDraw, Player playerWhereCardIsDrawing, Game game, HashSet<Player> players)
+        override
+        public void DrawAction(Player playerWhoDraw, Player playerWhereCardIsDrawing, Game game, HashSet<Player> players)
         {
             base.DrawAction(playerWhoDraw, playerWhereCardIsDrawing, game, players);
             game.EndGame();

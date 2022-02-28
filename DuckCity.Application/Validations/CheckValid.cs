@@ -104,12 +104,32 @@ namespace DuckCity.Application.Validations
             {
                 throw new NotEnoughPlayersException();
             }
+            if(room.Game != null && !room.Game.IsGameEnded)
+            {
+                throw new GameAlreadyBeginException();
+            }
             foreach(Player player in room.Players)
             {
                 if (!player.Ready)
                 {
                     throw new PlayerNotReadyException(player.Name);
                 }
+            }
+        }
+
+        public static void DrawCard(Player playerWhereCardIsDrawing, Player playerWhoDraw, Room room)
+        {
+            if (playerWhoDraw.Id != room.Game!.CurrentPlayerId)
+            {
+                throw new PlayerNotAuthorizeException();
+            }
+            if (!playerWhereCardIsDrawing.IsCardsDrawable)
+            {
+                throw new PlayerNotAuthorizeException();
+            }
+            if (room.Game.IsGameEnded)
+            {
+                throw new GameFinishedException();
             }
         }
     }

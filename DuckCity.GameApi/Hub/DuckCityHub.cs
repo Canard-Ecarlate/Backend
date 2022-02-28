@@ -50,7 +50,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
 
             // Send
             await Clients.Caller.PushRoom(_mapper.Map<RoomDto>(room));
-            if (room.IsPlaying)
+            if (room.Game != null)
             {
                 await SendGameInfo(room,
                     room.Players.Single(p => p.Id == userId && p.ConnectionId == Context.ConnectionId));
@@ -175,7 +175,8 @@ public class DuckCityHub : Hub<IDuckCityClient>
     [HubMethodName("QuitMidGame")]
     public async Task QuitMidGameAsync(string roomCode)
     {
-        _gameService.QuitMidGame(roomCode);
+        Room room = _gameService.QuitMidGame(roomCode);
+        await SendGameInfoAllPlayers(room);
 
         await LeaveRoomAsync(roomCode);
     }

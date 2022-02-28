@@ -33,6 +33,10 @@ namespace DuckCity.Application.GameService
             }
             CheckValid.StartGame(_roomRepository, room);
             HashSet<Player> players = room.Players;
+            foreach(Player player in players)
+            {
+                player.IsCardsDrawable = true;
+            }
 
             // Designate first player
             Random random = new();
@@ -76,7 +80,7 @@ namespace DuckCity.Application.GameService
         /*
          * Stop the game without winners
          */
-        public void QuitMidGame(string roomCode)
+        public Room QuitMidGame(string roomCode)
         {
             Room? room = _roomRepository.FindByCode(roomCode);
             if (room == null)
@@ -88,33 +92,24 @@ namespace DuckCity.Application.GameService
                 throw new GameNotBeginException();
             }
             room.Game.IsGameEnded = true;
+            return room;
         }
 
         /*
          * Draw randomly a card in player hands
          */
-        public Room DrawCard(string playerWhoDrawId, string playerWhereCardIsDrawingId, string roomCode)
+        public Room DrawCard(string playerWhoDrawConnectionId, string playerWhereCardIsDrawingId, string roomCode)
         {
-            Room? room = _roomRepository.FindByCode(roomCode);
-            if (room == null)
-            {
-                throw new RoomNotFoundException();
-            }
+            Room room = _roomRepository.FindByCode(roomCode) ?? throw new RoomNotFoundException();
+            Game game = room.Game ?? throw new GameNotBeginException();
 
-            Game? game = room.Game;
             HashSet<Player> players = room.Players;
-            if (game == null)
-            {
-                throw new GameNotBeginException();
-            }
 
             // get player who is drawing and from whom
             Player playerWhereCardIsDrawing = players.First(player => player.Id == playerWhereCardIsDrawingId);
-            Player playerWhoDraw = players.First(player => player.Id == playerWhoDrawId);
-            if (playerWhereCardIsDrawing == null || playerWhoDraw == null)
-            {
-                throw new PlayerNotFoundException();
-            }
+            Player playerWhoDraw = players.First(player => player.ConnectionId == playerWhoDrawConnectionId);
+
+            CheckValid.DrawCard(playerWhereCardIsDrawing, playerWhoDraw, room);
 
             // randomly draw a card in CardsInHand from playerWhereCardIsDrawing
             Type typeDrawnCard = playerWhereCardIsDrawing.DrawCard();
@@ -122,9 +117,9 @@ namespace DuckCity.Application.GameService
             ICard drawnCard = game.DrawCard(typeDrawnCard);
 
             // Card action
-            drawnCard.DrawAction(playerWhereCardIsDrawing, playerWhoDraw, game, players);
+            drawnCard.DrawAction(playerWhoDraw, playerWhereCardIsDrawing, game, players);
             game.CardsInGame.Remove(drawnCard);
-            UpdateGameInfos(playerWhoDrawId, drawnCard, players, game);
+            UpdateGameInfos(playerWhoDraw.Id, drawnCard, players, game);
 
             _roomRepository.Update(room);
             return room;
@@ -136,7 +131,7 @@ namespace DuckCity.Application.GameService
         private static void UpdateGameInfos(string playerWhoDrawId, ICard drawnCard, HashSet<Player> players, Game game)
         {
             game.UpdateGameInfos(playerWhoDrawId, drawnCard);
-            if (game.NbDrawnDuringRound > players.Count)
+            if (game.NbDrawnDuringRound >= players.Count)
             {
                 game.RoundNb++;
                 if (game.RoundNb > game.NbTotalRound)
@@ -164,6 +159,7 @@ namespace DuckCity.Application.GameService
                 throw new CardsInGameNumberNotMatchPlayersNumber();
             }
             game.ShuffleCardsInGame();
+            game.NbDrawnDuringRound = 0;
             int nbCardsInHand = game.CardsInGame.Count / players.Count;
             Random random = new();
             HashSet<Player> playerToShuffle = new(players.OrderBy(player => random.Next()));
@@ -176,6 +172,7 @@ namespace DuckCity.Application.GameService
                 start = end;
                 end += nbCardsInHand;
             }
+            game.ShuffleCardsInGame();
         }
     }
 }

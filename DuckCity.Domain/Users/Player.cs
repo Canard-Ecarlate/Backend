@@ -29,8 +29,9 @@ public class Player
         {
             throw new CardsInHandEmptyException();
         }
-        Type typeDrawnCard = CardsInHand.ElementAt(random.Next(nbCardsInHand)).GetType();
-        CardsInHand.RemoveAt(nbCardsInHand);
+        int indexCard = random.Next(nbCardsInHand);
+        Type typeDrawnCard = CardsInHand.ElementAt(indexCard).GetType();
+        CardsInHand.RemoveAt(indexCard);
         return typeDrawnCard;
     }
 

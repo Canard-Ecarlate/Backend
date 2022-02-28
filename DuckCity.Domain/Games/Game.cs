@@ -24,7 +24,7 @@ namespace DuckCity.Domain.Games
             CurrentPlayerId = currentPlayerId;
             PreviousPlayerId = null;
             PreviousDrawnCard = null;
-            RoundNb = 0;
+            RoundNb = 1;
             NbGreenDrawn = 0;
             NbDrawnDuringRound = 0;
             IsGameEnded = false;
@@ -55,6 +55,7 @@ namespace DuckCity.Domain.Games
             PreviousPlayerId = playerWhoDrawId;
             PreviousDrawnCard = drawnCard;
             NbDrawnDuringRound++;
+            ShuffleCardsInGame();
         }
 
         /*
@@ -80,7 +81,6 @@ namespace DuckCity.Domain.Games
         {
             if (CardsInGame != null && CardsInGame.Count % NbCardsToDrawByRound == 0)
             {
-                NbDrawnDuringRound = 0;
                 Random rnd = new();
                 IOrderedEnumerable<ICard> shuffleCards = CardsInGame.OrderBy(card => rnd.Next());
                 CardsInGame = new(shuffleCards);

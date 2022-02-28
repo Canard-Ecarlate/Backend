@@ -15,7 +15,6 @@ public class Room
     public RoomConfiguration RoomConfiguration { get; set; }
     public HashSet<Player> Players { get; }
     public Game? Game { get; set; }
-    public bool IsPlaying { get; set; }
 
     public Room(string name, string hostId, string hostName, string containerId, bool isPrivate,
         int nbPlayers, string connectionId,string code)
