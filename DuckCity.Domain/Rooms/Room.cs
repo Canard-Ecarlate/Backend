@@ -25,7 +25,7 @@ public class Room
         HostName = hostName;
         ContainerId = containerId;
         RoomConfiguration = new RoomConfiguration(isPrivate, nbPlayers);
-        Players = new HashSet<Player> {new(connectionId, hostId, hostName, true)};
+        Players = new HashSet<Player> {new(connectionId, hostId, hostName){Ready = true}};
         Code = code;
     }
 }
