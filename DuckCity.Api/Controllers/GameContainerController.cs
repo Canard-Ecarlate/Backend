@@ -20,15 +20,15 @@ public class GameContainerController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<GameContainer> ContainerAccessToCreateRoom(RoomCreationDto dto)
+    public ActionResult<GameContainer> FindContainerIdForCreateRoom(RoomCreationDto dto)
     {
         string userId = UserUtils.GetPayloadFromToken(HttpContext, "userId");
-        GameContainer access = _gameContainerService.ContainerAccessToCreateRoom(dto.Name, userId);
+        GameContainer access = _gameContainerService.ContainerAccessToCreateRoom(dto.RoomName, userId);
         return new OkObjectResult(access);
     }
 
     [HttpPost]
-    public ActionResult<string> ContainerAccessToJoinRoom(UserAndRoomDto dto)
+    public ActionResult<string> FindContainerIdForJoinRoom(UserAndRoomDto dto)
     {
         string userId = UserUtils.GetPayloadFromToken(HttpContext, "userId");
         GameContainer access = _gameContainerService.ContainerAccessToJoinRoom(dto.RoomCode, userId);
