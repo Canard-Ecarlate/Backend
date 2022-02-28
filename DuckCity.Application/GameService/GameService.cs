@@ -80,7 +80,7 @@ namespace DuckCity.Application.GameService
         /*
          * Stop the game without winners
          */
-        public void QuitMidGame(string roomCode)
+        public Room QuitMidGame(string roomCode)
         {
             Room? room = _roomRepository.FindByCode(roomCode);
             if (room == null)
@@ -92,6 +92,7 @@ namespace DuckCity.Application.GameService
                 throw new GameNotBeginException();
             }
             room.Game.IsGameEnded = true;
+            return room;
         }
 
         /*
@@ -133,7 +134,7 @@ namespace DuckCity.Application.GameService
             if (game.NbDrawnDuringRound >= players.Count)
             {
                 game.RoundNb++;
-                if (game.RoundNb >= game.NbTotalRound)
+                if (game.RoundNb > game.NbTotalRound)
                 {
                     game.EndGame();
                 }

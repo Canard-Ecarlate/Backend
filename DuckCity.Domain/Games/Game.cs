@@ -24,7 +24,7 @@ namespace DuckCity.Domain.Games
             CurrentPlayerId = currentPlayerId;
             PreviousPlayerId = null;
             PreviousDrawnCard = null;
-            RoundNb = 0;
+            RoundNb = 1;
             NbGreenDrawn = 0;
             NbDrawnDuringRound = 0;
             IsGameEnded = false;
