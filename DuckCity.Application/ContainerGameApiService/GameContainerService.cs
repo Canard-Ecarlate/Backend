@@ -58,7 +58,7 @@ public class GameContainerService : IGameContainerService
     public void StartGameContainer(string containerId)
     {
         //string strCmdText = "-c \"sshpass -p 'Iamroot!01' ssh localadm@adm.canardecarlate.fr -o StrictHostKeyChecking=no ./opt/Projet/ansible/run_container.sh " + containerId + "\"";
-        string strCmdText = "-c \"sshpass -p 'Iamroot!01' ssh localadm@adm.canardecarlate.fr -o StrictHostKeyChecking=no cd /opt/Projet/ansible/\"\"ls\"";
+        string strCmdText = "-c \"sshpass -p 'Iamroot!01' ssh localadm@adm.canardecarlate.fr -o StrictHostKeyChecking=no ./run_container.sh; cd /opt/Projet/ansible";
 
         ProcessStartInfo procStartInfo = new("/bin/bash", strCmdText)
         {
