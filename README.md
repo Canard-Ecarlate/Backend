@@ -15,17 +15,16 @@ C'est un jeu mobile bientôt disponible sur Android et IOS. C'est un jeu à rôl
 Ce repositorie est destiné au BackEnd du jeux mobile Canard Ecarlate. Dévelopé sous .Net, il contient un API Rest et des sockets Signal R pour permettre au frontend de faire tourner le coeur de notre application.
 <br><br>
 ###Pour le faire fonctionner vous devez :
-- Installer git https://git-scm.com/download/win
-- Clôner le repo : 'git clone https://github.com/Canard-Ecarlate/Backend.git'
-- Installer un IDE Visual Studio(https://visualstudio.microsoft.com/fr/free-developer-offers/) / Rider (https://www.jetbrains.com/fr-fr/rider/download/#section=windows)
-- Ouvrir le fichier SLN avec l'IDE pour ouvrir le projet
-- copier le fichier '.env.example.env', renommer le '.env' et copier votre signature de Bearer Token dedans
-- Lancer lancer DuckCity.Api et DuckCity.GameApi
-- Votre backend marche
+  - Installer git https://git-scm.com/download/win
+  - Clôner le repo : 'git clone https://github.com/Canard-Ecarlate/Backend.git'
+  - Installer un IDE Visual Studio(https://visualstudio.microsoft.com/fr/free-developer-offers/) / Rider (https://www.jetbrains.com/fr-fr/rider/download/#section=windows)
+  - Ouvrir le fichier SLN avec l'IDE pour ouvrir le projet
+  - copier le fichier '.env.example.env', renommer le '.env' et copier votre signature de Bearer Token dedans
+  - Lancer lancer DuckCity.Api et DuckCity.GameApi
+  - Votre backend marche
 
 
 ##Liens
-
-- [Site Web](https://canardecarlate.fr/)
-- [Serveur Discord](https://discord.gg/zxDmZPH6Nv)
+  - [Site Web](https://canardecarlate.fr/)
+  - [Serveur Discord](https://discord.gg/zxDmZPH6Nv)
 
