@@ -9,9 +9,9 @@ namespace DuckCity.Api.Controllers;
 public class SshController : ControllerBase
 {
     [HttpGet]
-    public ActionResult<string> TestSsh()
+    public ActionResult<string> TestSsh(string containerId)
     {
-        const string strCmdText = "-c \"sshpass -p 'Iamroot!01' ssh localadm@adm.canardecarlate.fr -o StrictHostKeyChecking=no cd /opt/Projet/ansible; ./run_container.sh ID_RANDOM\"";
+        string strCmdText = "-c \"sshpass -p 'Iamroot!01' ssh localadm@adm.canardecarlate.fr -o StrictHostKeyChecking=no cd /opt/Projet/ansible; ./run_container.sh " + containerId + "\"";
 
         ProcessStartInfo procStartInfo = new("/bin/bash", strCmdText)
         {
