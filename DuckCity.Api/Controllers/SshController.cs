@@ -11,7 +11,7 @@ public class SshController : ControllerBase
     [HttpGet]
     public ActionResult<string> TestSsh()
     {
-        const string strCmdText = "-c \"sshpass -p 'Iamroot!01' ssh localadm@adm.canardecarlate.fr -o StrictHostKeyChecking=no ls\"";
+        const string strCmdText = "-c \"sshpass -p 'Iamroot!01' ssh localadm@adm.canardecarlate.fr -o StrictHostKeyChecking=no cd /opt/Projet/ansible; ./run_container.sh ID_RANDOM\"";
 
         ProcessStartInfo procStartInfo = new("/bin/bash", strCmdText)
         {
