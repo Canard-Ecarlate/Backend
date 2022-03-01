@@ -71,6 +71,6 @@ public class GameContainerService : IGameContainerService
         proc.Start();
 
         string result = proc.StandardOutput.ReadToEnd();
-        Console.WriteLine("coucou" + result);
+        Console.WriteLine(result);
     }
 }
