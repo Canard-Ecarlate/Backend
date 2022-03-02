@@ -42,7 +42,7 @@ namespace DuckCity.Application.GameService
             Random random = new();
             HashSet<Player> playerToShuffle = new(players.OrderBy(player => random.Next()));
             Player firstPlayer = playerToShuffle.First();
-            room.Game = new Game(firstPlayer.Id, room.RoomConfiguration);
+            room.Game = new Game(firstPlayer.Id, firstPlayer.Name, room.RoomConfiguration);
             firstPlayer.IsCardsDrawable = false;
 
             // Init the first round and assign cards to players
@@ -119,7 +119,7 @@ namespace DuckCity.Application.GameService
             // Card action
             drawnCard.DrawAction(playerWhoDraw, playerWhereCardIsDrawing, game, players);
             game.CardsInGame.Remove(drawnCard);
-            UpdateGameInfos(playerWhoDraw.Id, drawnCard, players, game);
+            UpdateGameInfos(playerWhoDraw.Id, playerWhoDraw.Name, drawnCard, players, game);
 
             _roomRepository.Update(room);
             return room;
@@ -128,9 +128,9 @@ namespace DuckCity.Application.GameService
         /*
          * Update NbDrawnDuringRound, NbRound, PreviousPlayerId, PreviousDrawnCard
          */
-        private static void UpdateGameInfos(string playerWhoDrawId, ICard drawnCard, HashSet<Player> players, Game game)
+        private static void UpdateGameInfos(string playerWhoDrawId, string playerWhoDrawName, ICard drawnCard, HashSet<Player> players, Game game)
         {
-            game.UpdateGameInfos(playerWhoDrawId, drawnCard);
+            game.UpdateGameInfos(playerWhoDrawId, playerWhoDrawName, drawnCard);
             if (game.NbDrawnDuringRound >= players.Count)
             {
                 game.RoundNb++;

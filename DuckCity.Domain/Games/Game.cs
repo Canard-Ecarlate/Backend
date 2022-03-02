@@ -9,7 +9,9 @@ namespace DuckCity.Domain.Games
     {
         public List<ICard> CardsInGame { get; set; } = new();
         public string CurrentPlayerId { get; set; }
+        public string CurrentPlayerName { get; set; }
         public string? PreviousPlayerId { get; set; }
+        public string? PreviousPlayerName { get; set; }
         public ICard? PreviousDrawnCard { get; set; }
         public int RoundNb { get; set; }
         public int NbGreenDrawn { get; set; }
@@ -19,10 +21,12 @@ namespace DuckCity.Domain.Games
         public bool IsGameEnded { get; set; }
         public IRole? Winners { get; set; }
 
-        public Game(string currentPlayerId, RoomConfiguration roomConfiguration)
+        public Game(string currentPlayerId, string currentPlayerName, RoomConfiguration roomConfiguration)
         {
             CurrentPlayerId = currentPlayerId;
+            CurrentPlayerName = currentPlayerName;
             PreviousPlayerId = null;
+            PreviousPlayerName = null;
             PreviousDrawnCard = null;
             RoundNb = 1;
             NbGreenDrawn = 0;
@@ -50,9 +54,10 @@ namespace DuckCity.Domain.Games
         /*
          * Update NbDrawnDuringRound, NbRound, PreviousPlayerId, PreviousDrawnCard
          */
-        public void UpdateGameInfos(string playerWhoDrawId, ICard drawnCard)
+        public void UpdateGameInfos(string playerWhoDrawId, string playerWhoDrawName, ICard drawnCard)
         {
             PreviousPlayerId = playerWhoDrawId;
+            PreviousPlayerName = playerWhoDrawName;
             PreviousDrawnCard = drawnCard;
             NbDrawnDuringRound++;
             ShuffleCardsInGame();
