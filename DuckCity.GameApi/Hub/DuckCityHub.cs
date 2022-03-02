@@ -37,7 +37,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
      */
     public override async Task OnConnectedAsync()
     {
-        Debug.WriteLine("Enter OnConnectedAsync");
+        Console.WriteLine("Enter OnConnectedAsync");
 
         await base.OnConnectedAsync();
         string userId = UserUtils.GetPayloadFromToken(Context.GetHttpContext(), "userId");
@@ -70,12 +70,12 @@ public class DuckCityHub : Hub<IDuckCityClient>
             _roomPreviewService.DeleteRoomPreviewByUserId(userId);
         }
 
-        Debug.WriteLine("Quit OnConnectedAsync");
+        Console.WriteLine("Quit OnConnectedAsync");
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        Debug.WriteLine("Enter OnDisconnectedAsync");
+        Console.WriteLine("Enter OnDisconnectedAsync");
 
         Room? room = _roomService.DisconnectFromRoom(Context.ConnectionId);
         if (room != null)
@@ -86,13 +86,13 @@ public class DuckCityHub : Hub<IDuckCityClient>
 
         await base.OnDisconnectedAsync(exception);
 
-        Debug.WriteLine("Quit OnDisconnectedAsync");
+        Console.WriteLine("Quit OnDisconnectedAsync");
     }
 
     [HubMethodName("CreateRoom")]
     public async Task CreateRoomAsync(RoomCreationDto roomDto)
     {
-        Debug.WriteLine("Enter CreateRoomAsync");
+        Console.WriteLine("Enter CreateRoomAsync");
 
         string userId = UserUtils.GetPayloadFromToken(Context.GetHttpContext(), "userId");
         string userName = UserUtils.GetPayloadFromToken(Context.GetHttpContext(), "userName");
@@ -114,13 +114,13 @@ public class DuckCityHub : Hub<IDuckCityClient>
         await Clients.Group(newRoom.Code)
             .PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(newRoom.Players));
 
-        Debug.WriteLine("Quit CreateRoomAsync");
+        Console.WriteLine("Quit CreateRoomAsync");
     }
 
     [HubMethodName("JoinRoom")]
     public async Task JoinRoomAsync(string roomCode)
     {
-        Debug.WriteLine("Enter JoinRoomAsync");
+        Console.WriteLine("Enter JoinRoomAsync");
 
         string userId = UserUtils.GetPayloadFromToken(Context.GetHttpContext(), "userId");
         string userName = UserUtils.GetPayloadFromToken(Context.GetHttpContext(), "userName");
@@ -138,13 +138,13 @@ public class DuckCityHub : Hub<IDuckCityClient>
         await Clients.Caller.PushRoom(_mapper.Map<RoomDto>(room));
         await Clients.Group(roomCode).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
 
-        Debug.WriteLine("Quit CreateRoomAsync");
+        Console.WriteLine("Quit CreateRoomAsync");
     }
 
     [HubMethodName("LeaveRoom")]
     public async Task LeaveRoomAsync(string roomCode)
     {
-        Debug.WriteLine("Enter LeaveRoomAsync");
+        Console.WriteLine("Enter LeaveRoomAsync");
 
         // Leave Room
         Room? room = _roomService.LeaveRoom(roomCode, Context.ConnectionId);
@@ -166,60 +166,60 @@ public class DuckCityHub : Hub<IDuckCityClient>
             _roomPreviewService.DeleteRoomPreview(roomCode);
         }
 
-        Debug.WriteLine("Quit LeaveRoomAsync");
+        Console.WriteLine("Quit LeaveRoomAsync");
     }
 
     [HubMethodName("PlayerReady")]
     public async Task PlayerReadyAsync(string roomCode)
     {
-        Debug.WriteLine("Enter PlayerReadyAsync");
+        Console.WriteLine("Enter PlayerReadyAsync");
 
         Room room = _roomService.SetPlayerReady(roomCode, Context.ConnectionId);
 
         // Send
         await Clients.Group(roomCode).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
 
-        Debug.WriteLine("Quit PlayerReadyAsync");
+        Console.WriteLine("Quit PlayerReadyAsync");
     }
 
     [HubMethodName("StartGame")]
     public async Task StartGameAsync(string roomCode)
     {
-        Debug.WriteLine("Enter StartGameAsync");
+        Console.WriteLine("Enter StartGameAsync");
 
         Room room = _gameService.StartGame(roomCode);
         await SendGameInfoAllPlayers(room);
 
-        Debug.WriteLine("Quit StartGameAsync");
+        Console.WriteLine("Quit StartGameAsync");
     }
 
     [HubMethodName("DrawCard")]
     public async Task DrawCardAsync(string roomCode, string playerWhereCardIsDrawingId)
     {
-        Debug.WriteLine("Enter DrawCardAsync");
+        Console.WriteLine("Enter DrawCardAsync");
 
         Room room = _gameService.DrawCard(Context.ConnectionId, playerWhereCardIsDrawingId, roomCode);
         await SendGameInfoAllPlayers(room);
 
-        Debug.WriteLine("Quit DrawCardAsync");
+        Console.WriteLine("Quit DrawCardAsync");
     }
 
     [HubMethodName("QuitMidGame")]
     public async Task QuitMidGameAsync(string roomCode)
     {
-        Debug.WriteLine("Enter QuitMidGameAsync");
+        Console.WriteLine("Enter QuitMidGameAsync");
 
         Room room = _gameService.QuitMidGame(roomCode);
         await SendGameInfoAllPlayers(room);
 
         await LeaveRoomAsync(roomCode);
 
-        Debug.WriteLine("Quit QuitMidGameAsync");
+        Console.WriteLine("Quit QuitMidGameAsync");
     }
 
     private async Task SendGameInfoAllPlayers(Room room)
     {
-        Debug.WriteLine("Enter SendGameInfoAllPlayers");
+        Console.WriteLine("Enter SendGameInfoAllPlayers");
 
         if (room.Game == null)
         {
@@ -231,12 +231,12 @@ public class DuckCityHub : Hub<IDuckCityClient>
             await SendGameInfo(room, player);
         }
 
-        Debug.WriteLine("Quit SendGameInfoAllPlayers");
+        Console.WriteLine("Quit SendGameInfoAllPlayers");
     }
 
     private async Task SendGameInfo(Room room, Player player)
     {
-        Debug.WriteLine("Enter SendGameInfo");
+        Console.WriteLine("Enter SendGameInfo");
 
         if (player.ConnectionId != null)
         {
@@ -258,6 +258,6 @@ public class DuckCityHub : Hub<IDuckCityClient>
                 .PushGame(new GameDto(me, room.Game!, playersWithCardsDrawable, otherPlayers));
         }
 
-        Debug.WriteLine("Quit SendGameInfo");
+        Console.WriteLine("Quit SendGameInfo");
     }
 }
