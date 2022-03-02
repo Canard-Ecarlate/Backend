@@ -31,7 +31,7 @@ public class GameContainerService : IGameContainerService
         List<GameContainer> gameContainersNotFull = _gameContainerRepository.FindAll().Where(gameContainer =>
             _roomPreviewRepository.CountByGameContainerId(gameContainer.Id) < MaxNbRooms).ToList();
 
-        if (gameContainersNotFull.Count >= 10000)
+        if (gameContainersNotFull.Count >= 1)
         {
             return gameContainersNotFull[0];
         }
