@@ -206,7 +206,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
             HashSet<OtherPlayerDto> otherPlayers = new();
             foreach (Player otherPlayer in room.Players.Where(p => p.Id != player.Id))
             {
-                otherPlayers.Add(new OtherPlayerDto(otherPlayer.Id, otherPlayer.CardsInHand.Count));
+                otherPlayers.Add(new OtherPlayerDto(otherPlayer.Id, otherPlayer.Name, otherPlayer.CardsInHand.Count));
             }
 
             HashSet<string> playersWithCardsDrawable =
