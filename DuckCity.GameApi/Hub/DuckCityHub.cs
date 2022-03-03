@@ -57,7 +57,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
             if (room.Game != null)
             {
                 await SendGameInfo(room,
-                    room.Players.Single(p => p.Id == userId && p.ConnectionId == Context.ConnectionId));
+                    room.Players.First(p => p.Id == userId && p.ConnectionId == Context.ConnectionId));
             }
         }
         else

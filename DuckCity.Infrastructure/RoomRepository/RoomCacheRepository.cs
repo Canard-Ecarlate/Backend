@@ -13,22 +13,22 @@ public class RoomCacheRepository : IRoomRepository
 
     public Room? FindById(string roomId)
     {
-        return Rooms.SingleOrDefault(r => r.Id == roomId);
+        return Rooms.FirstOrDefault(r => r.Id == roomId);
     }
 
     public Room? FindByCode(string roomCode)
     {
-        return Rooms.SingleOrDefault(r => r.Code == roomCode);
+        return Rooms.FirstOrDefault(r => r.Code == roomCode);
     }
 
     public Room? FindByConnectionId(string connectionId)
     {
-        return Rooms.SingleOrDefault(g => g.Players.SingleOrDefault(p => p.ConnectionId == connectionId) != null);
+        return Rooms.FirstOrDefault(g => g.Players.FirstOrDefault(p => p.ConnectionId == connectionId) != null);
     }
     
     public Room? FindByUserId(string userId)
     {
-        return Rooms.SingleOrDefault(g => g.Players.FirstOrDefault(p => p.Id == userId) != null);
+        return Rooms.FirstOrDefault(g => g.Players.FirstOrDefault(p => p.Id == userId) != null);
     }
 
     public void Update(Room roomUpdated)
