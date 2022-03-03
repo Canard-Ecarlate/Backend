@@ -53,15 +53,11 @@ public class DuckCityHub : Hub<IDuckCityClient>
 
             // Send
             await Clients.Caller.PushRoom(_mapper.Map<RoomDto>(room));
+            await Clients.Group(room.Code).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
             if (room.Game != null)
             {
                 await SendGameInfo(room,
                     room.Players.Single(p => p.Id == userId && p.ConnectionId == Context.ConnectionId));
-            }
-            else
-            {
-                await Clients.Group(room.Code)
-                    .PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
             }
         }
         else
