@@ -111,7 +111,7 @@ public class RoomServiceUt
         // Then
         Assert.NotNull(roomResult);
         Assert.Single(roomResult!.Players);
-        Assert.Null(roomResult.Players.SingleOrDefault(p => p.ConnectionId == connectionId));
+        Assert.Null(roomResult.Players.FirstOrDefault(p => p.ConnectionId == connectionId));
         
         // Verify
         _mockRoomRep.Verify(r => r.FindByCode(roomCode), Times.Once);
