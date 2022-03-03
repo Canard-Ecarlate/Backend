@@ -9,7 +9,6 @@ using DuckCity.Domain.Users;
 using DuckCity.GameApi.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using System.Diagnostics;
 
 namespace DuckCity.GameApi.Hub;
 
@@ -54,7 +53,7 @@ public class DuckCityHub : Hub<IDuckCityClient>
             // Send
             await Clients.Caller.PushRoom(_mapper.Map<RoomDto>(room));
             await Clients.Group(room.Code).PushPlayers(_mapper.Map<IEnumerable<PlayerInWaitingRoomDto>>(room.Players));
-            if (room.Game != null)
+            if (room.Game is {IsGameEnded: false})
             {
                 await SendGameInfo(room,
                     room.Players.First(p => p.Id == userId && p.ConnectionId == Context.ConnectionId));
