@@ -1,4 +1,4 @@
-#Canard Ecarlate
+# Canard Ecarlate
 <center><img src="https://canardecarlate.fr/images/Canard-col-vert.png" style="border-radius: 50%; width: 300px"></center>
 <br>
 La ville est en danger ! 
@@ -11,10 +11,10 @@ C'est un jeu mobile bientôt disponible sur Android et IOS. C'est un jeu à rôl
 <br><br>
 <center><img src="https://canardecarlate.fr/images/Canard-blanc.png" style="border-radius: 50%; width: 300px;"></center>
 
-##BackEnd
+## BackEnd
 Ce repositorie est destiné au BackEnd du jeux mobile Canard Ecarlate. Dévelopé sous .Net, il contient un API Rest et des sockets Signal R pour permettre au frontend de faire tourner le coeur de notre application.
 <br><br>
-###Pour le faire fonctionner vous devez :
+### Pour le faire fonctionner vous devez :
   - Installer git https://git-scm.com/download/win
   - Clôner le repo : 'git clone https://github.com/Canard-Ecarlate/Backend.git'
   - Installer un IDE Visual Studio(https://visualstudio.microsoft.com/fr/free-developer-offers/) / Rider (https://www.jetbrains.com/fr-fr/rider/download/#section=windows)
@@ -24,7 +24,7 @@ Ce repositorie est destiné au BackEnd du jeux mobile Canard Ecarlate. Dévelop�
   - Votre backend marche
 
 
-##Liens
+## Liens
   - [Site Web](https://canardecarlate.fr/)
   - [Serveur Discord](https://discord.gg/zxDmZPH6Nv)
 
